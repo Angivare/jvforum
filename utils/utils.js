@@ -1,4 +1,4 @@
-var entities = require('html-entities').Html5Entities
+let entities = require('html-entities').Html5Entities
   , stickersList = require('./stickersList.js')
 
 function adaptMessageContent(content) {

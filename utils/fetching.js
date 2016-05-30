@@ -1,4 +1,4 @@
-var http = require('http')
+let http = require('http')
 , config = require('../config/index.js')
 
 function topic(mode, forumId, idLegacyOrNew, page, slug, successCallback, failCallback) {

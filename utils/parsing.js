@@ -1,4 +1,4 @@
-var utils = require('./utils')
+let utils = require('./utils')
 
 function topic(body) {
   let retour = {}

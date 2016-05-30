@@ -1,4 +1,4 @@
-var express = require('express')
+let express = require('express')
   , http = require('http')
   , parse = require('./utils/parsing')
   , fetch = require('./utils/fetching')

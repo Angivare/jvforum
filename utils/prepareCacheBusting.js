@@ -1,4 +1,4 @@
-var sha1 = require('sha1')
+let sha1 = require('sha1')
   , fs = require('fs')
 
 let content = fs.readFileSync('./assets/stylesheet.css').toString()
