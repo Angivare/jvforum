@@ -55,12 +55,15 @@ block body
               .card__header Sujet verrouillé
               .card__body= lockRationale
         else
-          case error
-            when 'deleted'
-              .error
+          .error
+            case error
+              when 'deleted'
                 h1.error__title Topic supprimé
                 .error__message
                   a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
+              when 'unknownRedirect'
+                h1.error__title Problème inconnu avec ce topic
+                .error__message Il redirige vers #{errorLocation}
       aside.aside
         unless error
           .aside__top-buttons
