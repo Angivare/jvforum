@@ -16,7 +16,7 @@ block body
             p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
             p
               a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
-        when 'forumdoesNotExist'
+        when 'forumDoesNotExist'
           h1.error__title Forum inexistant
         when '103'
           h1.error__title Forum privé
