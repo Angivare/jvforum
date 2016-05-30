@@ -20,9 +20,8 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     , page = req.params.page ? parseInt(req.params.page) : 1
     , urlJvc = `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${idLegacyOrNew}-${page}-0-1-0-${slug}.htm`
 
-  fetch.topic(mode, forumId, idLegacyOrNew, page, slug, (body) => {
-    let parsed = parse.topic(body)
-      , viewLocals = {
+  fetch.topic(mode, forumId, idLegacyOrNew, page, slug, (headers, body) => {
+    let viewLocals = {
           userAgent: req.headers['user-agent'],
           googleAnalyticsId: config.googleAnalyticsId,
           cssChecksum: cacheBusting.css.checksum,
@@ -37,9 +36,19 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
           superlative: superlative(),
         }
 
-    Object.keys(parsed).forEach(key => {
-      viewLocals[key] = parsed[key]
-    })
+    if (!('location' in headers)) {
+      let parsed = parse.topic(body)
+
+      Object.keys(parsed).forEach(key => {
+        viewLocals[key] = parsed[key]
+      })
+    }
+    else {
+      let location = headers.location
+      if (headers.location.indexOf(`/forums/0-${forumId}-`) == 0) {
+        viewLocals.error = 'deleted'
+      }
+    }
 
     res.render('topic2', viewLocals)
   }, (e) => {

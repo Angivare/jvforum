@@ -14,7 +14,7 @@ function topic(mode, forumId, idLegacyOrNew, page, slug, successCallback, failCa
       body += chunk
     })
     res.on('end', () => {
-      successCallback(body)
+      successCallback(res.headers, body)
     })
   })
 

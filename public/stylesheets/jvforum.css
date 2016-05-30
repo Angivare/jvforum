@@ -150,16 +150,16 @@ h1, h2, h3 {
 }
 
 @media (min-width: 1025px) {
-  .sheet > .content {
+  .content {
     width: calc(80% - 15px);
     margin-right: 15px;
     float: left;
   }
 
-  .sheet > .content.no-menu {
-    width: initial;
-    margin-right: initial;
-    float: initial;
+  .content--no-aside {
+    width: auto;
+    margin-right: 0;
+    float: none;
   }
 }
 
@@ -209,6 +209,18 @@ h1, h2, h3 {
 .page-title__link,
 .page-title--topic {
   color: hsl(240, 8%, 67%);
+}
+
+/* ERRORS */
+
+.error {
+  text-align: center;
+  color: #F44336;
+  padding: 10px;
+}
+
+.error__message {
+  margin-top: 15px;
 }
 
 /* ASIDE */
