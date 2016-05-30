@@ -53,6 +53,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         viewLocals.error = 'pageDoesNotExists'
       }
       else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
+        /* Known possible cases:
+         * - Topic with 42 mode redirected to 1 mode, or in reverse
+         * - Topic has been moved to another forum
+         * - Topic's title and its slug has been modified
+         */
         let urlJvf = `/${matches[2]}/`
         if (matches[1] == 1) {
           urlJvf += '0'
