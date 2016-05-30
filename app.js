@@ -6,8 +6,9 @@ let express = require('express')
   , bodyParser = require('body-parser')
   , compression = require('compression')
   , http = require('http')
-  , routes = require('./routes')
   , routesStaticFiles = require('./routes/staticFiles')
+  , routesForum = require('./routes/forum')
+  , routesTopic = require('./routes/topic')
   , config = require('./config')
   , app = express()
 
@@ -25,8 +26,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(routes)
 app.use(routesStaticFiles)
+app.use(routesForum)
+app.use(routesTopic)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
