@@ -45,11 +45,23 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     }
     else {
       let location = headers.location
+        , matches
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
         viewLocals.error = 'topicDoesNotExists'
       }
       else if (location.indexOf(`/forums/${mode}-${forumId}-${idLegacyOrNew}-1-`) == 0) {
         viewLocals.error = 'pageDoesNotExists'
+      }
+      else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
+        let urlJvf = `/${matches[2]}/`
+        if (matches[1] == 1) {
+          urlJvf += '0'
+        }
+        urlJvf += `${matches[3]}-${matches[5]}`
+        if (matches[4] != 1) {
+          urlJvf += `/${matches[4]}`
+        }
+        res.redirect(urlJvf)
       }
       else {
         viewLocals.error = 'unknownRedirect'
