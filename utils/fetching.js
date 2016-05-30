@@ -1,10 +1,10 @@
 let http = require('http')
 , config = require('../config')
 
-function topic(mode, forumId, idLegacyOrNew, page, slug, successCallback, failCallback) {
+function topic(mode, forumId, idlegacyOrModern, page, slug, successCallback, failCallback) {
   let request = http.request({
     hostname: 'www.jeuxvideo.com',
-    path: `/forums/${mode}-${forumId}-${idLegacyOrNew}-${page}-0-1-0-${slug}.htm`,
+    path: `/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`,
     headers: {
       'Cookie': 'coniunctio=cache_bypass'
     }

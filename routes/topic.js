@@ -11,10 +11,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
   let forumId = parseInt(req.params.forumId)
     , idJvf = req.params.idJvf
     , mode = idJvf[0] == '0' ? 1 : 42
-    , idLegacyOrNew = parseInt(idJvf)
+    , idlegacyOrModern = parseInt(idJvf)
     , slug = req.params.slug
     , page = req.params.page ? parseInt(req.params.page) : 1
-    , urlJvc = `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${idLegacyOrNew}-${page}-0-1-0-${slug}.htm`
+    , urlJvc = `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
@@ -22,7 +22,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         forumId,
         idJvf,
         mode,
-        idLegacyOrNew,
+        idlegacyOrModern,
         slug,
         page,
         urlJvc,
@@ -30,11 +30,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         superlative: superlative(),
       }
 
-  if (idLegacyOrNew == 0) {
+  if (idlegacyOrModern == 0) {
     return next()
   }
 
-  fetch.topic(mode, forumId, idLegacyOrNew, page, slug, (headers, body) => {
+  fetch.topic(mode, forumId, idlegacyOrModern, page, slug, (headers, body) => {
     if (!('location' in headers)) {
       let parsed = parse.topic(body)
 
@@ -48,7 +48,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
         viewLocals.error = 'topicdoesNotExist'
       }
-      else if (location.indexOf(`/forums/${mode}-${forumId}-${idLegacyOrNew}-1-`) == 0) {
+      else if (location.indexOf(`/forums/${mode}-${forumId}-${idlegacyOrModern}-1-`) == 0) {
         viewLocals.error = 'pagedoesNotExist'
       }
       else if (location == '//www.jeuxvideo.com/forums.htm') {

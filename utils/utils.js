@@ -61,14 +61,14 @@ function adaptMessageContent(content) {
   content = content.replace(/<blockquote class="blockquote-jv">/g, '<blockquote class="quote">')
 
   // JVF links to topics and forums
-  content = content.replace(/<a href="(https?:\/\/(?:www|m)\.jeuxvideo\.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-0-1-0-([0-9a-z-]+)\.htm(?:\#post_([0-9]+))?)"[^>]+>([^<]+)<\/a>/g, (all, url, mode, forumId, topicIdLegacyOrNew, page, slug, messageId, text) => {
+  content = content.replace(/<a href="(https?:\/\/(?:www|m)\.jeuxvideo\.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-0-1-0-([0-9a-z-]+)\.htm(?:\#post_([0-9]+))?)"[^>]+>([^<]+)<\/a>/g, (all, url, mode, forumId, topicIdlegacyOrModern, page, slug, messageId, text) => {
     let path = '/' + forumId
     if ((mode == 1 || mode == 42) && forumId != 0) {
       path += '/'
       if (mode == 1) {
         path += '0'
       }
-      path += topicIdLegacyOrNew + '-' + slug
+      path += topicIdlegacyOrModern + '-' + slug
     }
     else {
       path += '-' + slug
