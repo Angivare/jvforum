@@ -14,7 +14,9 @@ function fetch(url, successCallback, failCallback) {
       body += chunk
     })
     res.on('end', () => {
-      successCallback(res.headers, body)
+      let headers = res.headers
+      headers.statusCode = res.statusCode
+      successCallback(headers, body)
     })
   })
 

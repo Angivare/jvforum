@@ -69,8 +69,12 @@ block body
                   p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
                   p
                     a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Réessayer
-              when 'topicDoesNotExist'
+              when 'deleted'
                 h1.error__title Topic supprimé
+                .error__message
+                  a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
+              when 'doesNotExist'
+                h1.error__title Topic inexistant
                 .error__message
                   a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
               when 'pageDoesNotExist'

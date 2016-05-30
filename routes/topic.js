@@ -35,18 +35,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
   }
 
   fetch.topic(mode, forumId, idlegacyOrModern, page, slug, (headers, body) => {
-    if (!('location' in headers)) {
-      let parsed = parse.topic(body)
-
-      Object.keys(parsed).forEach((key) => {
-        viewLocals[key] = parsed[key]
-      })
-    }
-    else {
+    if ('location' in headers) {
       let {location} = headers
         , matches
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
-        viewLocals.error = 'topicDoesNotExist'
+        viewLocals.error = 'deleted'
       }
       else if (location.indexOf(`/forums/${mode}-${forumId}-${idlegacyOrModern}-1-`) == 0) {
         viewLocals.error = 'pageDoesNotExist'
@@ -74,6 +67,16 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         viewLocals.error = 'unknownRedirect'
         viewLocals.errorLocation = location
       }
+    }
+    else if (headers.statusCode == 404) {
+      viewLocals.error = 'doesNotExist'
+    }
+    else {
+      let parsed = parse.topic(body)
+
+      Object.keys(parsed).forEach((key) => {
+        viewLocals[key] = parsed[key]
+      })
     }
 
     res.render('topic', viewLocals)
