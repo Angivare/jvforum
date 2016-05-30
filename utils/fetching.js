@@ -1,5 +1,5 @@
 let http = require('http')
-, config = require('../config/index.js')
+, config = require('../config')
 
 function topic(mode, forumId, idLegacyOrNew, page, slug, successCallback, failCallback) {
   let request = http.request({

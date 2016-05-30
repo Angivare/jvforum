@@ -1,5 +1,5 @@
 let entities = require('html-entities').Html5Entities
-  , stickersList = require('./stickersList.js')
+  , stickersList = require('./stickersList')
 
 function adaptMessageContent(content) {
   let matches

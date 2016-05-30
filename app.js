@@ -7,7 +7,7 @@ let express = require('express')
   , compression = require('compression')
   , http = require('http')
   , routes = require('./routes')
-  , config = require('./config/index.js')
+  , config = require('./config')
   , app = express()
 
 http.globalAgent.keepAlive = true
