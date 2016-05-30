@@ -1,4 +1,7 @@
-var stickersList = {
+let sha1 = require('sha1')
+  , fs = require('fs')
+
+let stickersList = {
   'hap': {
     '1kki': 'pose',
     '1kkn': 'prof',
@@ -150,6 +153,17 @@ var stickersList = {
     '1mip': 'xx2',
     '1miq': 'xy2',
     '1mir': 'xpub',
+  }
+}
+
+for (let category in stickersList) {
+  for (let id in stickersList[category]) {
+    let code = stickersList[category][id]
+      , checksum = sha1(fs.readFileSync(`./assets/images/stickers/140/${code}.png`))
+    stickersList[category][id] = {
+      code,
+      checksum,
+    }
   }
 }
 

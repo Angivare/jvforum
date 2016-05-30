@@ -93,21 +93,23 @@ function adaptMessageContent(content) {
     let category = 'unknown'
       , code = ''
       , shortcut = `[[sticker:p/${id}]]`
+      , checksum = ''
 
     loop:
     for (let category_ in stickersList) {
       for (let id_ in stickersList[category_]) {
-        let code_ = stickersList[category_][id_]
+        let code_ = stickersList[category_][id_].code
         if (id_ == id) {
           category = category_
           code = code_
           shortcut = `:${code}:`
+          checksum = stickersList[category_][id_].checksum
           break loop
         }
       }
     }
 
-    return `<img class="sticker sticker--${category}" src="/images/stickers/140/${code}.png" data-sticker-id="${id}" data-code="${shortcut}" title="${shortcut}" alt="${shortcut}">`
+    return `<img class="sticker sticker--${category}" src="/assets/images/stickers/140/${code}--${checksum}.png" data-sticker-id="${id}" data-code="${shortcut}" title="${shortcut}" alt="${shortcut}">`
   })
 
   // Show thumbnails for YouTube links
