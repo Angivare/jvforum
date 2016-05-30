@@ -30,6 +30,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         superlative: superlative(),
       }
 
+  if (!idLegacyOrNew) {
+    return next()
+  }
+
   fetch.topic(mode, forumId, idLegacyOrNew, page, slug, (headers, body) => {
     if (!('location' in headers)) {
       let parsed = parse.topic(body)
