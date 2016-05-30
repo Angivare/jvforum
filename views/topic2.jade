@@ -65,6 +65,9 @@ block body
                 h1.error__title Cette page de ce topic n’existe pas
                 .error__message
                   a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Aller à la première page
+              when '103'
+                h1.error__title Topic privé
+                .error__message Ce topic est réservé aux modérateurs.
               when 'unknownRedirect'
                 h1.error__title Problème inconnu avec ce topic
                 .error__message Il redirige vers #{errorLocation}

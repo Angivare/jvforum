@@ -52,6 +52,9 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       else if (location.indexOf(`/forums/${mode}-${forumId}-${idLegacyOrNew}-1-`) == 0) {
         viewLocals.error = 'pageDoesNotExists'
       }
+      else if (location == '//www.jeuxvideo.com/forums.htm') {
+        viewLocals.error = '103'
+      }
       else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
         /* Known possible cases:
          * - Topic with 42 mode redirected to 1 mode, or in reverse
