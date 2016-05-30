@@ -21,14 +21,20 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
       }
   
   fetch.forum(id, slug, 1, (headers, body) => {
-    res.contentType('text/plain')
     if (!('location' in headers)) {
     }
     else {
       let {location} = headers
         , matches
-
-      if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
+      if (location == '//www.jeuxvideo.com/forums.htm') {
+        if (id == 103) {
+          viewLocals.error = '103'
+        }
+        else {
+          viewLocals.error = 'forumDoesNotExists'
+        }
+      }
+      else if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
         res.redirect(`/${matches[1]}-${matches[2]}`)
       }
       else {
@@ -36,8 +42,18 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         viewLocals.errorLocation = location
       }
     }
+
+    res.render('forum', viewLocals)
   }, (e) => {
-    res.send('Oh')
+    if (e == 'timeout') {
+      viewLocals.error = 'timeout'
+      viewLocals.timeoutDelay = (config.timeout / 1000).toString().replace('.', ',')
+    }
+    else {
+      viewLocals.error = 'network'
+      viewLocals.errorDetail = e
+    }
+    res.render('forum', viewLocals)
   })
 })
 
