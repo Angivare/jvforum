@@ -21,8 +21,7 @@ function topic(mode, forumId, idLegacyOrNew, page, slug, successCallback, failCa
   request.on('error', failCallback)
 
   request.setTimeout(config.timeout, () => {
-    console.log('timeout')
-    request.abort()
+    failCallback('timeout')
   })
 
   request.end()

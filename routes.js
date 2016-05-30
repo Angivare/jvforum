@@ -19,23 +19,22 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     , slug = req.params.slug
     , page = req.params.page ? parseInt(req.params.page) : 1
     , urlJvc = `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${idLegacyOrNew}-${page}-0-1-0-${slug}.htm`
+    , viewLocals = {
+        userAgent: req.headers['user-agent'],
+        googleAnalyticsId: config.googleAnalyticsId,
+        cssChecksum: cacheBusting.css.checksum,
+        forumId,
+        idJvf,
+        mode,
+        idLegacyOrNew,
+        slug,
+        page,
+        urlJvc,
+        isFavorite: false,
+        superlative: superlative(),
+      }
 
   fetch.topic(mode, forumId, idLegacyOrNew, page, slug, (headers, body) => {
-    let viewLocals = {
-          userAgent: req.headers['user-agent'],
-          googleAnalyticsId: config.googleAnalyticsId,
-          cssChecksum: cacheBusting.css.checksum,
-          forumId,
-          idJvf,
-          mode,
-          idLegacyOrNew,
-          slug,
-          page,
-          urlJvc,
-          isFavorite: false,
-          superlative: superlative(),
-        }
-
     if (!('location' in headers)) {
       let parsed = parse.topic(body)
 
@@ -79,11 +78,15 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
 
     res.render('topic2', viewLocals)
   }, (e) => {
-    console.log(`error: ${e.message}`)
-    res.render('error', {
-      message: 'Erreur réseau',
-      error: {status: 'La page n’a pas pu être récupérée depuis jeuxvideo.com.'},
-    })
+    if (e == 'timeout') {
+      viewLocals.error = 'timeout'
+      viewLocals.timeoutDelay = (config.timeout / 1000).toString().replace('.', ',')
+    }
+    else {
+      viewLocals.error = 'network'
+      viewLocals.errorDetail = e
+    }
+    res.render('topic2', viewLocals)
   })
 })
 
