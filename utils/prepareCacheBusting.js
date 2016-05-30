@@ -1,7 +1,7 @@
 var sha1 = require('sha1')
   , fs = require('fs')
 
-let content = fs.readFileSync('./public/stylesheets/jvforum.css').toString()
+let content = fs.readFileSync('./public/stylesheet.css').toString()
   , checksum = sha1(content)
 
 content = content.replace(/url\(\/images\/([^.]+)\.([a-z]+)\)/g, (all, filename, extension) => {

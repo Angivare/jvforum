@@ -1,17 +1,101 @@
-doctype html
-meta(charset="utf-8")
-title!= data.title
-link(rel='stylesheet', href='/stylesheets/style.css')
-h1!= data.title
-h2= data.forumSlug
-h2!= data.forumName
-h3 #{data.messages.length} messages
-each val in data.messages
-  ul
-    li= val.html
-    li= val.id
-    li= val.avatar
-    li= val.status
-    li= val.pseudo
-    li= val.date
-    li= val.message
+extends layout
+
+block body
+  body(class="forum-#{forumId} topic-#{idJvf} body--no-bottom")
+    .sheet
+      include ./includes/head.jade
+      .content
+        unless error
+          h1.page-title.page-title--topic
+            != title
+            .mobile-menu
+              .mobile-menu__opener
+                .mobile-menu__opener-icon
+              .mobile-menu__items
+                unless isFavorite
+                  span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="add") Mettre en favoris
+                else
+                  span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="delete") Retirer des favoris
+                a.mobile-menu__item(href="/#{urlJvc}" target="_blank") Ouvrir sur JVC
+          .pagination-topic.pagination-topic--top
+            unless isLocked
+              .pagination-topic__action-button.pagination-topic__action-button--post
+                span.js-go-to-form.button.button--raised.button--cta.button--scale Répondre
+            include ./includes/topicPagination.jade
+          .messages-list
+            script var messages = []
+            include ./includes/topicMessages.jade
+          .pagination-topic.pagination-topic--bottom
+            .pagination-topic__action-button
+              a.button.button--scale(href="/#{forumId}-#{forumSlug}") Retour
+                span.pagination-topic__action-button-additional-text  forum
+            include ./includes/topicPagination.jade
+          unless isLocked
+            form.js-form-post.form.form--touches-bottom.form--with-container
+              .form__actions-mobile
+                button.button-mobile-post(type="submit" tabindex="4")
+                  .button-mobile-post__visible
+                    .button-mobile-post__icon
+              .form__container
+                .form__draft Brouillon sauvegardé.
+                  span.form__draft-recover  Récupérer
+                .form__errors
+                  p
+                textarea.form__textarea(placeholder="Écrivez votre #{superlative} message" tabindex="1")
+              .form__actions-desktop
+                .form__action
+                .form__action.form__action--submit
+                  input.button.button--raised.button--cta.button--large.button--scale(type="submit" value="Poster" tabindex="4")
+                .form__action
+            .js-go-to-form.fab-post
+              .fab-post__inner
+                .fab-post__icon
+          else
+            .card
+              .card__header Sujet verrouillé
+              .card__body= lockRationale
+        else
+          .error
+            case error
+              when 'timeout'
+                h1.error__title Timeout
+                .error__message
+                  p La page sur JVC mettait plus de #{timeoutDelay} secondes à charger, elle a était arrêtée.
+                  p
+                    a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Réessayer
+              when 'network'
+                h1.error__title Erreur réseau
+                .error__message
+                  p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
+                  p
+                    a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Réessayer
+              when 'topicDoesNotExists'
+                h1.error__title Topic supprimé
+                .error__message
+                  a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
+              when 'pageDoesNotExists'
+                h1.error__title Cette page de ce topic n’existe pas
+                .error__message
+                  a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Aller à la première page
+              when '103'
+                h1.error__title Topic privé
+                .error__message Ce topic est réservé aux modérateurs.
+              when 'unknownRedirect'
+                h1.error__title Problème inconnu avec ce topic
+                .error__message Il redirige vers #{errorLocation}
+      aside.aside
+        unless error
+          .aside__top-buttons
+            unless isFavorite
+              span.js-favorite-toggle.aside__top-button.aside__top-button--favorite(data-action="add")
+                span.js-favorite-toggle-label.aside__top-button-label Mettre en favoris
+            else
+              span.js-favorite-toggle.aside__top-button.aside__top-button--unfavorite(data-action="delete")
+                span.js-favorite-toggle-label.aside__top-button-label Retirer des favoris
+            a.aside__top-button.aside__top-button--open-jeuxvideocom(href=urlJvc target="_blank")
+              span.aside__top-button-label Ouvrir sur JVC
+        .js-favorites
+          .js-favorites-forums.aside__menu.menu
+            span.menu__item.menu__item--blank-state Aucun forum favori
+          .js-favorites-topics.js-slider.aside__menu.menu.slider
+            span.menu__item.menu__item--blank-state Aucun topic favori

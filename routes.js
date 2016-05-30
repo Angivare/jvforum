@@ -7,10 +7,6 @@ var express = require('express')
   , config = require('./config/index.js')
   , router = express.Router()
 
-router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' })
-})
-
 router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-9]{1,5})?', (req, res, next) => {
   let forumId = parseInt(req.params.forumId)
     , idJvf = req.params.idJvf
@@ -76,7 +72,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       }
     }
 
-    res.render('topic2', viewLocals)
+    res.render('topic', viewLocals)
   }, (e) => {
     if (e == 'timeout') {
       viewLocals.error = 'timeout'
@@ -86,7 +82,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       viewLocals.error = 'network'
       viewLocals.errorDetail = e
     }
-    res.render('topic2', viewLocals)
+    res.render('topic', viewLocals)
   })
 })
 
