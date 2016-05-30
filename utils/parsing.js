@@ -1,4 +1,5 @@
-let utils = require('./utils')
+let cheerio = require('cheerio')
+  , utils = require('./utils')
 
 function topic(body) {
   let retour = {}
@@ -68,6 +69,21 @@ function topic(body) {
   return retour
 }
 
+function forum(body) {
+  let $ = cheerio.load(body)
+    , r = []
+    , selection
+
+  r.title = false
+  selection = $('.highlight')
+  if (selection) {
+    r.title = selection.text().substr("Forum ".length)
+  }
+
+  return r
+}
+
 module.exports = {
   topic,
+  forum,
 }

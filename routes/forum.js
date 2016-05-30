@@ -19,11 +19,9 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         isFavorite: false,
         superlative: superlative(),
       }
-  
+
   fetch.forum(id, slug, 1, (headers, body) => {
-    if (!('location' in headers)) {
-    }
-    else {
+    if ('location' in headers) {
       let {location} = headers
         , matches
       if (location == '//www.jeuxvideo.com/forums.htm') {
@@ -41,6 +39,13 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         viewLocals.error = 'unknownRedirect'
         viewLocals.errorLocation = location
       }
+    }
+    else {
+      let parsed = parse.forum(body)
+
+      Object.keys(parsed).forEach((key) => {
+        viewLocals[key] = parsed[key]
+      })
     }
 
     res.render('forum', viewLocals)
