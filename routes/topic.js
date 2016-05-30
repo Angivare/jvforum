@@ -42,10 +42,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       let {location} = headers
         , matches
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
-        viewLocals.error = 'topicDoesNotExists'
+        viewLocals.error = 'topicdoesNotExist'
       }
       else if (location.indexOf(`/forums/${mode}-${forumId}-${idLegacyOrNew}-1-`) == 0) {
-        viewLocals.error = 'pageDoesNotExists'
+        viewLocals.error = 'pagedoesNotExist'
       }
       else if (location == '//www.jeuxvideo.com/forums.htm') {
         viewLocals.error = '103'

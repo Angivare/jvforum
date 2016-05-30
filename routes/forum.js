@@ -31,7 +31,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           viewLocals.error = '103'
         }
         else {
-          viewLocals.error = 'forumDoesNotExists'
+          viewLocals.error = 'forumdoesNotExist'
         }
       }
       else if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
