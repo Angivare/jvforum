@@ -1,10 +1,10 @@
 let express = require('express')
   , http = require('http')
-  , parse = require('./utils/parsing')
-  , fetch = require('./utils/fetching')
-  , cacheBusting = require('./utils/prepareCacheBusting')
-  , superlative = require('./utils/superlative')
-  , config = require('./config')
+  , parse = require('../utils/parsing')
+  , fetch = require('../utils/fetching')
+  , cacheBusting = require('../utils/prepareCacheBusting')
+  , superlative = require('../utils/superlative')
+  , config = require('../config')
   , router = express.Router()
 
 router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-9]{1,5})?', (req, res, next) => {
@@ -137,7 +137,7 @@ router.get(`/assets/stylesheet--${cacheBusting.css.checksum}.css`, (req, res, ne
 })
 
 router.get('/assets/images/:filename(*)--:checksum(*).:extension(*)', (req, res, next) => {
-  res.sendFile(`${req.params.filename}.${req.params.extension}`, {root: __dirname + '/assets/images/'})
+  res.sendFile(`${req.params.filename}.${req.params.extension}`, {root: __dirname + '/../assets/images/'})
 })
 
 module.exports = router
