@@ -45,8 +45,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     }
     else {
       let location = headers.location
-      if (headerslocation.indexOf(`/forums/0-${forumId}-`) == 0) {
-        viewLocals.error = 'deleted'
+      if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+        viewLocals.error = 'topicDoesNotExists'
+      }
+      else if (location.indexOf(`/forums/${mode}-${forumId}-${idLegacyOrNew}-1-`) == 0) {
+        viewLocals.error = 'pageDoesNotExists'
       }
       else {
         viewLocals.error = 'unknownRedirect'

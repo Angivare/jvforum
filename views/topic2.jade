@@ -57,10 +57,14 @@ block body
         else
           .error
             case error
-              when 'deleted'
+              when 'topicDoesNotExists'
                 h1.error__title Topic supprimé
                 .error__message
                   a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
+              when 'pageDoesNotExists'
+                h1.error__title Cette page de ce topic n’existe pas
+                .error__message
+                  a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Aller à la première page
               when 'unknownRedirect'
                 h1.error__title Problème inconnu avec ce topic
                 .error__message Il redirige vers #{errorLocation}
