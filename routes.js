@@ -86,6 +86,17 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
   })
 })
 
+/* Static files */
+
+router.get('/robots.txt', (req, res, next) => {
+  res.contentType('text/plain')
+  res.send([
+    'User-agent: *',
+    'Allow: /$',
+    'Disallow: /',
+  ].join("\n"))
+})
+
 router.get(`/assets/stylesheet--${cacheBusting.css.checksum}.css`, (req, res, next) => {
   res.contentType('text/css')
   res.send(cacheBusting.css.content)
