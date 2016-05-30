@@ -2056,7 +2056,6 @@ color: hsl(240, 8%, 27%);
 .sticker {
   width: 70px;
   height: 70px;
-  cursor: pointer;
   -webkit-filter: saturate(1.4);
           filter: saturate(1.4);
 }
