@@ -92,7 +92,7 @@ router.get(`/assets/stylesheet--${cacheBusting.css.checksum}.css`, (req, res, ne
 })
 
 router.get('/assets/images/:filename(*)--:checksum(*).:extension(*)', (req, res, next) => {
-  res.sendFile(`${req.params.filename}.${req.params.extension}`, {root: __dirname + '/public/images/'})
+  res.sendFile(`${req.params.filename}.${req.params.extension}`, {root: __dirname + '/assets/images/'})
 })
 
 module.exports = router
