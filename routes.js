@@ -34,12 +34,12 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     if (!('location' in headers)) {
       let parsed = parse.topic(body)
 
-      Object.keys(parsed).forEach(key => {
+      Object.keys(parsed).forEach((key) => {
         viewLocals[key] = parsed[key]
       })
     }
     else {
-      let location = headers.location
+      let {location} = headers
         , matches
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
         viewLocals.error = 'topicDoesNotExists'
@@ -83,6 +83,40 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       viewLocals.errorDetail = e
     }
     res.render('topic', viewLocals)
+  })
+})
+
+router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
+  let id = req.params.id
+    , slug = req.params.slug ? req.params.slug : '0'
+    , viewLocals = {
+        userAgent: req.headers['user-agent'],
+        googleAnalyticsId: config.googleAnalyticsId,
+        cssChecksum: cacheBusting.css.checksum,
+        id,
+        slug,
+        isFavorite: false,
+        superlative: superlative(),
+      }
+  
+  fetch.forum(id, slug, 1, (headers, body) => {
+    res.contentType('text/plain')
+    if (!('location' in headers)) {
+    }
+    else {
+      let {location} = headers
+        , matches
+
+      if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
+        res.redirect(`/${matches[1]}-${matches[2]}`)
+      }
+      else {
+        viewLocals.error = 'unknownRedirect'
+        viewLocals.errorLocation = location
+      }
+    }
+  }, (e) => {
+    res.send('Oh')
   })
 })
 
