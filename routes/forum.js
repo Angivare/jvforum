@@ -17,6 +17,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         cssChecksum: cacheBusting.css.checksum,
         id,
         slug,
+        urlJvc,
         isFavorite: false,
         superlative: superlative(),
       }
