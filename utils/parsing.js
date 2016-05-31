@@ -77,9 +77,29 @@ function forum(body) {
   r.title = false
   selection = $('.highlight')
   if (selection) {
-    r.title = selection.text().substr("Forum ".length)
+    r.title = selection.html().substr("Forum ".length)
   }
 
+  r.topics = []
+  selection = $('li[data-id]', '.topic-list')
+  selection.each((index, element) => {
+    let url = $('.topic-title', element).attr('href')
+      , urlSplit = url.split('/forums/')[1].split('-')
+
+    r.topics.push({
+      id: $(element).data('id'),
+      label: $('.topic-img', element).attr('src').substr("/img/forums/topic-".length).split('.')[0],
+      idJvf: (urlSplit[0] == 1 ? '0' : '') + urlSplit[2],
+      slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
+      title: $('.topic-title', element).attr('title'),
+      status: !$('.topic-author', element).attr('style') ? $('.topic-author', element).attr('class').split(' ')[2].substr('user-'.length) : 'deleted',
+      nickname: $('.topic-author', element).text().trim(),
+      answerCount: parseInt($('.topic-count', element).text().trim()),
+      date: $('.topic-date span', element).text().trim(),
+    })
+  })
+
+  console.log(r)
   return r
 }
 
