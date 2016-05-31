@@ -10,6 +10,7 @@ let express = require('express')
 router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
   let id = req.params.id
     , slug = req.params.slug ? req.params.slug : '0'
+    , urlJvc = `http://www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-${slug}.htm`
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,

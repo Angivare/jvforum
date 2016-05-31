@@ -1,26 +1,92 @@
 extends layout
 
 block body
-  if error
-    .error
-      case error
-        when 'timeout'
-          h1.error__title Timeout
-          .error__message
-            p La page sur JVC mettait plus de #{timeoutDelay} secondes à charger, elle a était arrêtée.
-            p
-              a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
-        when 'network'
-          h1.error__title Erreur réseau
-          .error__message
-            p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
-            p
-              a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
-        when 'forumDoesNotExist'
-          h1.error__title Forum inexistant
-        when '103'
-          h1.error__title Forum privé
-          .error__message Ce forum est réservé aux modérateurs.
-        when 'unknownRedirect'
-          h1.error__title Problème inconnu avec ce topic
-          .error__message Il redirige vers #{errorLocation}
+  body(class="forum-#{id}")
+  .sheet
+    include ./includes/head.jade
+    .content
+      unless error
+        h1.page-title.page-title--larger
+          a.page-title__link.page-title__link--with-refresh-icon(href="/#{id}-#{slug}")!= title
+          .mobile-menu
+            .mobile-menu__opener
+              .mobile-menu__opener-icon
+            .mobile-menu__items
+              unless isFavorite
+                span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="add") Mettre en favoris
+              else
+                span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="delete") Retirer des favoris
+              a.mobile-menu__item(href=urlJvc target="_blank") Ouvrir sur JVC
+        .liste-topics
+          each i in topics
+            unless label == 'ghost'
+              a.topic(href="/#{id}/#{i.idJvf}-#{i.slug}")
+                div(class="topic__label topic__label--#{i.label}")
+                .topic__text-container
+                  .topic__title!= i.title
+                  .topic__infos
+                    div(class="topic__author topic__author--#{i.status}")= i.pseudo
+                    .topic__date-and-nb-answers-container
+                      .topic__nb-answers= i.answerCount
+                      .topic__date= i.date
+                .topic__title.topic__title--desktop= i.title
+                div(class="topic__author topic__author--#{i.status} topic__author--desktop")= i.nickname
+                .topic__nb-answers.topic__nb-answers--desktop= i.answerCount
+                .topic__date.topic__date--desktop= i.date
+        if isLocked
+          .card Forum verrouillé
+      else
+        .error
+          case error
+            when 'timeout'
+              h1.error__title Timeout
+              .error__message
+                p La page sur JVC mettait plus de #{timeoutDelay} secondes à charger, elle a était arrêtée.
+                p
+                  a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
+            when 'network'
+              h1.error__title Erreur réseau
+              .error__message
+                p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
+                p
+                  a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
+            when 'forumDoesNotExist'
+              h1.error__title Forum inexistant
+            when '103'
+              h1.error__title Forum privé
+              .error__message Ce forum est réservé aux modérateurs.
+            when 'unknownRedirect'
+              h1.error__title Problème inconnu avec ce topic
+              .error__message Il redirige vers #{errorLocation}
+    if !error && subforums
+      .menu.mobile
+        if parent
+          a.menu__item(href="/#{parent.id}-#{parent.slug}")= parent.title
+        else
+          a.menu__item(href="/#{id}-#{slug}")!= title
+        each i in subforums
+          a.menu__item(href="/#{i.id}-#{i.slug}")= i.title
+    aside.aside
+      unless error
+        .aside__top-buttons
+          unless isFavorite
+            span.js-favorite-toggle.aside__top-button.aside__top-button--favorite(data-action="add")
+              span.js-favorite-toggle-label.aside__top-button-label Mettre en favoris
+          else
+            span.js-favorite-toggle.aside__top-button.aside__top-button--unfavorite(data-action="delete")
+              span.js-favorite-toggle-label.aside__top-button-label Retirer des favoris
+          a.aside__top-button.aside__top-button--open-jeuxvideocom(href=urlJvc target="_blank")
+            span.aside__top-button-label Ouvrir sur JVC
+      .js-favorites
+        .js-favorites-forums.aside__menu.menu
+          span.menu__item.menu__item--blank-state Aucun forum favori
+        .js-favorites-topics.aside__menu.menu
+          span.menu__item.menu__item--blank-state Aucun topic favori
+      if subforums
+        .menu.aside__menu
+          if parent
+            a.menu__item(href="/#{parent.id}-#{parent.slug}")= parent.title
+          else
+            a.menu__item(href="/#{id}-#{slug}")!= title
+          each i in subforums
+            a.menu__item(href="/#{i.id}-#{i.slug}")= i.title

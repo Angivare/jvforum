@@ -16,7 +16,7 @@ block body
                   span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="add") Mettre en favoris
                 else
                   span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="delete") Retirer des favoris
-                a.mobile-menu__item(href="/#{urlJvc}" target="_blank") Ouvrir sur JVC
+                a.mobile-menu__item(href=urlJvc target="_blank") Ouvrir sur JVC
           .pagination-topic.pagination-topic--top
             unless isLocked
               .pagination-topic__action-button.pagination-topic__action-button--post

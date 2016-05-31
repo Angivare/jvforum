@@ -280,7 +280,7 @@ h1, h2, h3 {
   color: hsl(240, 8%, 73%);
 }
 
-.aside__menu {
+.menu.aside__menu {
   margin: 0 0 15px 15px;
 }
 

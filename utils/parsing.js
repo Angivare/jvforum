@@ -100,7 +100,7 @@ function forum(body) {
   })
 
   // Text on JVC: Vous ne pouvez pas créer un nouveau sujet sur ce forum car il est fermé.
-  r.locked = $('#bloc-formulaire-forum .alert').length > 0
+  r.isLocked = $('#bloc-formulaire-forum .alert').length > 0
 
   r.parent = false
   if (2 in $('.fil-ariane-crumb span a')) {
@@ -124,6 +124,9 @@ function forum(body) {
       slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
     })
   })
+  if (r.subforums.length == 0) {
+    r.subforums = false
+  }
 
   return r
 }
