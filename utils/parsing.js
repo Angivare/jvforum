@@ -99,7 +99,32 @@ function forum(body) {
     })
   })
 
-  console.log(r)
+  // Text on JVC: Vous ne pouvez pas créer un nouveau sujet sur ce forum car il est fermé.
+  r.locked = $('#bloc-formulaire-forum .alert').length > 0
+
+  r.parent = false
+  if (2 in $('.fil-ariane-crumb span a')) {
+    let element = $('.fil-ariane-crumb span a')[2]
+      , url = $(element).attr('href')
+
+    r.parent = {
+      title: $(element).text().substr('Forum principal '.length),
+      id: parseInt(url.split('-')[1]),
+      slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
+    }
+  }
+
+  r.subforums = []
+  $('.liste-sous-forums .lien-jv').each((index, element) => {
+    let url = $(element).attr('href')
+
+    r.subforums.push({
+      title: $(element).text().trim(),
+      id: parseInt(url.split('-')[1]),
+      slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
+    })
+  })
+
   return r
 }
 
