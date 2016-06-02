@@ -29,15 +29,4 @@ function fetch(url, successCallback, failCallback) {
   request.end()
 }
 
-function topic(mode, forumId, idlegacyOrModern, page, slug, successCallback, failCallback) {
-  fetch(`/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`, successCallback, failCallback)
-}
-
-function forum(id, slug, page, successCallback, failCallback) {
-  fetch(`/forums/0-${id}-0-${page}-0-1-0-${slug}.htm`, successCallback, failCallback)
-}
-
-module.exports = {
-  topic,
-  forum,
-}
+module.exports = fetch

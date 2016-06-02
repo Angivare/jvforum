@@ -14,7 +14,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     , idlegacyOrModern = parseInt(idJvf)
     , slug = req.params.slug
     , page = req.params.page ? parseInt(req.params.page) : 1
-    , urlJvc = `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`
+    , pathname = `/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
@@ -25,7 +25,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         idlegacyOrModern,
         slug,
         page,
-        urlJvc,
+        urlJvc: `http://www.jeuxvideo.com/${pathname}`,
         isFavorite: false,
         superlative: superlative(),
       }
@@ -34,7 +34,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     return next()
   }
 
-  fetch.topic(mode, forumId, idlegacyOrModern, page, slug, (headers, body) => {
+  fetch(pathname, (headers, body) => {
     if ('location' in headers) {
       let {location} = headers
         , matches
