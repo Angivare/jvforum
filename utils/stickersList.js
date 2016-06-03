@@ -153,7 +153,22 @@ let stickersList = {
     '1mip': 'xx2',
     '1miq': 'xy2',
     '1mir': 'xpub',
-  }
+  },
+  'xbox': {
+    '1myf': 'yeah',
+    '1my7': 'thugx',
+    '1my6': 'super',
+    '1myc': 'faim',
+    '1my9': 'hahax',
+    '1myb': 'ggx',
+    '1mye': 'wtf',
+    '1myx': 'mercix',
+    '1myd': 'np',
+    '1my4': 'oqp',
+    '1my8': 'jrv',
+    '1mya': 'quoi',
+    '1my5': 'cpa',
+  },
 }
 
 for (let category in stickersList) {
