@@ -69,7 +69,7 @@ function forum(body) {
   r.title = false
   selection = $('.highlight')
   if (selection) {
-    r.title = selection.html().substr("Forum ".length)
+    r.title = selection.text().substr("Forum ".length)
   }
 
   r.topics = []

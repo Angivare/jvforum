@@ -7,7 +7,7 @@ block body
     .content
       unless error
         h1.page-title.page-title--larger
-          a.page-title__link.page-title__link--with-refresh-icon(href="/#{id}-#{slug}")!= title
+          a.page-title__link.page-title__link--with-refresh-icon(href="/#{id}-#{slug}")= title
           .mobile-menu
             .mobile-menu__opener
               .mobile-menu__opener-icon
@@ -23,7 +23,7 @@ block body
               a.topic(href="/#{id}/#{i.idJvf}-#{i.slug}")
                 div(class="topic__label topic__label--#{i.label}")
                 .topic__text-container
-                  .topic__title!= i.title
+                  .topic__title= i.title
                   .topic__infos
                     div(class="topic__author topic__author--#{i.status}")= i.pseudo
                     .topic__date-and-nb-answers-container
@@ -63,7 +63,7 @@ block body
         if parent
           a.menu__item(href="/#{parent.id}-#{parent.slug}")= parent.title
         else
-          a.menu__item(href="/#{id}-#{slug}")!= title
+          a.menu__item(href="/#{id}-#{slug}")= title
         each i in subforums
           a.menu__item(href="/#{i.id}-#{i.slug}")= i.title
     aside.aside
@@ -87,6 +87,6 @@ block body
           if parent
             a.menu__item(href="/#{parent.id}-#{parent.slug}")= parent.title
           else
-            a.menu__item(href="/#{id}-#{slug}")!= title
+            a.menu__item(href="/#{id}-#{slug}")= title
           each i in subforums
             a.menu__item(href="/#{i.id}-#{i.slug}")= i.title
