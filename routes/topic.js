@@ -41,9 +41,6 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
         viewLocals.error = 'deleted'
       }
-      else if (location.indexOf(`/forums/${mode}-${forumId}-${idlegacyOrModern}-1-`) == 0) {
-        viewLocals.error = 'pageDoesNotExist'
-      }
       else if (location == '//www.jeuxvideo.com/forums.htm') {
         viewLocals.error = '103'
       }
@@ -52,6 +49,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
          * - Topic with 42 mode redirected to 1 mode, or in reverse
          * - Topic has been moved to another forum
          * - Topic's title and its slug has been modified
+         * - The page we try to access doesn't exists and JVC redirects to the first one
          */
         let urlJvf = `/${matches[2]}/`
         if (matches[1] == 1) {
