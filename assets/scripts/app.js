@@ -14,6 +14,10 @@ function showErrors(errors) {
   $('.form__errors').show()
 }
 
+function alertPlaceholder() {
+  alert('Cette fonction reviendra plus tard')
+}
+
 function postMessage(event) {
   event.preventDefault()
 
@@ -98,6 +102,8 @@ instantClick.on('change', function() {
   $('.js-form-post').submit(postMessage)
   $('.js-form-post .form__textarea').on('input', readyFormToPost)
   isFormReadyToPost = false
+
+  $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
 })
 
 $(document.body).on('touchstart', setAsHavingTouch)
