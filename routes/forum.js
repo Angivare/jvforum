@@ -17,7 +17,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         cacheBusting,
         id,
         slug,
-        urlJvc: `http://www.jeuxvideo.com/${pathname}`,
+        urlJvc: `http://www.jeuxvideo.com${pathname}`,
         isFavorite: false,
         superlative: superlative(),
       }

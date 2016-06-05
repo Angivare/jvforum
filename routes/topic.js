@@ -25,7 +25,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         idlegacyOrModern,
         slug,
         page,
-        urlJvc: `http://www.jeuxvideo.com/${pathname}`,
+        urlJvc: `http://www.jeuxvideo.com${pathname}`,
         isFavorite: false,
         superlative: superlative(),
       }
