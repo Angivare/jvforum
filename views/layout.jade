@@ -17,4 +17,4 @@ html(lang="fr" class=isIOS ? "is-ios" : "")
   script.
     var googleAnalyticsId = "#{googleAnalyticsId}"
   each checksum, name in cacheBusting.scripts
-    script(src="/assets/scripts/#{name}--#{checksum}.js")
+    script(src="/assets/scripts/#{name}--#{checksum}.js" data-no-instant)

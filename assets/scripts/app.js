@@ -1,5 +1,14 @@
 var TIMEOUT_POST_MESSAGE = 2000
 
+var isFormReadyToPost = false
+  , hasTouch = false
+
+function setAsHavingTouch() {
+  $('html').addClass('has-touch')
+  hasTouch = true
+  $(document.body).off('touchstart', setAsHavingTouch)
+}
+
 function postMessage(event) {
   event.preventDefault()
 
@@ -22,13 +31,38 @@ function postMessage(event) {
     data: data,
     timeout: TIMEOUT_POST_MESSAGE,
   })
+    .always(function() {
+      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
+    })
     .done(function(data, textStatus, jqXHR) {
+      $('.messages-list').append('<p>' + data.message + '</p>') // Dummy
+
       $('.form__textarea').val('')
-      alert(data.message)
+      isFormReadyToPost = false
+      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
+
+      if (!hasTouch) {
+        $('.form .form__textarea').focus()
+      }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
 
     })
+}
+
+function readyFormToPost() {
+  if (isFormReadyToPost) {
+    if (!$('.form__textarea').val().trim()) {
+      isFormReadyToPost = false
+      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
+      return
+    }
+  }
+
+  if ($('.form__textarea').val().trim()) {
+    $('.button-mobile-post__visible').addClass('button-mobile-post__visible--ready-to-post')
+    isFormReadyToPost = true
+  }
 }
 
 instantClick.init()
@@ -46,6 +80,10 @@ if (googleAnalyticsId) {
   })
 }
 
-instantClick.on('change', function(isInitialLoad) {
+instantClick.on('change', function() {
   $('.js-form-post').submit(postMessage)
+  $('.js-form-post .form__textarea').on('input', readyFormToPost)
+  isFormReadyToPost = false
 })
+
+$(document.body).on('touchstart', setAsHavingTouch)
