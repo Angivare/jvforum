@@ -9,6 +9,7 @@ let express = require('express')
   , routesStaticFiles = require('./routes/staticFiles')
   , routesForum = require('./routes/forum')
   , routesTopic = require('./routes/topic')
+  , routesAjax = require('./routes/ajax')
   , config = require('./config')
   , app = express()
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use(routesStaticFiles)
 app.use(routesForum)
 app.use(routesTopic)
+app.use(routesAjax)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

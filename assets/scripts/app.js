@@ -1,3 +1,36 @@
+var TIMEOUT_POST_MESSAGE = 2000
+
+function postMessage(event) {
+  event.preventDefault()
+
+  var message = $('.form__textarea').val()
+
+  if (message.length == 0) {
+    $('.form__textarea').focus()
+    return
+  }
+
+  $('.button-mobile-post__visible').addClass('button-mobile-post__visible--sending')
+  $('.button-mobile-post').blur()
+
+  var data = {
+    message: message,
+  }
+
+  $.post({
+    url: '/ajax/postMessage',
+    data: data,
+    timeout: TIMEOUT_POST_MESSAGE,
+  })
+    .done(function(data, textStatus, jqXHR) {
+      $('.form__textarea').val('')
+      alert(data.message)
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+
+    })
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -12,3 +45,7 @@ if (googleAnalyticsId) {
     ga('send', 'pageview', location.pathname + location.search)
   })
 }
+
+instantClick.on('change', function(isInitialLoad) {
+  $('.js-form-post').submit(postMessage)
+})
