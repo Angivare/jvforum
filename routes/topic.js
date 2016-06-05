@@ -18,7 +18,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
-        cssChecksum: cacheBusting.css.checksum,
+        cacheBusting,
         forumId,
         idJvf,
         mode,

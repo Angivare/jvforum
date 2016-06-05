@@ -5,7 +5,7 @@ html(lang="fr" class=isIOS ? "is-ios" : "")
   meta(charset="utf-8")
   title!= title
   meta(name="viewport" content="width=device-width, initial-scale=1.0")
-  link(rel="stylesheet" href="/assets/stylesheet--#{cssChecksum}.css")
+  link(rel="stylesheet" href="/assets/stylesheet--#{cacheBusting.css.checksum}.css")
   meta(name="google-analytics-id" content=googleAnalyticsId)
   link.js-favicon(rel="icon" href="/images/favicon.png")
   meta(name="format-detection" content="telephone=no")
@@ -17,3 +17,5 @@ html(lang="fr" class=isIOS ? "is-ios" : "")
     .toast__label
   script.
     var googleAnalyticsId = "#{googleAnalyticsId}"
+  each checksum, name in cacheBusting.scripts
+    script(src="/assets/scripts/#{name}--#{checksum}.js")

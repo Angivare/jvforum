@@ -9,9 +9,23 @@ content = content.replace(/url\(\/images\/([^.]+)\.([a-z]+)\)/g, (all, filename,
   return `url(/assets/images/${filename}--${checksum}.${extension})`
 })
 
+let scriptsList = [
+      'jquery',
+      'fastclick',
+      'instantclick',
+      'instantclick-loading-indicator',
+      'app',
+    ]
+  , scripts = {}
+
+for (let script of scriptsList) {
+  scripts[script] = sha1(fs.readFileSync(`./assets/scripts/${script}.js`).toString())
+}
+
 module.exports = {
   css: {
     content,
     checksum,
   },
+  scripts,
 }

@@ -14,7 +14,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
-        cssChecksum: cacheBusting.css.checksum,
+        cacheBusting,
         id,
         slug,
         urlJvc: `http://www.jeuxvideo.com/${pathname}`,
