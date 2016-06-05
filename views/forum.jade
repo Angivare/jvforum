@@ -23,7 +23,7 @@ block body
               a.topic(href="/#{id}/#{i.idJvf}-#{i.slug}")
                 div(class="topic__label topic__label--#{i.label}")
                 .topic__text-container
-                  .topic__title!= i.title
+                  .topic__title= i.title
                   .topic__infos
                     div(class="topic__author topic__author--#{i.status}")= i.pseudo
                     .topic__date-and-nb-answers-container
