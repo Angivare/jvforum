@@ -9,6 +9,11 @@ function setAsHavingTouch() {
   $(document.body).off('touchstart', setAsHavingTouch)
 }
 
+function showErrors(errors) {
+  $('.form__errors p').html(errors)
+  $('.form__errors').show()
+}
+
 function postMessage(event) {
   event.preventDefault()
 
@@ -35,18 +40,25 @@ function postMessage(event) {
       $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
     })
     .done(function(data, textStatus, jqXHR) {
-      $('.messages-list').append('<p>' + data.message + '</p>') // Dummy
+      if (data.error) {
+        showErrors(data.error)
+        return
+      }
 
+      $('.messages-list').append('<p>' + data.sent.message + '</p>') // Dummy
+
+      $('.form__errors').hide()
       $('.form__textarea').val('')
+
       isFormReadyToPost = false
       $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
 
       if (!hasTouch) {
-        $('.form .form__textarea').focus()
+        $('.form__textarea').focus()
       }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-
+      showErrors('Erreur Ajax (' + textStatus + ': ' + errorThrown + ')')
     })
 }
 
