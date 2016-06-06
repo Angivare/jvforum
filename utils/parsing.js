@@ -132,11 +132,17 @@ function forum(body) {
 }
 
 function form(body) {
-  let matches = body.match(/<input type="hidden" name="(fs_[^"]+)" value="([^"]+)"\/>/g)
-  if (!matches) {
+  let r = {}
+    , regex = /<input type="hidden" name="(fs_[^"]+)" value="([^"]+)"\/>/g
+    , matches
+
+  while (matches = regex.exec(body)) {
+    r[matches[1]] = matches[2]
+  }
+  if (r.length == 0) {
     return false
   }
-  return matches
+  return r
 }
 
 module.exports = {

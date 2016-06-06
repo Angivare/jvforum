@@ -3,23 +3,24 @@ let express = require('express')
   , parse = require('../utils/parsing')
   , router = express.Router()
 
-function getForm(pathJvc, successCallback, failCallback) {
+function getForm(pathJvc, ipAddress, successCallback, failCallback) {
   fetch(pathJvc, (headers, body) => {
-    let parsed = parse.form(body)
-    if (parsed) {
-      successCallback(parsed)
+    let form = parse.form(body)
+    if (form) {
+      successCallback(form)
     }
     else {
       failCallback('parsing')
     }
-  }, failCallback)
+  }, failCallback, ipAddress)
 }
 
 router.post('/ajax/postMessage', (req, res, next) => {
   let r = {
-    error: false,
-    sent: req.body,
-  }
+      error: false,
+      sent: req.body,
+    }
+    , ipAddress = req.connection.remoteAddress
 
   if (!req.body.message || !req.body.pathJvc) {
     r.error = 'Missing params'
@@ -29,7 +30,8 @@ router.post('/ajax/postMessage', (req, res, next) => {
 
   let {message, pathJvc} = req.body
 
-  getForm(pathJvc, () => {
+  getForm(pathJvc, ipAddress, (form) => {
+    r.form = form
     res.json(r)
   }, (error) => {
     r.error = error

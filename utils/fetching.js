@@ -1,13 +1,22 @@
 let http = require('http')
 , config = require('../config')
 
-function fetch(path, successCallback, failCallback) {
+function fetch(path, successCallback, failCallback, asAuthentified = false) {
+  let headers = {
+    'Cookie': 'coniunctio=cache_bypass',
+  }
+
+  if (asAuthentified) {
+    headers = {
+      'Cookie': config.cookies,
+      'X-Forwarded-For': asAuthentified,
+    }
+  }
+
   let request = http.request({
     hostname: 'www.jeuxvideo.com',
     path,
-    headers: {
-      'Cookie': 'coniunctio=cache_bypass'
-    }
+    headers,
   }, (res) => {
     let body = ''
     res.on('data', (chunk) => {
