@@ -10,19 +10,20 @@ let express = require('express')
 router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
   let id = req.params.id
     , slug = req.params.slug ? req.params.slug : '0'
-    , pathname = `/forums/0-${id}-0-1-0-1-0-${slug}.htm`
+    , pathJvc = `/forums/0-${id}-0-1-0-1-0-${slug}.htm`
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
         cacheBusting,
         id,
         slug,
-        urlJvc: `http://www.jeuxvideo.com${pathname}`,
+        pathJvc,
+        urlJvc: `http://www.jeuxvideo.com${pathJvc}`,
         isFavorite: false,
         superlative: superlative(),
       }
 
-  fetch(pathname, (headers, body) => {
+  fetch(pathJvc, (headers, body) => {
     if ('location' in headers) {
       let {location} = headers
         , matches

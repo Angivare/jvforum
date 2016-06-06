@@ -131,7 +131,16 @@ function forum(body) {
   return r
 }
 
+function form(body) {
+  let matches = body.match(/<input type="hidden" name="(fs_[^"]+)" value="([^"]+)"\/>/g)
+  if (!matches) {
+    return false
+  }
+  return matches
+}
+
 module.exports = {
   topic,
   forum,
+  form,
 }

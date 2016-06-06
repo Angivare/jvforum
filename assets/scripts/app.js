@@ -33,6 +33,7 @@ function postMessage(event) {
 
   var data = {
     message: message,
+    pathJvc: pathJvc,
   }
 
   $.post({

@@ -1,10 +1,10 @@
 let http = require('http')
 , config = require('../config')
 
-function fetch(url, successCallback, failCallback) {
+function fetch(path, successCallback, failCallback) {
   let request = http.request({
     hostname: 'www.jeuxvideo.com',
-    path: url,
+    path,
     headers: {
       'Cookie': 'coniunctio=cache_bypass'
     }
