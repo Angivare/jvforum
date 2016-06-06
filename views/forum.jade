@@ -41,7 +41,7 @@ block body
             when 'timeout'
               h1.error__title Timeout
               .error__message
-                p La page sur JVC mettait plus de #{timeoutDelay} secondes à charger, elle a était arrêtée.
+                p La page sur JVC mettait trop de temps à charger, elle a était arrêtée.
                 p
                   a.button.button--cta.button--scale(href="/#{id}-#{slug}") Réessayer
             when 'network'

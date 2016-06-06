@@ -3,8 +3,9 @@ let http = require('http')
 
 function fetch(path, successCallback, failCallback, asAuthentified = false) {
   let headers = {
-    'Cookie': 'coniunctio=cache_bypass',
-  }
+        'Cookie': 'coniunctio=cache_bypass',
+      }
+    , timeout = config.timeouts.notAuthentified
 
   if (asAuthentified) {
     headers = {
@@ -31,7 +32,7 @@ function fetch(path, successCallback, failCallback, asAuthentified = false) {
 
   request.on('error', failCallback)
 
-  request.setTimeout(config.timeout, () => {
+  request.setTimeout(timeout, () => {
     failCallback('timeout')
   })
 

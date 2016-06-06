@@ -1,5 +1,7 @@
 let config = {
-  timeout: 1500,
+  timeouts: {
+    notAuthentified: 2500,
+  },
   cookies: 'coniunctio=; dlrowolleh=',
 }
 

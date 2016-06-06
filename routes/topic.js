@@ -82,7 +82,6 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
   }, (e) => {
     if (e == 'timeout') {
       viewLocals.error = 'timeout'
-      viewLocals.timeoutDelay = (config.timeout / 1000).toString().replace('.', ',')
     }
     else {
       viewLocals.error = 'network'

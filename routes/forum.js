@@ -55,7 +55,6 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
   }, (e) => {
     if (e == 'timeout') {
       viewLocals.error = 'timeout'
-      viewLocals.timeoutDelay = (config.timeout / 1000).toString().replace('.', ',')
     }
     else {
       viewLocals.error = 'network'
