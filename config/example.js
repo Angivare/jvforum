@@ -1,6 +1,11 @@
 let config = {
   timeouts: {
-    notAuthentified: 2500,
+    server: {
+      notAuthentified: 2500,
+    },
+    client: {
+      postMessage: 2000,
+    },
   },
   cookies: 'coniunctio=; dlrowolleh=',
 }

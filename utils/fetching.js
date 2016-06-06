@@ -5,7 +5,7 @@ function fetch(path, successCallback, failCallback, asAuthentified = false) {
   let headers = {
         'Cookie': 'coniunctio=cache_bypass',
       }
-    , timeout = config.timeouts.notAuthentified
+    , timeout = config.timeouts.server.notAuthentified
 
   if (asAuthentified) {
     headers = {

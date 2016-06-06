@@ -15,6 +15,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
         cacheBusting,
+        timeouts: config.timeouts.client,
         id,
         slug,
         pathJvc,

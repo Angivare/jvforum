@@ -1,5 +1,3 @@
-var TIMEOUT_POST_MESSAGE = 2000
-
 var isFormReadyToPost = false
   , hasTouch = false
 
@@ -39,7 +37,7 @@ function postMessage(event) {
   $.post({
     url: '/ajax/postMessage',
     data: data,
-    timeout: TIMEOUT_POST_MESSAGE,
+    timeout: timeouts.postMessage,
   })
     .always(function() {
       $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
