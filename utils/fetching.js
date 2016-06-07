@@ -1,4 +1,5 @@
 let http = require('http')
+, querystring = require('querystring')
 , config = require('../config')
 
 http.globalAgent.keepAlive = true
@@ -8,26 +9,38 @@ function fetch(pathOrOptions, successCallback, failCallback) {
   let path = pathOrOptions
     , asAuthentified = false
     , timeout = config.timeouts.server.notAuthentified
-    , headers = {
-        'Cookie': 'coniunctio=cache_bypass',
+    , requestOptions = {
+        hostname: 'www.jeuxvideo.com',
+        headers: {
+          'Cookie': 'coniunctio=cache_bypass',
+        }
       }
+    , postData
 
   if (typeof pathOrOptions == 'object') {
-    path = pathOrOptions.path
+    requestOptions.path = pathOrOptions.path
+
     if (pathOrOptions.asAuthentified) {
       asAuthentified = pathOrOptions.asAuthentified
-      headers = {
+      requestOptions.headers = {
         'Cookie': config.cookies,
         'X-Forwarded-For': asAuthentified,
       }
     }
+
+    if (pathOrOptions.postData) {
+      postData = querystring.stringify(pathOrOptions.postData)
+
+      requestOptions.method = 'POST'
+      requestOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      requestOptions.headers['Content-Length'] = Buffer.byteLength(postData)
+    }
+  }
+  else {
+    requestOptions.path = pathOrOptions
   }
 
-  let request = http.request({
-    hostname: 'www.jeuxvideo.com',
-    path,
-    headers,
-  }, (res) => {
+  let request = http.request(requestOptions, (res) => {
     let body = ''
     res.on('data', (chunk) => {
       body += chunk
@@ -44,6 +57,10 @@ function fetch(pathOrOptions, successCallback, failCallback) {
   request.setTimeout(timeout, () => {
     failCallback('timeout')
   })
+
+  if (postData) {
+    request.write(postData)
+  }
 
   request.end()
 }

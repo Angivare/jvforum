@@ -48,8 +48,6 @@ function postMessage(event) {
         return
       }
 
-      $('.messages-list').append('<p>' + data.sent.message + '</p>') // Dummy
-
       $('.form__errors').hide()
       $('.form__textarea').val('')
 
