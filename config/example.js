@@ -8,6 +8,12 @@ let config = {
     },
   },
   cookies: 'coniunctio=; dlrowolleh=',
+  databaseConnection: {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'jvforum',
+  },
 }
 
 module.exports = config
