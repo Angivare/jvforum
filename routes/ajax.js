@@ -57,21 +57,21 @@ router.post('/ajax/postMessage', (req, res, next) => {
           r.error = 'Timeout de JVC lors de l’envoi du message. Le message a cependant peut-être été posté.'
         }
         else {
-          r.error = error
+          r.error = `Erreur réseau de JVF lors de l’envoi du message. (${error}).`
         }
         res.json(r)
       })
     }
     else {
-      r.error = 'JVForum n’a pas pu parser le formulaire de post.'
+      r.error = 'JVForum n’a pas pu parser le formulaire.'
       res.json(r)
     }
   }, (error) => {
     if (error == 'timeout') {
-      r.error = 'Timeout de JVC lors de la récupération du formulaire de post.'
+      r.error = 'Timeout de JVC lors de la récupération du formulaire.'
     }
     else {
-      r.error = error
+      r.error = `Erreur réseau de JVF lors de la récupération du formulaire. (${error}).`
     }
     res.json(r)
   })
