@@ -55,6 +55,10 @@ function fetch(pathOrOptions, successCallback, failCallback) {
   request.on('error', failCallback)
 
   request.setTimeout(timeout, () => {
+    request.removeListener('error', failCallback)
+    request.on('error', (e) => {})
+    request.abort()
+
     failCallback('timeout')
   })
 
