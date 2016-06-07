@@ -27,7 +27,7 @@ router.post('/ajax/postMessage', (req, res, next) => {
       r.form = form
     }
     else {
-      r.error = 'parsing'
+      r.error = 'JVForum n’a pas pu parser le formulaire de post.'
     }
     res.json(r)
   }, (error) => {
