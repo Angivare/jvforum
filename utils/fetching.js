@@ -1,6 +1,9 @@
 let http = require('http')
 , config = require('../config')
 
+http.globalAgent.keepAlive = true
+http.globalAgent.maxSockets = 30
+
 function fetch(path, successCallback, failCallback, asAuthentified = false) {
   let headers = {
         'Cookie': 'coniunctio=cache_bypass',

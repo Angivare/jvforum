@@ -10,11 +10,7 @@ let express = require('express')
   , routesForum = require('./routes/forum')
   , routesTopic = require('./routes/topic')
   , routesAjax = require('./routes/ajax')
-  , config = require('./config')
   , app = express()
-
-http.globalAgent.keepAlive = true
-http.globalAgent.maxSockets = 30
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
