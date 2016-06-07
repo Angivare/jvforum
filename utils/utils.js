@@ -162,6 +162,10 @@ function adaptPostedMessage(message, hostname) {
     }
   }
 
+  // Enable hashtags and asterisks at the start of a line by inserting a soft hyphen
+  message = message.replace(/^(#|\*)([^ ])/, '­' + '$1$2')
+  message = message.replace(/\n(#|\*)([^ ])/g, "\n" + '­' + '$1$2')
+
   return message
 }
 
