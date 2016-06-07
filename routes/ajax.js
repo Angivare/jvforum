@@ -18,7 +18,10 @@ router.post('/ajax/postMessage', (req, res, next) => {
 
   let {message, pathJvc} = req.body
 
-  fetch(pathJvc, (headers, body) => {
+  fetch({
+    path: pathJvc,
+    asAuthentified: ipAddress,
+  }, (headers, body) => {
     let form = parse.form(body)
     if (form) {
       r.form = form
@@ -30,7 +33,7 @@ router.post('/ajax/postMessage', (req, res, next) => {
   }, (error) => {
     r.error = error
     res.json(r)
-  }, ipAddress)
+  })
 })
 
 module.exports = router
