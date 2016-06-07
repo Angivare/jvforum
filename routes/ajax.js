@@ -4,7 +4,7 @@ let express = require('express')
   , parse = require('../utils/parsing')
   , router = express.Router()
 
-router.post('/ajax/*', (req, res, next) => {
+router.post('/*', (req, res, next) => {
   if (!('origin' in req.headers) || req.headers.origin != `${req.protocol}://${req.headers.host}`) {
     res.json({error: 'Bad Origin'})
     return
@@ -12,7 +12,7 @@ router.post('/ajax/*', (req, res, next) => {
   next()
 })
 
-router.post('/ajax/postMessage', (req, res, next) => {
+router.post('/postMessage', (req, res, next) => {
   let r = {
       error: false,
     }
