@@ -133,6 +133,32 @@ function adaptMessageContent(content) {
   return content
 }
 
+function adaptPostedMessage(message, hostname) {
+  let regex = new RegExp(`https?://${hostname}/([0-9]+)(?:/([0-9]+))?-([a-z0-9]+(?:-[a-z0-9]+)*)(?:/([0-9]+))?(?:\#([0-9]+))?(?:\#after[0-9]+)?`, 'gi')
+  message = message.replace(regex, (all, forumId, topicIdJvf, slug, page, messageId) => {
+    let mode = 0
+      , topicIdlegacyOrModern = 0
+      , indexForum = 1
+
+    if (!page) {
+      page = 1
+    }
+    if (topicIdJvf) {
+      mode = topicIdJvf[0] == 0 ? 1 : 42
+      topicIdlegacyOrModern = parseInt(topicIdJvf)
+    }
+    else {
+      indexForum = (page - 1) * 25 + 1
+      page = 1
+    }
+
+    return `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${topicIdlegacyOrModern}-${page}-0-${indexForum}-0-${slug}.htm`
+  })
+
+  return message
+}
+
 module.exports = {
   adaptMessageContent,
+  adaptPostedMessage,
 }

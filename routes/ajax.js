@@ -1,4 +1,5 @@
 let express = require('express')
+  , utils = require('../utils/utils')
   , fetch = require('../utils/fetching')
   , parse = require('../utils/parsing')
   , router = express.Router()
@@ -16,6 +17,7 @@ router.post('/ajax/postMessage', (req, res, next) => {
   }
 
   let {message, pathJvc} = req.body
+  message = utils.adaptPostedMessage(message, req.headers.host)
 
   fetch({
     path: pathJvc,
