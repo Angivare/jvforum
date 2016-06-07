@@ -3,18 +3,6 @@ let express = require('express')
   , parse = require('../utils/parsing')
   , router = express.Router()
 
-function getForm(pathJvc, ipAddress, successCallback, failCallback) {
-  fetch(pathJvc, (headers, body) => {
-    let form = parse.form(body)
-    if (form) {
-      successCallback(form)
-    }
-    else {
-      failCallback('parsing')
-    }
-  }, failCallback, ipAddress)
-}
-
 router.post('/ajax/postMessage', (req, res, next) => {
   let r = {
       error: false,
@@ -30,13 +18,19 @@ router.post('/ajax/postMessage', (req, res, next) => {
 
   let {message, pathJvc} = req.body
 
-  getForm(pathJvc, ipAddress, (form) => {
-    r.form = form
+  fetch(pathJvc, (headers, body) => {
+    let form = parse.form(body)
+    if (form) {
+      r.form = form
+    }
+    else {
+      r.error = 'parsing'
+    }
     res.json(r)
   }, (error) => {
     r.error = error
     res.json(r)
-  })
+  }, ipAddress)
 })
 
 module.exports = router
