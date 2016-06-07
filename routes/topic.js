@@ -11,10 +11,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
   let forumId = parseInt(req.params.forumId)
     , idJvf = req.params.idJvf
     , mode = idJvf[0] == '0' ? 1 : 42
-    , idlegacyOrModern = parseInt(idJvf)
+    , idLegacyOrModern = parseInt(idJvf)
     , slug = req.params.slug
     , page = req.params.page ? parseInt(req.params.page) : 1
-    , pathJvc = `/forums/${mode}-${forumId}-${idlegacyOrModern}-${page}-0-1-0-${slug}.htm`
+    , pathJvc = `/forums/${mode}-${forumId}-${idLegacyOrModern}-${page}-0-1-0-${slug}.htm`
     , viewLocals = {
         userAgent: req.headers['user-agent'],
         googleAnalyticsId: config.googleAnalyticsId,
@@ -23,7 +23,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         forumId,
         idJvf,
         mode,
-        idlegacyOrModern,
+        idLegacyOrModern,
         slug,
         page,
         pathJvc,
@@ -32,7 +32,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         superlative: superlative(),
       }
 
-  if (idlegacyOrModern == 0) {
+  if (idLegacyOrModern == 0) {
     return next()
   }
 

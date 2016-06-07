@@ -31,7 +31,10 @@ function postMessage(event) {
 
   var data = {
     message: message,
-    pathJvc: pathJvc,
+    forumId: forumId,
+    topicMode: topicMode,
+    topicIdLegacyOrModern: topicIdLegacyOrModern,
+    slug: slug,
   }
 
   $.post({
