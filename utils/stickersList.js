@@ -1,6 +1,7 @@
 let sha1 = require('sha1')
   , fs = require('fs')
 
+/* Values, like 'pose', are transformed into an object below this list, it becomes {code: 'pose', checksum: '…'} */
 let stickersList = {
   'hap': {
     '1kki': 'pose',

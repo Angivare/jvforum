@@ -155,6 +155,13 @@ function adaptPostedMessage(message, hostname) {
     return `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${topicIdlegacyOrModern}-${page}-0-${indexForum}-0-${slug}.htm`
   })
 
+  for (let category in stickersList) {
+    for (let id in stickersList[category]) {
+      let {code} = stickersList[category][id]
+      message = message.replace(`:${code}:`, `[[sticker:p/${id}]]`)
+    }
+  }
+
   return message
 }
 
