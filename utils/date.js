@@ -50,6 +50,7 @@ function convertTopicList(date) {
       date = formatHoursAndMinutes(then)
     }
   }
+
   return date
 }
 
@@ -94,7 +95,10 @@ function convertMessage(date) {
     date += formatHoursAndMinutes(then)
   }
 
-  return date
+  return {
+    diff,
+    text: date,
+  }
 }
 
 module.exports = {
