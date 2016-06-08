@@ -16,6 +16,21 @@ function alertPlaceholder() {
   alert('Cette fonction reviendra plus tard')
 }
 
+function addMessagesEvent(element, type, listener) {
+  instantClick.on('change', function() {
+    $('.message ' + element)[type](listener)
+  })
+}
+
+function toggleSpoil(event) {
+  event.stopPropagation()
+  var target = $(event.target)
+  if (target.is('a, .sticker, .noelshack-link__thumb')) {
+    return
+  }
+  $(this).toggleClass('spoil--revealed')
+}
+
 function postMessage(event) {
   event.preventDefault()
 
@@ -105,5 +120,7 @@ instantClick.on('change', function() {
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
 })
+
+addMessagesEvent('.spoil', 'click', toggleSpoil)
 
 $(document.body).on('touchstart', setAsHavingTouch)

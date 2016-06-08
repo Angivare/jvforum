@@ -1925,6 +1925,10 @@ color: hsl(240, 8%, 27%);
   margin: 1em 0;
 }
 
+.spoil:not(.spoil--revealed) {
+  cursor: pointer;
+}
+
 .spoil--revealed {
   overflow: visible;
   background: #EF9A9A;
