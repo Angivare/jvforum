@@ -20,7 +20,7 @@ each i in messages
                 img.message__byline-author-avatar-image.message__byline-author-avatar-image--default(src="http://image.jeuxvideo.com/avatar-md/default.jpg")
               span.message__byline-author-pseudo Pseudo supprimé
         .message__byline-date
-          span.js-menu.js-date.message__byline-date-inline(title=i.date)= i.date
+          span.js-menu.js-date.message__byline-date-inline(title=i.dateRaw)= i.date
       .js-content.message__content!= i.content
       .message__quick-actions
         .js-quote.message__quick-action.message__quick-action--quote(title="Citer")

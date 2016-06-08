@@ -28,7 +28,8 @@ function topic(body) {
       status: matches[3],
       nickname: matches[4],
       isNicknameDeleted,
-      date: matches[5],
+      date: date.convertMessage(matches[5]),
+      dateRaw: matches[5],
       content: utils.adaptMessageContent(matches[6]),
     })
   }
