@@ -43,6 +43,9 @@ function topic(body) {
   while (matches = regex.exec(body)) {
     retour.lastPage = parseInt(matches[1])
   }
+  if (page > retour.lastPage) {
+    retour.lastPage = page
+  }
 
   retour.paginationPages = []
   if (page >= 5) {
