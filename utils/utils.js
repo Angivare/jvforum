@@ -28,7 +28,9 @@ function adaptMessageContent(content) {
   regex = /<span class="JvCare[^<]+>([^<]+)(?:<i><\/i><span>([^<]+)<\/span>([^<]+))?<\/span>/g
   while (matches = regex.exec(content)) {
     let url = matches.slice(1).join('')
-    content = content.replace(matches[0], `<a href="${url}" target="_blank" title="${url}">${url}</a>`)
+      , replace = `<a href="${url}" target="_blank" title="${url}">${url}</a>`
+    content = content.replace(matches[0], replace)
+    regex.lastIndex = regex.lastIndex - matches[0].length + replace.length
   }
 
   // Non-JvCare links unshortening
