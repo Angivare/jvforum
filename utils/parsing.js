@@ -1,5 +1,6 @@
 let cheerio = require('cheerio')
   , utils = require('./utils')
+  , date = require('./date')
 
 function topic(body) {
   let retour = {}
@@ -98,7 +99,7 @@ function forum(body) {
       status: !$('.topic-author', element).attr('style') ? $('.topic-author', element).attr('class').split(' ')[2].substr('user-'.length) : 'deleted',
       nickname: $('.topic-author', element).text().trim(),
       answerCount: parseInt($('.topic-count', element).text().trim()),
-      date: $('.topic-date span', element).text().trim(),
+      date: date.convertTopicList($('.topic-date span', element).text().trim()),
     })
   })
 
