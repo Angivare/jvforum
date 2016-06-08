@@ -1,7 +1,7 @@
 let entities = require('html-entities').Html5Entities
   , stickersList = require('./stickersList')
 
-function adaptMessageContent(content) {
+function adaptMessageContent(content, id) {
   let matches
     , regex
 
@@ -131,6 +131,10 @@ function adaptMessageContent(content) {
   content = content.replace(/<a ([^>]+)>([^<]{90,})<\/a>/g, (all, attributes, text) => {
     return `<a class="long-link" ${attributes}>` + text.substr(0, 85) + '<span class="long-link__hidden-part">' + text.substr(85) + '</span></a>'
   })
+
+  if (content.length > 32000) {
+    content = '<div class="message__content-text"><p><small>Message trop gros pour être affiché par JVForum.</small></p></div>'
+  }
 
   return content
 }

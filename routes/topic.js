@@ -4,6 +4,7 @@ let express = require('express')
   , fetch = require('../utils/fetching')
   , cacheBusting = require('../utils/prepareCacheBusting')
   , superlative = require('../utils/superlative')
+  , cache = require('../utils/caching')
   , config = require('../config')
   , router = express.Router()
 
@@ -73,6 +74,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     }
     else {
       let parsed = parse.topic(body)
+        , cacheId = `${forumId}/${idJvf}/${page}`
+
+      cache.has(cacheId, (fetchedAt) => {}, () => {
+        cache.save(cacheId, parsed)
+      })
 
       Object.keys(parsed).forEach((key) => {
         viewLocals[key] = parsed[key]

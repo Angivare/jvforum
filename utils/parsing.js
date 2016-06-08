@@ -32,7 +32,7 @@ function topic(body) {
       date: dateConversion.text,
       dateRaw: matches[5],
       age: dateConversion.diff,
-      content: utils.adaptMessageContent(matches[6]),
+      content: utils.adaptMessageContent(matches[6], matches[1]),
     })
   }
 
