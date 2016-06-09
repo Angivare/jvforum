@@ -31,70 +31,77 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         urlJvc: `http://www.jeuxvideo.com${pathJvc}`,
         isFavorite: false,
         superlative: superlative(),
+        cacheAge: 0,
       }
 
   if (idLegacyOrModern == 0) {
     return next()
   }
 
-  fetch(pathJvc, (headers, body) => {
-    if ('location' in headers) {
-      let {location} = headers
-        , matches
-      if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
-        viewLocals.error = 'deleted'
-      }
-      else if (location == '//www.jeuxvideo.com/forums.htm') {
-        viewLocals.error = '103'
-      }
-      else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
-        /* Known possible cases:
-         * - Topic with 42 mode redirected to 1 mode, or in reverse
-         * - Topic has been moved to another forum
-         * - Topic's title and its slug has been modified
-         * - The page we try to access doesn't exists and JVC redirects to the first one
-         */
-        let urlJvf = `/${matches[2]}/`
-        if (matches[1] == 1) {
-          urlJvf += '0'
+  let cacheId = `${forumId}/${idJvf}/${page}`
+  cache.get(cacheId, 60 * 60 * 24 * 7, (content, age) => {
+    Object.keys(content).forEach((key) => {
+      viewLocals[key] = content[key]
+    })
+    viewLocals.cacheAge = age
+    res.render('topic', viewLocals)
+  }, () => {
+    fetch(pathJvc, (headers, body) => {
+      if ('location' in headers) {
+        let {location} = headers
+          , matches
+        if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+          viewLocals.error = 'deleted'
         }
-        urlJvf += `${matches[3]}-${matches[5]}`
-        if (matches[4] != 1) {
-          urlJvf += `/${matches[4]}`
+        else if (location == '//www.jeuxvideo.com/forums.htm') {
+          viewLocals.error = '103'
         }
-        res.redirect(urlJvf)
+        else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
+          /* Known possible cases:
+           * - Topic with 42 mode redirected to 1 mode, or in reverse
+           * - Topic has been moved to another forum
+           * - Topic's title and its slug has been modified
+           * - The page we try to access doesn't exists and JVC redirects to the first one
+           */
+          let urlJvf = `/${matches[2]}/`
+          if (matches[1] == 1) {
+            urlJvf += '0'
+          }
+          urlJvf += `${matches[3]}-${matches[5]}`
+          if (matches[4] != 1) {
+            urlJvf += `/${matches[4]}`
+          }
+          res.redirect(urlJvf)
+        }
+        else {
+          viewLocals.error = 'unknownRedirect'
+          viewLocals.errorLocation = location
+        }
+      }
+      else if (headers.statusCode == 404) {
+        viewLocals.error = 'doesNotExist'
       }
       else {
-        viewLocals.error = 'unknownRedirect'
-        viewLocals.errorLocation = location
-      }
-    }
-    else if (headers.statusCode == 404) {
-      viewLocals.error = 'doesNotExist'
-    }
-    else {
-      let parsed = parse.topic(body)
-        , cacheId = `${forumId}/${idJvf}/${page}`
+        let parsed = parse.topic(body)
 
-      cache.has(cacheId, (fetchedAt) => {}, () => {
         cache.save(cacheId, parsed)
-      })
 
-      Object.keys(parsed).forEach((key) => {
-        viewLocals[key] = parsed[key]
-      })
-    }
+        Object.keys(parsed).forEach((key) => {
+          viewLocals[key] = parsed[key]
+        })
+      }
 
-    res.render('topic', viewLocals)
-  }, (e) => {
-    if (e == 'timeout') {
-      viewLocals.error = 'timeout'
-    }
-    else {
-      viewLocals.error = 'network'
-      viewLocals.errorDetail = e
-    }
-    res.render('topic', viewLocals)
+      res.render('topic', viewLocals)
+    }, (e) => {
+      if (e == 'timeout') {
+        viewLocals.error = 'timeout'
+      }
+      else {
+        viewLocals.error = 'network'
+        viewLocals.errorDetail = e
+      }
+      res.render('topic', viewLocals)
+    })
   })
 })
 

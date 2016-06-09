@@ -1,14 +1,15 @@
 let db = require('./db')
   , config = require('../config')
 
-function has(id, successCallback, failCallback) {
-  db.select('fetchedAt', 'cache', {id}, (results) => {
+function get(id, maxAge, successCallback, failCallback) {
+  db.select('fetchedAt, content', 'cache', {id}, (results) => {
     if (results.length) {
-      successCallback(results[0].fetchedAt)
+      let age = (+new Date - results[0].fetchedAt) / 1000
+      if (age < maxAge) {
+        return successCallback(JSON.parse(results[0].content), age)
+      }
     }
-    else {
-      failCallback()
-    }
+    return failCallback()
   })
 }
 
@@ -21,6 +22,6 @@ function save(id, content, successCallback) {
 }
 
 module.exports = {
-  has,
+  get,
   save,
 }
