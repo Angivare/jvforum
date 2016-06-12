@@ -112,12 +112,16 @@ function forum(body) {
   r.parent = false
   if (2 in $('.fil-ariane-crumb span a')) {
     let element = $('.fil-ariane-crumb span a')[2]
+      , elementText = $(element).text()
       , url = $(element).attr('href')
 
-    r.parent = {
-      title: $(element).text().substr('Forum principal '.length),
-      id: parseInt(url.split('-')[1]),
-      slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
+    if (elementText.substr(0, 'Forum principal '.length) == 'Forum principal ') {
+      // Game forums, but not their subforums, have their breadcrumb include a link to the game's info page
+      r.parent = {
+        title: $(element).text().substr('Forum principal '.length),
+        id: parseInt(url.split('-')[1]),
+        slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
+      }
     }
   }
 
