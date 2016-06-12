@@ -3,6 +3,7 @@ let express = require('express')
   , parse = require('../utils/parsing')
   , fetch = require('../utils/fetching')
   , cacheBusting = require('../utils/prepareCacheBusting')
+  , cache = require('../utils/caching')
   , superlative = require('../utils/superlative')
   , config = require('../config')
   , router = express.Router()
@@ -24,44 +25,55 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         superlative: superlative(),
       }
 
-  fetch(pathJvc, (headers, body) => {
-    if ('location' in headers) {
-      let {location} = headers
-        , matches
-      if (location == '//www.jeuxvideo.com/forums.htm') {
-        if (id == 103) {
-          viewLocals.error = '103'
+  let cacheId = `${id}/1`
+  cache.get(cacheId, 5, (content, age) => {
+    Object.keys(content).forEach((key) => {
+      viewLocals[key] = content[key]
+    })
+    viewLocals.cacheAge = age
+    res.render('forum', viewLocals)
+  }, () => {
+    fetch.unique(pathJvc, cacheId, (headers, body) => {
+      if ('location' in headers) {
+        let {location} = headers
+          , matches
+        if (location == '//www.jeuxvideo.com/forums.htm') {
+          if (id == 103) {
+            viewLocals.error = '103'
+          }
+          else {
+            viewLocals.error = 'forumDoesNotExist'
+          }
+        }
+        else if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
+          res.redirect(`/${matches[1]}-${matches[3]}`)
         }
         else {
-          viewLocals.error = 'forumDoesNotExist'
+          viewLocals.error = 'unknownRedirect'
+          viewLocals.errorLocation = location
         }
       }
-      else if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
-        res.redirect(`/${matches[1]}-${matches[3]}`)
+      else {
+        let parsed = parse.forum(body)
+
+        cache.save(cacheId, parsed)
+
+        Object.keys(parsed).forEach((key) => {
+          viewLocals[key] = parsed[key]
+        })
+      }
+
+      res.render('forum', viewLocals)
+    }, (e) => {
+      if (e == 'timeout') {
+        viewLocals.error = 'timeout'
       }
       else {
-        viewLocals.error = 'unknownRedirect'
-        viewLocals.errorLocation = location
+        viewLocals.error = 'network'
+        viewLocals.errorDetail = e
       }
-    }
-    else {
-      let parsed = parse.forum(body)
-
-      Object.keys(parsed).forEach((key) => {
-        viewLocals[key] = parsed[key]
-      })
-    }
-
-    res.render('forum', viewLocals)
-  }, (e) => {
-    if (e == 'timeout') {
-      viewLocals.error = 'timeout'
-    }
-    else {
-      viewLocals.error = 'network'
-      viewLocals.errorDetail = e
-    }
-    res.render('forum', viewLocals)
+      res.render('forum', viewLocals)
+    })
   })
 })
 

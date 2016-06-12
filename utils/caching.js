@@ -5,6 +5,9 @@ function get(id, maxAge, successCallback, failCallback) {
   db.select('fetchedAt, content', 'cache', {id}, (results) => {
     if (results.length) {
       let age = (+new Date - results[0].fetchedAt) / 1000
+      if (!maxAge) {
+        return successCallback(JSON.parse(results[0].content), age)
+      }
       if (age < maxAge) {
         return successCallback(JSON.parse(results[0].content), age)
       }

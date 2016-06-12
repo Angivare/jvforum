@@ -78,7 +78,7 @@ function topic(body) {
 
 function forum(body) {
   let $ = cheerio.load(body)
-    , r = []
+    , r = {}
     , selection
 
   r.title = false
