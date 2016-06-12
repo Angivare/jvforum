@@ -13,11 +13,42 @@ function get(id, maxAge, successCallback, failCallback) {
   })
 }
 
+let lastSaved = {}
+
 function save(id, content, successCallback) {
-  db.insert('cache', {
-    id,
-    content: JSON.stringify(content),
-    fetchedAt: +new Date,
+  let now = +new Date
+    , row = {
+        id,
+        content: JSON.stringify(content),
+        fetchedAt: now,
+      }
+
+  if (id in lastSaved) {
+    if (lastSaved[id] < now - 100) {
+      /* No need to update if saved less than 100ms ago. This happens when
+       * fetch.unique has succeeded and multiple success callbacks are called.
+       */
+      db.update('cache', row, {
+        id,
+      })
+      lastSaved[id] = now
+      return
+    }
+
+    db.update('cache', row, {
+      id,
+    })
+    lastSaved[id] = now
+    return
+  }
+
+  lastSaved[id] = now
+  this.get(id, null, (results) => {
+    db.update('cache', row, {
+      id,
+    })
+  }, () => {
+    db.insert('cache', row)
   })
 }
 

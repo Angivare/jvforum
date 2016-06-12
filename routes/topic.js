@@ -46,7 +46,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
     viewLocals.cacheAge = age
     res.render('topic', viewLocals)
   }, () => {
-    fetch(pathJvc, (headers, body) => {
+    fetch.unique(pathJvc, cacheId, (headers, body) => {
       if ('location' in headers) {
         let {location} = headers
           , matches

@@ -69,4 +69,31 @@ function fetch(pathOrOptions, successCallback, failCallback) {
   request.end()
 }
 
+let uniquesBeingFetched = {}
+
+fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
+  if (id in uniquesBeingFetched) {
+    uniquesBeingFetched[id].push({
+      successCallback,
+      failCallback,
+    })
+    return
+  }
+
+  uniquesBeingFetched[id] = [{
+    successCallback,
+    failCallback,
+  }]
+
+  fetch(pathOrOptions, (headers, body) => {
+    for (let i of uniquesBeingFetched[id]) {
+      i.successCallback(headers, body)
+    }
+  }, (error) => {
+    for (let i of uniquesBeingFetched[id]) {
+      i.failCallback(error)
+    }
+  })
+}
+
 module.exports = fetch
