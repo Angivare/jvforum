@@ -635,13 +635,13 @@ var instantClick
     }
   }
 
-  function timer() {
+  function setTimeout() {
     var timer = setTimeout.apply(window, arguments)
     $currentPageTimers.push(timer)
     return timer
   }
 
-  function interval() {
+  function setInterval() {
     var timer = setInterval.apply(window, arguments)
     $currentPageTimers.push(timer)
     return timer
@@ -659,8 +659,8 @@ var instantClick
     supported: supported,
     init: init,
     on: on,
-    timer: timer,
-    interval: interval,
+    setTimeout: setTimeout,
+    setInterval: setInterval,
     trackXhr: trackXhr
   }
 
