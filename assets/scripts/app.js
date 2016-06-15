@@ -1,5 +1,11 @@
+var REFRESH_INTERVAL = 5
+  , REFRESH_INTERVAL_FOR_OLD_CONTENT = 5 * 60
+  , REFRESH_CHECK_INTERVAL = 15
+
 var isFormReadyToPost = false
   , hasTouch = false
+  , refreshTimeout
+  , lastRefreshTimestamp = 0
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -96,6 +102,32 @@ function readyFormToPost() {
   }
 }
 
+function startRefresh() {
+  var lastMessageAge = $('.message').last().data('age')
+  if (lastMessageAge == undefined) {
+    return
+  }
+
+  var isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
+  if (isLastPage || lastMessageAge < 5 * 60) {
+    instantClick.setTimeout(refresh, (REFRESH_INTERVAL - cacheAge) * 1000)
+    instantClick.setInterval(restartRefreshIfNeeded, REFRESH_CHECK_INTERVAL)
+  }
+  else {
+    instantClick.setTimeout(refresh, (REFRESH_INTERVAL_FOR_OLD_CONTENT - cacheAge) * 1000)
+  }
+}
+
+function restartRefreshIfNeeded() {
+  if (lastRefreshTimestamp < +new Date - REFRESH_CHECK_INTERVAL * 1000) {
+    refresh()
+  }
+}
+
+function refresh() {
+  lastRefreshTimestamp = +new Date
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -119,6 +151,8 @@ instantClick.on('change', function() {
   isFormReadyToPost = false
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
+
+  startRefresh()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
