@@ -1,5 +1,5 @@
 each i in messages
-  .message(id=i.id data-pseudo=i.pseudo)
+  .message(id=i.id data-nickname=i.nickname data-age=i.age)
     .message__actions.message__actions--nb-1
       span.js-quote.message__actions-action.message__actions-action--quote Citer
     .message__visible
@@ -20,7 +20,7 @@ each i in messages
                 img.message__byline-author-avatar-image.message__byline-author-avatar-image--default(src="http://image.jeuxvideo.com/avatar-md/default.jpg")
               span.message__byline-author-pseudo Pseudo supprimé
         .message__byline-date
-          span.js-menu.js-date.message__byline-date-inline(title=i.dateRaw data-age=i.age)= i.date
+          span.js-menu.js-date.message__byline-date-inline(title=i.dateRaw)= i.date
       .js-content.message__content!= i.content
       .message__quick-actions
         .js-quote.message__quick-action.message__quick-action--quote(title="Citer")
