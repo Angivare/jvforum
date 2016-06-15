@@ -636,13 +636,13 @@ var instantClick
   }
 
   function setTimeout() {
-    var timer = setTimeout.apply(window, arguments)
+    var timer = window.setTimeout.apply(window, arguments)
     $currentPageTimers.push(timer)
     return timer
   }
 
   function setInterval() {
-    var timer = setInterval.apply(window, arguments)
+    var timer = window.setInterval.apply(window, arguments)
     $currentPageTimers.push(timer)
     return timer
   }
