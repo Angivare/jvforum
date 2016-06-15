@@ -55,7 +55,7 @@ function postMessage(event) {
     forumId: forumId,
     topicMode: topicMode,
     topicIdLegacyOrModern: topicIdLegacyOrModern,
-    slug: slug,
+    topicSlug: topicSlug,
   }
 
   $.post({

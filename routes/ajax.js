@@ -19,15 +19,15 @@ router.post('/postMessage', (req, res, next) => {
     }
     , ipAddress = req.connection.remoteAddress
 
-  ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'slug'].forEach((varName) => {
+  ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug'].forEach((varName) => {
     if (!(varName in req.body)) {
       r.error = 'Paramètres manquants'
       res.json(r)
       return
     }
   })
-  let {message, forumId, topicMode, topicIdLegacyOrModern, slug} = req.body
-    , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${slug}.htm`
+  let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
+    , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${topicSlug}.htm`
 
   message = utils.adaptPostedMessage(message, req.headers.host)
 
