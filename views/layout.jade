@@ -19,7 +19,7 @@ html(lang="fr" class=isIOS ? "is-ios" : "")
   script
     | var timeouts = {
     each value, name in timeouts
-      | '#{name}': #{value},
+      | #{name}: #{value},
     | }
   each checksum, name in cacheBusting.scripts
     script(src="/assets/scripts/#{name}--#{checksum}.js" data-no-instant)
