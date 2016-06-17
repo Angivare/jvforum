@@ -63,28 +63,28 @@ function postMessage(event) {
     data: data,
     timeout: timeouts.postMessage,
   })
-    .always(function() {
-      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
-    })
-    .done(function(data, textStatus, jqXHR) {
-      if (data.error) {
-        showErrors(data.error)
-        return
-      }
+  .always(function() {
+    $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
+  })
+  .done(function(data, textStatus, jqXHR) {
+    if (data.error) {
+      showErrors(data.error)
+      return
+    }
 
-      $('.form__errors').hide()
-      $('.form__textarea').val('')
+    $('.form__errors').hide()
+    $('.form__textarea').val('')
 
-      isFormReadyToPost = false
-      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
+    isFormReadyToPost = false
+    $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
 
-      if (!hasTouch) {
-        $('.form__textarea').focus()
-      }
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      showErrors('Erreur Ajax (' + textStatus + ': ' + errorThrown + ')')
-    })
+    if (!hasTouch) {
+      $('.form__textarea').focus()
+    }
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    showErrors('Erreur Ajax (' + textStatus + ': ' + errorThrown + ')')
+  })
 }
 
 function readyFormToPost() {
