@@ -4,6 +4,7 @@ var isFormReadyToPost = false
   , lastRefreshTimestamp = 0
   , messagesChecksums
   , refreshInterval
+  , messagesEvents = []
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -21,6 +22,11 @@ function alertPlaceholder() {
 }
 
 function addMessagesEvent(element, type, listener) {
+  messagesEvents.push({
+    element: element,
+    type: type,
+    listener: listener,
+  })
   instantClick.on('change', function() {
     $('.message ' + element)[type](listener)
   })
@@ -159,6 +165,9 @@ function refresh() {
       if (!(id in messagesChecksums)) {
         // New message
         messagesChecksums[id] = message.checksum
+        for (var i = 0; i < messagesEvents.length; i++) {
+          $('#' + id + ' ' + messagesEvents[i].element)[messagesEvents[i].type](messagesEvents[i].listener)
+        }
         continue
       }
 
