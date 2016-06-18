@@ -2,7 +2,9 @@ let express = require('express')
   , utils = require('../utils/utils')
   , fetch = require('../utils/fetching')
   , parse = require('../utils/parsing')
+  , cache = require('../utils/caching')
   , db = require('../utils/db')
+  , date = require('../utils/date')
   , router = express.Router()
 
 router.post('/*', (req, res, next) => {
@@ -21,9 +23,7 @@ router.post('/postMessage', (req, res, next) => {
 
   ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug'].forEach((varName) => {
     if (!(varName in req.body)) {
-      r.error = 'Paramètres manquants'
-      res.json(r)
-      return
+      return res.json({error: 'Paramètres manquants'})
     }
   })
   let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
@@ -103,6 +103,47 @@ router.post('/postMessage', (req, res, next) => {
       r.error = `Erreur réseau de JVF lors de la récupération du formulaire. (${error}).`
     }
     res.json(r)
+  })
+})
+
+router.post('/refresh', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+
+  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage'].forEach((varName) => {
+    if (!(varName in req.body)) {
+      return res.json({error: 'Paramètres manquants'})
+    }
+  })
+  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage} = req.body
+    , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
+    , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
+
+  if (topicIdLegacyOrModern == 0) {
+    return res.json({error: 'topicIdLegacyOrModern == 0'})
+  }
+
+  let cacheId = `${forumId}/${idJvf}/${topicPage}`
+  cache.get(cacheId, 60 * 60 * 24 * 7, (content, age) => {
+    let data = {
+      messages: [],
+    }
+
+    for (let i = 0; i < content.messages.length; i++) {
+      data.messages[i] = {
+        id: content.messages[i].id,
+      }
+
+      let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+      data.messages[i].date = dateConversion.text
+      data.messages[i].age = dateConversion.diff
+    }
+
+    res.json(data)
+
+  }, () => {
+    res.json({error: 'nocache'})
   })
 })
 

@@ -126,6 +126,38 @@ function restartRefreshIfNeeded() {
 
 function refresh() {
   lastRefreshTimestamp = +new Date
+  var data = {
+    forumId: forumId,
+    topicMode: topicMode,
+    topicIdLegacyOrModern: topicIdLegacyOrModern,
+    topicSlug: topicSlug,
+    topicPage: topicPage,
+  }
+
+  $.post({
+    url: '/ajax/refresh',
+    data: data,
+    timeout: timeouts.refresh,
+  })
+  .done(function(data, textStatus, jqXHR) {
+    if (data.error) {
+      return
+    }
+
+    for (var i = 0; i < data.messages.length; i++) {
+      var message = data.messages[i]
+      $('.message').each(function(index, element) {
+        if (element.id != message.id) {
+          return
+        }
+
+        $('#' + message.id).data('age', message.age)
+        $('#' + message.id + ' .js-date').html(message.date)
+      })
+    }
+
+    instantClick.setTimeout(refresh, 2000)
+  })
 }
 
 instantClick.init()

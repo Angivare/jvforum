@@ -24,7 +24,7 @@ function topic(body) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
       , dateConversion = date.convertMessage(matches[5])
     retour.messages.push({
-      id: matches[1],
+      id: parseInt(matches[1]),
       avatar: isNicknameDeleted || matches[2].includes('/default.jpg') ? false : matches[2],
       status: matches[3],
       nickname: matches[4],

@@ -41,12 +41,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
 
   let cacheId = `${forumId}/${idJvf}/${page}`
   cache.get(cacheId, 60 * 60 * 24 * 7, (content, age) => {
-    if ('messages' in content) {
-      for (let i = 0; i < content.messages.length; i++) {
-        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
-        content.messages[i].date = dateConversion.text
-        content.messages[i].age = dateConversion.diff
-      }
+    for (let i = 0; i < content.messages.length; i++) {
+      let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+      content.messages[i].date = dateConversion.text
+      content.messages[i].age = dateConversion.diff
     }
     Object.keys(content).forEach((key) => {
       viewLocals[key] = content[key]

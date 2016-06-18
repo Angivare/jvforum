@@ -4,7 +4,8 @@ let config = {
       notAuthentified: 2500,
     },
     client: {
-      postMessage: 2000,
+      refresh: 9000,
+      postMessage: 9000,
     },
   },
   cookies: 'coniunctio=; dlrowolleh=',
