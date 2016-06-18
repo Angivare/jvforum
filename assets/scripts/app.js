@@ -3,6 +3,7 @@ var isFormReadyToPost = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
   , messagesChecksums
+  , refreshInterval
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -112,12 +113,13 @@ function startRefresh() {
 
   var isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
   if (isLastPage || lastMessageAge < 5 * 60) {
-    instantClick.setTimeout(refresh, refreshIntervals.recent - (cacheAge * 1000))
+    refreshInterval = refreshIntervals.recent
     instantClick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
   }
   else {
-    instantClick.setTimeout(refresh, refreshIntervals.old - (cacheAge * 1000))
+    refreshInterval = refreshIntervals.old
   }
+  instantClick.setTimeout(refresh, refreshInterval - cacheAge)
 }
 
 function restartRefreshIfNeeded() {
@@ -159,7 +161,7 @@ function refresh() {
       })
     }
 
-    instantClick.setTimeout(refresh, refreshIntervals.recent)
+    instantClick.setTimeout(refresh, refreshInterval)
   })
 }
 
