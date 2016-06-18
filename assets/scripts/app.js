@@ -6,6 +6,7 @@ var isFormReadyToPost = false
   , hasTouch = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
+  , messagesList
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -108,6 +109,11 @@ function startRefresh() {
     return
   }
 
+  messagesList = {}
+  $('.message').each(function(index, element) {
+    messagesList[element.id] = $(element).data('checksum')
+  })
+
   var isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
   if (isLastPage || lastMessageAge < 5 * 60) {
     instantClick.setTimeout(refresh, (REFRESH_INTERVAL - cacheAge) * 1000)
@@ -132,6 +138,7 @@ function refresh() {
     topicIdLegacyOrModern: topicIdLegacyOrModern,
     topicSlug: topicSlug,
     topicPage: topicPage,
+    messagesList: JSON.stringify(messagesList),
   }
 
   $.post({

@@ -35,7 +35,7 @@ function topic(body) {
       dateRaw: matches[5],
       age: dateConversion.diff,
       content,
-      checksum: sha1(content),
+      checksum: sha1(content).substr(0, 8),
     })
   }
 
