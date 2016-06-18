@@ -163,7 +163,7 @@ function refresh() {
       })
     }
 
-    instantClick.setTimeout(refresh, 2000)
+    instantClick.setTimeout(refresh, REFRESH_INTERVAL * 1000)
   })
 }
 

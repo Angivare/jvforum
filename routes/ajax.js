@@ -151,7 +151,6 @@ router.post('/refresh', (req, res, next) => {
     }
 
     res.json(data)
-
   }, () => {
     res.json({error: 'nocache'})
   })
