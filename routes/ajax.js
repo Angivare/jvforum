@@ -135,7 +135,7 @@ router.post('/refresh', (req, res, next) => {
     return res.json({error: 'topicIdLegacyOrModern == 0'})
   }
 
-  function serveContent(content, messagesChecksums) {
+  function serveContent(content) {
     let data = {
       messages: [],
     }
@@ -155,7 +155,7 @@ router.post('/refresh', (req, res, next) => {
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
   cache.get(cacheId, config.timeouts.cache.refresh, (content, age) => {
-    serveContent(content, messagesChecksums)
+    serveContent(content)
   }, () => {
     fetch.unique(pathJvc, cacheId, (headers, body) => {
       if ('location' in headers) {
@@ -192,7 +192,9 @@ router.post('/refresh', (req, res, next) => {
         res.json({error: 'Topic inexistant'})
       }
       else {
-        serveContent(parse.topic(body), messagesChecksums)
+        let parsed = parse.topic(body)
+        serveContent(parsed)
+        cache.save(cacheId, parsed)
       }
     }, (e) => {
       if (e == 'timeout') {
