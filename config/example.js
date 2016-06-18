@@ -7,6 +7,11 @@ let config = {
       refresh: 9000,
       postMessage: 9000,
     },
+    cache: {
+      topicDisplay: 60 * 60 * 24 * 7,
+      forumDisplay: 5,
+      refresh: 5,
+    },
   },
   refreshIntervals: {
     recent: 2000,

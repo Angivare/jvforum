@@ -5,6 +5,7 @@ let express = require('express')
   , cache = require('../utils/caching')
   , db = require('../utils/db')
   , date = require('../utils/date')
+  , config = require('../config')
   , router = express.Router()
 
 router.post('/*', (req, res, next) => {
@@ -135,7 +136,7 @@ router.post('/refresh', (req, res, next) => {
   }
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
-  cache.get(cacheId, 60 * 60 * 24 * 7, (content, age) => {
+  cache.get(cacheId, config.timeouts.cache.refresh, (content, age) => {
     let data = {
       messages: [],
     }

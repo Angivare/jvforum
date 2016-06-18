@@ -27,7 +27,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
       }
 
   let cacheId = `${id}/1`
-  cache.get(cacheId, 5, (content, age) => {
+  cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {
     Object.keys(content).forEach((key) => {
       viewLocals[key] = content[key]
     })
