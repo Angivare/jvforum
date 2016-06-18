@@ -6,7 +6,7 @@ var isFormReadyToPost = false
   , hasTouch = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
-  , messagesList
+  , messagesChecksums
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -109,9 +109,9 @@ function startRefresh() {
     return
   }
 
-  messagesList = {}
+  messagesChecksums = {}
   $('.message').each(function(index, element) {
-    messagesList[element.id] = $(element).data('checksum')
+    messagesChecksums[element.id] = $(element).data('checksum')
   })
 
   var isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
@@ -138,7 +138,7 @@ function refresh() {
     topicIdLegacyOrModern: topicIdLegacyOrModern,
     topicSlug: topicSlug,
     topicPage: topicPage,
-    messagesList: JSON.stringify(messagesList),
+    messagesChecksums: JSON.stringify(messagesChecksums),
   }
 
   $.post({
