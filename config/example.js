@@ -9,7 +9,7 @@ let config = {
     },
   },
   refreshIntervals: {
-    recent: 5000,
+    recent: 2000,
     old: 5 * 60 * 1000,
     check: 15000,
   },
