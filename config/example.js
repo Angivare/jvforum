@@ -8,6 +8,11 @@ let config = {
       postMessage: 9000,
     },
   },
+  refreshIntervals: {
+    recent: 5000,
+    old: 5 * 60 * 1000,
+    check: 15000,
+  },
   cookies: 'coniunctio=; dlrowolleh=',
   databaseConnection: {
     host: 'localhost',

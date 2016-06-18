@@ -17,6 +17,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         googleAnalyticsId: config.googleAnalyticsId,
         cacheBusting,
         timeouts: config.timeouts.client,
+        refreshIntervals: config.refreshIntervals,
         id,
         slug,
         pathJvc,

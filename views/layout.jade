@@ -1,5 +1,5 @@
 - let isIOS = /\((iPhone|iPod|iPad)/.test(userAgent)
-//    github.com/dieulot/jvforum    
+//    github.com/dieulot/jvforum
 doctype html
 html(lang="fr" class=isIOS ? "is-ios" : "")
   meta(charset="utf-8")
@@ -19,6 +19,10 @@ html(lang="fr" class=isIOS ? "is-ios" : "")
   script
     | var timeouts = {
     each value, name in timeouts
+      | #{name}: #{value},
+    | }
+    | var refreshIntervals = {
+    each value, name in refreshIntervals
       | #{name}: #{value},
     | }
   each checksum, name in cacheBusting.scripts

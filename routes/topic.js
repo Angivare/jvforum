@@ -22,6 +22,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         googleAnalyticsId: config.googleAnalyticsId,
         cacheBusting,
         timeouts: config.timeouts.client,
+        refreshIntervals: config.refreshIntervals,
         forumId,
         idJvf,
         mode,
