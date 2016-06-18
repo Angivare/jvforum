@@ -21,11 +21,16 @@ router.post('/postMessage', (req, res, next) => {
     }
     , ipAddress = req.connection.remoteAddress
 
+  let missingParams = false
   ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug'].forEach((varName) => {
     if (!(varName in req.body)) {
-      return res.json({error: 'Paramètres manquants'})
+      missingParams = true
     }
   })
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
   let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${topicSlug}.htm`
 
@@ -111,12 +116,17 @@ router.post('/refresh', (req, res, next) => {
       error: false,
     }
 
-  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage'].forEach((varName) => {
+  let missingParams = false
+  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'messagesChecksums'].forEach((varName) => {
     if (!(varName in req.body)) {
-      return res.json({error: 'Paramètres manquants'})
+      missingParams = true
     }
   })
-  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage} = req.body
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
+  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, messagesChecksums} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
 
