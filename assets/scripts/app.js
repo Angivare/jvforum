@@ -149,8 +149,20 @@ function refresh() {
       return
     }
 
+    if ('newMessagesHTML' in data) {
+      $('.messages-list').append(data.newMessagesHTML)
+    }
+
     for (var id in data.messages) {
       var message = data.messages[id]
+
+      if (!(id in messagesChecksums)) {
+        // New message
+        messagesChecksums[id] = message.checksum
+        continue
+      }
+
+      // Update
       $('#' + id).data('age', message.age)
       $('#' + id + ' .js-date').html(message.date)
       if ('content' in message) {

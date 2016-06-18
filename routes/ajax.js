@@ -139,25 +139,41 @@ router.post('/refresh', (req, res, next) => {
 
   function serveContent(content) {
     let data = {
-      messages: {},
-    }
+        messages: {},
+      }
+      , newMessages = []
 
     for (let i = 0; i < content.messages.length; i++) {
       let id = content.messages[i].id
       data.messages[id] = {}
 
-      let dateConversion = date.convertMessage(content.messages[i].dateRaw)
-      data.messages[id].date = dateConversion.text
-      data.messages[id].age = dateConversion.diff
+      if (id in messagesChecksums) {
+        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+        data.messages[id].date = dateConversion.text
+        data.messages[id].age = dateConversion.diff
 
-      // Checksum diff
-      if (id in messagesChecksums && messagesChecksums[id] != content.messages[i].checksum) {
-        data.messages[id].content = content.messages[i].content
+        if (messagesChecksums[id] != content.messages[i].checksum) {
+          data.messages[id].content = content.messages[i].content
+          data.messages[id].checksum = content.messages[i].checksum
+        }
+      }
+      else {
+        newMessages.push(content.messages[i])
         data.messages[id].checksum = content.messages[i].checksum
       }
     }
 
-    res.json(data)
+    if (newMessages.length == 0) {
+      res.json(data)
+    }
+    else {
+      req.app.render('includes/topicMessages', {
+        messages: newMessages,
+      }, (err, html) => {
+        data.newMessagesHTML = html
+        res.json(data)
+      })
+    }
   }
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
