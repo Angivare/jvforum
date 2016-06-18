@@ -1,4 +1,5 @@
 let cheerio = require('cheerio')
+  , sha1 = require('sha1')
   , utils = require('./utils')
   , date = require('./date')
 
@@ -23,6 +24,7 @@ function topic(body) {
   while (matches = regex.exec(body)) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
       , dateConversion = date.convertMessage(matches[5])
+      , content = utils.adaptMessageContent(matches[6], matches[1])
     retour.messages.push({
       id: parseInt(matches[1]),
       avatar: isNicknameDeleted || matches[2].includes('/default.jpg') ? false : matches[2],
@@ -32,7 +34,8 @@ function topic(body) {
       date: dateConversion.text,
       dateRaw: matches[5],
       age: dateConversion.diff,
-      content: utils.adaptMessageContent(matches[6], matches[1]),
+      content,
+      checksum: sha1(content),
     })
   }
 
