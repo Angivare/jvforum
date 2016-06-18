@@ -149,16 +149,17 @@ function refresh() {
       return
     }
 
-    for (var i = 0; i < data.messages.length; i++) {
-      var message = data.messages[i]
-      $('.message').each(function(index, element) {
-        if (element.id != message.id) {
-          return
-        }
+    for (var id in data.messages) {
+      var message = data.messages[id]
+      $('#' + id).data('age', message.age)
+      $('#' + id + ' .js-date').html(message.date)
+      if ('content' in message) {
+        $('#' + id).data('checksum', message.checksum)
+        messagesChecksums[id] = message.checksum
 
-        $('#' + message.id).data('age', message.age)
-        $('#' + message.id + ' .js-date').html(message.date)
-      })
+        $('#' + id + ' .js-content').html(message.content)
+        $('#' + id + ' .spoil').click(toggleSpoil)
+      }
     }
 
     instantClick.setTimeout(refresh, refreshInterval)

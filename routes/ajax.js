@@ -131,23 +131,30 @@ router.post('/refresh', (req, res, next) => {
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
 
+  messagesChecksums = JSON.parse(messagesChecksums)
+
   if (topicIdLegacyOrModern == 0) {
     return res.json({error: 'topicIdLegacyOrModern == 0'})
   }
 
   function serveContent(content) {
     let data = {
-      messages: [],
+      messages: {},
     }
 
     for (let i = 0; i < content.messages.length; i++) {
-      data.messages[i] = {
-        id: content.messages[i].id,
-      }
+      let id = content.messages[i].id
+      data.messages[id] = {}
 
       let dateConversion = date.convertMessage(content.messages[i].dateRaw)
-      data.messages[i].date = dateConversion.text
-      data.messages[i].age = dateConversion.diff
+      data.messages[id].date = dateConversion.text
+      data.messages[id].age = dateConversion.diff
+
+      // Checksum diff
+      if (id in messagesChecksums && messagesChecksums[id] != content.messages[i].checksum) {
+        data.messages[id].content = content.messages[i].content
+        data.messages[id].checksum = content.messages[i].checksum
+      }
     }
 
     res.json(data)
