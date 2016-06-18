@@ -135,8 +135,7 @@ router.post('/refresh', (req, res, next) => {
     return res.json({error: 'topicIdLegacyOrModern == 0'})
   }
 
-  let cacheId = `${forumId}/${idJvf}/${topicPage}`
-  cache.get(cacheId, config.timeouts.cache.refresh, (content, age) => {
+  function serveContent(content, messagesChecksums) {
     let data = {
       messages: [],
     }
@@ -152,8 +151,57 @@ router.post('/refresh', (req, res, next) => {
     }
 
     res.json(data)
+  }
+
+  let cacheId = `${forumId}/${idJvf}/${topicPage}`
+  cache.get(cacheId, config.timeouts.cache.refresh, (content, age) => {
+    serveContent(content, messagesChecksums)
   }, () => {
-    res.json({error: 'nocache'})
+    fetch.unique(pathJvc, cacheId, (headers, body) => {
+      if ('location' in headers) {
+        let {location} = headers
+          , matches
+        if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+          res.json({error: 'Topic supprimé'})
+        }
+        else if (location == '//www.jeuxvideo.com/forums.htm') {
+          res.json({error: 'Topic privé'})
+        }
+        else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
+          /* Known possible cases:
+           * - Topic with 42 mode redirected to 1 mode, or in reverse
+           * - Topic has been moved to another forum
+           * - Topic's title and its slug has been modified
+           * - The page we try to access doesn't exists and JVC redirects to the first one
+           */
+          let urlJvf = `/${matches[2]}/`
+          if (matches[1] == 1) {
+            urlJvf += '0'
+          }
+          urlJvf += `${matches[3]}-${matches[5]}`
+          if (matches[4] != 1) {
+            urlJvf += `/${matches[4]}`
+          }
+          res.json({error: 'Redirection'})
+        }
+        else {
+          res.json({error: `Redirection inconnue (${location})`})
+        }
+      }
+      else if (headers.statusCode == 404) {
+        res.json({error: 'Topic inexistant'})
+      }
+      else {
+        serveContent(parse.topic(body), messagesChecksums)
+      }
+    }, (e) => {
+      if (e == 'timeout') {
+        res.json({error: 'Timeout'})
+      }
+      else {
+        res.json({error: `Réseau. (${e})`})
+      }
+    })
   })
 })
 
