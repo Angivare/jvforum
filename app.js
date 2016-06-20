@@ -7,6 +7,7 @@ let express = require('express')
   , compression = require('compression')
   , http = require('http')
   , routesStaticFiles = require('./routes/staticFiles')
+  , routesIntroduction = require('./routes/introduction')
   , routesForum = require('./routes/forum')
   , routesTopic = require('./routes/topic')
   , routesAjax = require('./routes/ajax')
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(routesStaticFiles)
+app.use(routesIntroduction)
 app.use(routesForum)
 app.use(routesTopic)
 app.use('/ajax', routesAjax)
