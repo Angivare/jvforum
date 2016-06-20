@@ -12,15 +12,15 @@ function fetch(pathOrOptions, successCallback, failCallback) {
         hostname: 'www.jeuxvideo.com',
         headers: {
           'Cookie': 'coniunctio=cache_bypass',
-        }
+        },
       }
     , postData
 
   if (typeof pathOrOptions == 'object') {
     requestOptions.path = pathOrOptions.path
 
-    if (pathOrOptions.asAuthentified) {
-      requestOptions.headers['Cookie'] = config.cookies
+    if (pathOrOptions.cookies) {
+      requestOptions.headers['Cookie'] = pathOrOptions.cookies
     }
 
     if (pathOrOptions.ipAddress) {

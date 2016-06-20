@@ -114,7 +114,7 @@ router.post('/postMessage', (req, res, next) => {
 
   fetch({
     path: pathJvc,
-    asAuthentified: true,
+    cookies: config.cookies,
     ipAddress,
   }, (headers, body) => {
     let form = parse.form(body)
@@ -133,7 +133,7 @@ router.post('/postMessage', (req, res, next) => {
         let dbId = results.insertId
         fetch({
           path: pathJvc,
-          asAuthentified: true,
+          cookies: config.cookies,
           ipAddress,
           postData: form,
         }, (headers, body) => {
