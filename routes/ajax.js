@@ -43,9 +43,12 @@ router.post('/login', (req, res, next) => {
       form['login_pseudo'] = nickname
       form['login_password'] = password
       form['g-recaptcha-response'] = captcha
+
+      let cookie = headers['set-cookie'][0].split(';')[0] // dlrowolleh
       fetch({
         path: '/login',
         ipAddress,
+        cookies: cookie,
         postData: form,
       }, (headers, body) => {
         let cookies = {}
@@ -53,7 +56,6 @@ router.post('/login', (req, res, next) => {
           let [name, value] = headers['set-cookie'][i].split(';')[0].split('=')
           cookies[name] = value
         }
-        r.cookies = cookies
         if ('coniunctio' in cookies) {
           r.successful = true
         }
