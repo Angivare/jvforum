@@ -15,8 +15,8 @@ let config = {
   },
   refreshIntervals: {
     recent: 2000,
-    old: 5 * 60 * 1000,
-    check: 15000,
+    old: 60000,
+    check: 12000,
   },
   cookies: 'coniunctio=; dlrowolleh=',
   databaseConnection: {
