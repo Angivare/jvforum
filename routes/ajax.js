@@ -66,6 +66,7 @@ router.post('/login', (req, res, next) => {
               signed: true,
             })
             res.json(r)
+            utils.logLogin(nickname, null, parseInt(cookies.coniunctio))
           }
 
           db.select('id', 'users', {nickname}, (results) => {
@@ -82,9 +83,11 @@ router.post('/login', (req, res, next) => {
         else {
           if (matches = /<div class="bloc-erreur">([^<]+)<\/div>/.exec(body)) {
             r.error = 'Erreur lors de la connexion : ' + matches[1]
+            utils.logLogin(nickname, `jvc ${matches[1]}`)
           }
           else {
             r.error = 'Erreur lors de la connexion, mais JVC n’indique vraisemblablement pas laquelle.'
+            utils.logLogin(nickname, 'jvc_unknown')
           }
           res.json(r)
         }
@@ -96,6 +99,7 @@ router.post('/login', (req, res, next) => {
           r.error = `Erreur réseau de JVF lors de la connexion. (${error}).`
         }
         res.json(r)
+        utils.logLogin(nickname, `post_network ${error}`)
       })
     }
     else {
@@ -110,6 +114,7 @@ router.post('/login', (req, res, next) => {
       r.error = `Erreur réseau de JVF lors de la récupération du formulaire. (${error}).`
     }
     res.json(r)
+    utils.logLogin(nickname, `get_network ${error}`)
   })
 })
 

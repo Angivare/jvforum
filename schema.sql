@@ -23,3 +23,10 @@ CREATE TABLE `users` (
   `nickname` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `logins` (
+  `loggedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `nickname` varchar(16) NOT NULL,
+  `jvcLoginId` int,
+  `error` varchar(1024)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

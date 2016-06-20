@@ -1,5 +1,6 @@
 let entities = require('html-entities').Html5Entities
   , stickersList = require('./stickersList')
+  , db = require('./db')
 
 function adaptMessageContent(content, id) {
   let matches
@@ -175,7 +176,16 @@ function adaptPostedMessage(message, hostname) {
   return message
 }
 
+function logLogin(nickname, error, jvcLoginId = null) {
+  db.insert('logins', {
+    nickname,
+    jvcLoginId, // Used to get stats about logins on JVC
+    error,
+  })
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
+  logLogin,
 }
