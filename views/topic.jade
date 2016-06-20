@@ -21,14 +21,16 @@ block body
             unless isLocked
               .pagination-topic__action-button.pagination-topic__action-button--post
                 span.js-go-to-form.button.button--raised.button--cta.button--scale Répondre
-            include ./includes/topicPagination.jade
+            .pagination-topic__pages
+              include ./includes/topicPagination.jade
           .messages-list
             include ./includes/topicMessages.jade
           .pagination-topic.pagination-topic--bottom
             .pagination-topic__action-button
               a.button.button--scale(href="/#{forumId}-#{forumSlug}") Retour
                 span.pagination-topic__action-button-additional-text  forum
-            include ./includes/topicPagination.jade
+            .pagination-topic__pages
+              include ./includes/topicPagination.jade
           unless isLocked
             form.js-form-post.form.form--touches-bottom.form--with-container
               .form__actions-mobile
@@ -103,5 +105,6 @@ block body
       , topicMode = #{mode}
       , topicIdLegacyOrModern = #{idLegacyOrModern}
       , topicSlug = "#{slug}"
-      , topicPage = "#{page}"
+      , topicPage = #{page}
+      , lastPage = #{lastPage}
       , cacheAge = #{cacheAge * 1000}

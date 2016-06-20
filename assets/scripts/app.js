@@ -142,6 +142,7 @@ function refresh() {
     topicIdLegacyOrModern: topicIdLegacyOrModern,
     topicSlug: topicSlug,
     topicPage: topicPage,
+    lastPage: lastPage,
     messagesChecksums: JSON.stringify(messagesChecksums),
   }
 
@@ -181,6 +182,11 @@ function refresh() {
         $('#' + id + ' .js-content').html(message.content)
         $('#' + id + ' .spoil').click(toggleSpoil)
       }
+    }
+
+    if ('paginationHTML' in data) {
+      $('.pagination-topic__pages').html(data.paginationHTML)
+      lastPage = data.lastPage
     }
 
     instantClick.setTimeout(refresh, refreshInterval)

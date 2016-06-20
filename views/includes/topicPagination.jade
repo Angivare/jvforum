@@ -1,10 +1,8 @@
-
-.pagination-topic__pages
-  each paginationPage in paginationPages
-    unless paginationPage == page
-      span.pagination-topic__page
-        a(class="pagination-topic__page-link #{paginationPage == page + 1 ? 'pagination-topic__page-link--next' : (paginationPage == lastPage ? 'pagination-topic__page-link--last' : '')}" href="/#{forumId}/#{idJvf}-#{slug}#{paginationPage > 1 ? ('/' + paginationPage) : ''}")= paginationPage
-    else
-      span.pagination-topic__page
-        span.pagination-topic__page-link.pagination-topic__page-link--active= paginationPage
-    | 
+each paginationPage in paginationPages
+  unless paginationPage == page
+    span.pagination-topic__page
+      a(class="pagination-topic__page-link #{paginationPage == page + 1 ? 'pagination-topic__page-link--next' : (paginationPage == lastPage ? 'pagination-topic__page-link--last' : '')}" href="/#{forumId}/#{idJvf}-#{slug}#{paginationPage > 1 ? ('/' + paginationPage) : ''}")= paginationPage
+  else
+    span.pagination-topic__page
+      span.pagination-topic__page-link.pagination-topic__page-link--active= paginationPage
+  | 

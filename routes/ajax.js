@@ -118,7 +118,7 @@ router.post('/refresh', (req, res, next) => {
     }
 
   let missingParams = false
-  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'messagesChecksums'].forEach((varName) => {
+  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'lastPage', 'messagesChecksums'].forEach((varName) => {
     if (!(varName in req.body)) {
       missingParams = true
     }
@@ -127,7 +127,7 @@ router.post('/refresh', (req, res, next) => {
     return res.json({error: 'Paramètres manquants'})
   }
 
-  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, messagesChecksums} = req.body
+  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, lastPage, messagesChecksums} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
 
@@ -163,15 +163,42 @@ router.post('/refresh', (req, res, next) => {
       }
     }
 
-    if (newMessages.length == 0) {
+    let renderings = 0
+    function sendJSONAfterRenderings() {
+      renderings++
+      if (lastPage != content.lastPage && newMessages.length) {
+        if (renderings == 2) {
+          res.json(data)
+        }
+      }
+      else {
+        res.json(data)
+      }
+    }
+
+    if (newMessages.length == 0 && lastPage == content.lastPage) {
       res.json(data)
     }
-    else {
+    else if (lastPage != content.lastPage) {
+      req.app.render('includes/topicPagination', {
+        paginationPages: content.paginationPages,
+        lastPage: content.lastPage,
+        page: topicPage,
+        forumId,
+        idJvf,
+        slug: topicSlug,
+      }, (err, html) => {
+        data.paginationHTML = html
+        data.lastPage = content.lastPage
+        sendJSONAfterRenderings()
+      })
+    }
+    else if (newMessages.length) {
       req.app.render('includes/topicMessages', {
         messages: newMessages,
       }, (err, html) => {
         data.newMessagesHTML = html
-        res.json(data)
+        sendJSONAfterRenderings()
       })
     }
   }
