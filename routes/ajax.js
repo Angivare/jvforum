@@ -1,4 +1,5 @@
 let express = require('express')
+  , cheerio = require('cheerio')
   , utils = require('../utils/utils')
   , fetch = require('../utils/fetching')
   , parse = require('../utils/parsing')
@@ -34,10 +35,27 @@ router.post('/login', (req, res, next) => {
 
   let {nickname, password, captcha} = req.body
 
-  res.json({
-    nickname,
-    password,
-    captcha,
+  fetch('/login', (headers, body) => {
+    let form = parse.form(body)
+    if (form) {
+      form['login_pseudo'] = nickname
+      form['login_password'] = password
+      form['g-recaptcha-response'] = captcha
+      r.form = form
+      res.json(r)
+    }
+    else {
+      r.error = 'JVForum n’a pas pu parser le formulaire.'
+      res.json(r)
+    }
+  }, (error) => {
+    if (error == 'timeout') {
+      r.error = 'Timeout de JVC lors de la récupération du formulaire.'
+    }
+    else {
+      r.error = `Erreur réseau de JVF lors de la récupération du formulaire. (${error}).`
+    }
+    res.json(r)
   })
 })
 
