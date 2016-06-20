@@ -58,6 +58,14 @@ router.post('/login', (req, res, next) => {
         }
         if ('coniunctio' in cookies) {
           r.successful = true
+          let id = 0
+            , isLoggedAsModerator = 0
+
+          res.cookie('id', [id, nickname, isLoggedAsModerator, cookies.coniunctio, cookies.dlrowolleh].join(','), {
+            maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+            httpOnly: true,
+            signed: true,
+          })
         }
         else {
           if (matches = /<div class="bloc-erreur">([^<]+)<\/div>/.exec(body)) {

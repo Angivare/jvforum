@@ -11,6 +11,7 @@ let express = require('express')
   , routesForum = require('./routes/forum')
   , routesTopic = require('./routes/topic')
   , routesAjax = require('./routes/ajax')
+  , config = require('./config')
   , app = express()
 
 // view engine setup
@@ -22,7 +23,7 @@ app.use(compression())
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser(config.cookiesSecret))
 
 app.use(routesStaticFiles)
 app.use(routesIntroduction)
