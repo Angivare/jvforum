@@ -58,13 +58,25 @@ router.post('/login', (req, res, next) => {
         }
         if ('coniunctio' in cookies) {
           r.successful = true
-          let id = 0
-            , isLoggedAsModerator = 0
 
-          res.cookie('id', [id, nickname, isLoggedAsModerator, cookies.coniunctio, cookies.dlrowolleh].join(','), {
-            maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
-            httpOnly: true,
-            signed: true,
+          function setCookieAndSendResponse(id) {
+            res.cookie('id', [id, nickname, 0 /* is logged as moderator, for later use */, cookies.coniunctio, cookies.dlrowolleh].join('-'), {
+              maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+              httpOnly: true,
+              signed: true,
+            })
+            res.json(r)
+          }
+
+          db.select('id', 'users', {nickname}, (results) => {
+            if (results.length) {
+              setCookieAndSendResponse(results[0].id)
+            }
+            else {
+              db.insert('users', {nickname}, (results) => {
+                setCookieAndSendResponse(results.insertId)
+              })
+            }
           })
         }
         else {
@@ -74,8 +86,8 @@ router.post('/login', (req, res, next) => {
           else {
             r.error = 'Erreur lors de la connexion, mais JVC n’indique vraisemblablement pas laquelle.'
           }
+          res.json(r)
         }
-        res.json(r)
       }, (error) => {
         if (error == 'timeout') {
           r.error = 'Timeout de JVC lors de la connexion.'
