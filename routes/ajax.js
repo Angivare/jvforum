@@ -1,5 +1,4 @@
 let express = require('express')
-  , cheerio = require('cheerio')
   , utils = require('../utils/utils')
   , fetch = require('../utils/fetching')
   , parse = require('../utils/parsing')
@@ -35,14 +34,47 @@ router.post('/login', (req, res, next) => {
 
   let {nickname, password, captcha} = req.body
 
-  fetch('/login', (headers, body) => {
+  fetch({
+    path: '/login',
+    ipAddress,
+  }, (headers, body) => {
     let form = parse.form(body)
     if (form) {
       form['login_pseudo'] = nickname
       form['login_password'] = password
       form['g-recaptcha-response'] = captcha
-      r.form = form
-      res.json(r)
+      fetch({
+        path: '/login',
+        ipAddress,
+        postData: form,
+      }, (headers, body) => {
+        let cookies = {}
+        for (let i = 0; i < headers['set-cookie'].length; i++) {
+          let [name, value] = headers['set-cookie'][i].split(';')[0].split('=')
+          cookies[name] = value
+        }
+        r.cookies = cookies
+        if ('coniunctio' in cookies) {
+          r.successful = true
+        }
+        else {
+          if (matches = /<div class="bloc-erreur">([^<]+)<\/div>/.exec(body)) {
+            r.error = 'Erreur lors de la connexion : ' + matches[1]
+          }
+          else {
+            r.error = 'Erreur lors de la connexion, mais JVC n’indique vraisemblablement pas laquelle.'
+          }
+        }
+        res.json(r)
+      }, (error) => {
+        if (error == 'timeout') {
+          r.error = 'Timeout de JVC lors de la connexion.'
+        }
+        else {
+          r.error = `Erreur réseau de JVF lors de la connexion. (${error}).`
+        }
+        res.json(r)
+      })
     }
     else {
       r.error = 'JVForum n’a pas pu parser le formulaire.'
