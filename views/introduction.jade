@@ -19,7 +19,7 @@ form(id="js-form" action="/" method="post")
   br
   input(id="password" type="password" placeholder="Mot de passe")
   .g-recaptcha(data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx")
-  input(type="submit" value="Me connecter" style="font-weight: bold")
+  input(id="submit" type="submit" value="Me connecter" style="font-weight: bold")
 
 p
   small Votre identifiant sera transmis au serveur de JVForum, sans y être stocké. JVForum n’est pas affilié à
@@ -32,12 +32,20 @@ script.
 
   geid('js-form').addEventListener('submit', function (e) {
     e.preventDefault()
+    geid('submit').disabled = true
     var xhr = new XMLHttpRequest()
     xhr.addEventListener('readystatechange', function() {
       if (xhr.readyState < 4) {
         return
       }
       var data = JSON.parse(xhr.responseText)
+      if (data.successful) {
+        location.href = '/1000021/39674315-appli-jvforum-topic-officiel'
+      }
+      else {
+        alert(data.error)
+        location.href = location.href
+      }
     })
     xhr.open('POST', '/ajax/login')
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
