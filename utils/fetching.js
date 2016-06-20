@@ -7,7 +7,6 @@ http.globalAgent.maxSockets = 30
 
 function fetch(pathOrOptions, successCallback, failCallback) {
   let path = pathOrOptions
-    , asAuthentified = false
     , timeout = config.timeouts.server.notAuthentified
     , requestOptions = {
         hostname: 'www.jeuxvideo.com',
@@ -21,11 +20,11 @@ function fetch(pathOrOptions, successCallback, failCallback) {
     requestOptions.path = pathOrOptions.path
 
     if (pathOrOptions.asAuthentified) {
-      asAuthentified = pathOrOptions.asAuthentified
-      requestOptions.headers = {
-        'Cookie': config.cookies,
-        'X-Forwarded-For': asAuthentified,
-      }
+      requestOptions.headers['Cookie'] = config.cookies
+    }
+
+    if (pathOrOptions.ipAddress) {
+      requestOptions.headers['X-Forwarded-For'] = pathOrOptions.ipAddress
     }
 
     if (pathOrOptions.postData) {

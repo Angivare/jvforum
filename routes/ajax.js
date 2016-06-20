@@ -64,7 +64,8 @@ router.post('/postMessage', (req, res, next) => {
 
   fetch({
     path: pathJvc,
-    asAuthentified: ipAddress,
+    asAuthentified: true,
+    ipAddress,
   }, (headers, body) => {
     let form = parse.form(body)
     if (form) {
@@ -82,7 +83,8 @@ router.post('/postMessage', (req, res, next) => {
         let dbId = results.insertId
         fetch({
           path: pathJvc,
-          asAuthentified: ipAddress,
+          asAuthentified: true,
+          ipAddress,
           postData: form,
         }, (headers, body) => {
           let matches
