@@ -7,22 +7,42 @@ meta(name="theme-color" content="hsl(240, 8%, 13%)")
 style.
  body {
    font: 15px/1.4 sans-serif;
+   background: #e7e9ec;
  }
 
 h2 Connexion à JVForum bêta
 
 p Connectez-vous ci-dessous pour essayer la bêta, et veuillez rapporter tous les bugs que vous croisez sur le topic officiel.
 
-form(action="/" method="post")
-  input(type="text" name="login_pseudo" placeholder="Pseudo" maxlength="15" autocorrect="off")
+form(id="js-form" action="/" method="post")
+  input(id="nickname" type="text" name="login_pseudo" placeholder="Pseudo" maxlength="15" autocorrect="off")
   br
-  input(type="password" name="password" placeholder="Mot de passe")
+  input(id="password" type="password" placeholder="Mot de passe")
   .g-recaptcha(data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx")
   input(type="submit" value="Me connecter" style="font-weight: bold")
 
 p
   small Votre identifiant sera transmis au serveur de JVForum, sans y être stocké. JVForum n’est pas affilié à
     a(href="http://www.jeuxvideo.com/") jeuxvideo.com
+
+script.
+  function geid(id) {
+    return document.getElementById(id)
+  }
+
+  geid('js-form').addEventListener('submit', function (e) {
+    e.preventDefault()
+    var xhr = new XMLHttpRequest()
+    xhr.addEventListener('readystatechange', function() {
+      if (xhr.readyState < 4) {
+        return
+      }
+      var data = JSON.parse(xhr.responseText)
+    })
+    xhr.open('POST', '/ajax/login')
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    xhr.send('nickname=' + geid('nickname').value + '&password=' + geid('password').value + '&captcha=' + geid('g-recaptcha-response').value)
+  })
 
 script.
   var googleAnalyticsId = '#{googleAnalyticsId}'

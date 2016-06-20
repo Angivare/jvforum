@@ -16,6 +16,31 @@ router.post('/*', (req, res, next) => {
   next()
 })
 
+router.post('/login', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.connection.remoteAddress
+
+  let missingParams = false
+  ;['nickname', 'password', 'captcha'].forEach((varName) => {
+    if (!(varName in req.body)) {
+      missingParams = true
+    }
+  })
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
+  let {nickname, password, captcha} = req.body
+
+  res.json({
+    nickname,
+    password,
+    captcha,
+  })
+})
+
 router.post('/postMessage', (req, res, next) => {
   let r = {
       error: false,
