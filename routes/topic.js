@@ -57,7 +57,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
       viewLocals[key] = content[key]
     })
     viewLocals.cacheAge = age
-    res.render('topic', viewLocals)
+    res.render('topic.jade', viewLocals)
   }, () => {
     fetch.unique(pathJvc, cacheId, (headers, body) => {
       if ('location' in headers) {
@@ -104,7 +104,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         })
       }
 
-      res.render('topic', viewLocals)
+      res.render('topic.jade', viewLocals)
     }, (e) => {
       if (e == 'timeout') {
         viewLocals.error = 'timeout'
@@ -113,7 +113,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         viewLocals.error = 'network'
         viewLocals.errorDetail = e
       }
-      res.render('topic', viewLocals)
+      res.render('topic.jade', viewLocals)
     })
   })
 })

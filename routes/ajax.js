@@ -293,7 +293,7 @@ router.post('/refresh', (req, res, next) => {
       res.json(data)
     }
     else if (lastPage != content.lastPage) {
-      req.app.render('includes/topicPagination', {
+      req.app.render('includes/topicPagination.jade', {
         paginationPages: content.paginationPages,
         lastPage: content.lastPage,
         page: topicPage,
@@ -307,7 +307,7 @@ router.post('/refresh', (req, res, next) => {
       })
     }
     else if (newMessages.length) {
-      req.app.render('includes/topicMessages', {
+      req.app.render('includes/topicMessages.jade', {
         messages: newMessages,
       }, (err, html) => {
         data.newMessagesHTML = html

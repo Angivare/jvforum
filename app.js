@@ -6,6 +6,7 @@ let express = require('express')
   , bodyParser = require('body-parser')
   , compression = require('compression')
   , http = require('http')
+  , consolidate = require('consolidate')
   , routesStaticFiles = require('./routes/staticFiles')
   , routesIntroduction = require('./routes/introduction')
   , routesForum = require('./routes/forum')
@@ -16,7 +17,8 @@ let express = require('express')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine('jade', consolidate.jade)
+app.engine('dot', consolidate.dot)
 
 app.use(favicon(path.join(__dirname, 'assets', 'images/favicon.png')))
 app.use(compression())
@@ -45,7 +47,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('error.jade', {
       message: err.message,
       error: err
     });
@@ -56,7 +58,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
+  res.render('error.jade', {
     message: err.message,
     error: {}
   });
