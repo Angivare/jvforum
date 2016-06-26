@@ -27,6 +27,7 @@ let config = {
     password: '',
     database: 'jvforum',
   },
+  googleAnalyticsId: '',
 }
 
 module.exports = config
