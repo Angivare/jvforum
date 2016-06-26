@@ -14,6 +14,11 @@ router.post('/*', (req, res, next) => {
     return
   }
   req.user = utils.parseUserCookie(req.signedCookies.user)
+  console.log(req.params)
+  if (!req.user && req.params[0] != 'login') {
+    res.json({error: 'Déconnecté'})
+    return
+  }
   next()
 })
 

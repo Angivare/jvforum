@@ -5,6 +5,7 @@ let express = require('express')
   , cacheBusting = require('../utils/prepareCacheBusting')
   , cache = require('../utils/caching')
   , superlative = require('../utils/superlative')
+  , utils = require('../utils/utils')
   , config = require('../config')
   , router = express.Router()
 
@@ -25,6 +26,11 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         isFavorite: false,
         superlative: superlative(),
       }
+    , user = utils.parseUserCookie(req.signedCookies.user)
+
+  if (!user) {
+    return res.redirect('/')
+  }
 
   let cacheId = `${id}/1`
   cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {

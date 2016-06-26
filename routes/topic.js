@@ -6,6 +6,7 @@ let express = require('express')
   , superlative = require('../utils/superlative')
   , cache = require('../utils/caching')
   , date = require('../utils/date')
+  , utils = require('../utils/utils')
   , config = require('../config')
   , router = express.Router()
 
@@ -35,6 +36,11 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
         superlative: superlative(),
         cacheAge: 0,
       }
+    , user = utils.parseUserCookie(req.signedCookies.user)
+
+  if (!user) {
+    return res.redirect('/')
+  }
 
   if (idLegacyOrModern == 0) {
     return next()
