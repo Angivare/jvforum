@@ -5,9 +5,13 @@ let express = require('express')
   , router = express.Router()
 
 router.get('/', (req, res, next) => {
+  let start = Date.now()
   res.render('introduction.jade', {
     googleAnalyticsId: config.googleAnalyticsId,
     cacheBusting,
+  }, (err, html) => {
+    console.log((Date.now() - start) / 1000)
+    res.send(html)
   })
 })
 
