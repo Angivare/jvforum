@@ -1,5 +1,6 @@
 let express = require('express')
   , cacheBusting = require('../utils/prepareCacheBusting')
+  , utils = require('../utils/utils')
   , config = require('../config')
   , router = express.Router()
 

@@ -18,7 +18,6 @@ let config = {
     old: 60000,
     check: 12000,
   },
-  cookies: 'coniunctio=; dlrowolleh=',
   cookiesSecret: 'secret',
   databaseConnection: {
     host: 'localhost',

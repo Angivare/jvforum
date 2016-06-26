@@ -184,8 +184,26 @@ function logLogin(nickname, error, jvcLoginId = null) {
   })
 }
 
+function parseUserCookie(cookie) {
+  if (!cookie) {
+    return false
+  }
+
+  let split = cookie.split('-')
+  return {
+    id: parseInt(split[0]),
+    nickname: split[1],
+    isLoggedIntoModeration: !!parseInt(split[2]),
+    jvcCookies: {
+      coniunctio: split[3],
+      dlrowolleh: split[4],
+    },
+  }
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
   logLogin,
+  parseUserCookie,
 }

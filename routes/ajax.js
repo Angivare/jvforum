@@ -13,6 +13,7 @@ router.post('/*', (req, res, next) => {
     res.json({error: 'Bad Origin'})
     return
   }
+  req.user = utils.parseUserCookie(req.signedCookies.user)
   next()
 })
 
@@ -60,7 +61,7 @@ router.post('/login', (req, res, next) => {
           r.successful = true
 
           function setCookieAndSendResponse(id) {
-            res.cookie('id', [id, nickname, 0 /* is logged as moderator, for later use */, cookies.coniunctio, cookies.dlrowolleh].join('-'), {
+            res.cookie('user', [id, nickname, 0 /* is logged as moderator, for later use */, cookies.coniunctio, cookies.dlrowolleh].join('-'), {
               maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
               httpOnly: true,
               signed: true,
@@ -123,6 +124,7 @@ router.post('/postMessage', (req, res, next) => {
       error: false,
     }
     , ipAddress = req.connection.remoteAddress
+    , user = req.user
 
   let missingParams = false
   ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug'].forEach((varName) => {
@@ -136,12 +138,13 @@ router.post('/postMessage', (req, res, next) => {
 
   let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${topicSlug}.htm`
+    , formattedJvcCookies = `coniunctio=${user.jvcCookies.coniunctio}; dlrowolleh=${user.jvcCookies.dlrowolleh}`
 
   message = utils.adaptPostedMessage(message, req.headers.host)
 
   fetch({
     path: pathJvc,
-    cookies: config.cookies,
+    cookies: formattedJvcCookies,
     ipAddress,
   }, (headers, body) => {
     let form = parse.form(body)
@@ -150,7 +153,7 @@ router.post('/postMessage', (req, res, next) => {
       form['form_alias_rang'] = 1
 
       db.insert('messages_posted', {
-        authorId: 0,
+        authorId: user.id,
         isTopic: 0,
         forumId,
         topicMode,
@@ -160,7 +163,7 @@ router.post('/postMessage', (req, res, next) => {
         let dbId = results.insertId
         fetch({
           path: pathJvc,
-          cookies: config.cookies,
+          cookies: formattedJvcCookies,
           ipAddress,
           postData: form,
         }, (headers, body) => {
