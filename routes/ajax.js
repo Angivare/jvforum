@@ -146,6 +146,7 @@ router.post('/postMessage', (req, res, next) => {
     path: pathJvc,
     cookies: formattedJvcCookies,
     ipAddress,
+    timeout: config.timeouts.server.postMessageForm,
   }, (headers, body) => {
     let form = parse.form(body)
     if (form) {
@@ -166,6 +167,7 @@ router.post('/postMessage', (req, res, next) => {
           cookies: formattedJvcCookies,
           ipAddress,
           postData: form,
+          timeout: config.timeouts.server.postMessage,
         }, (headers, body) => {
           let matches
             , id

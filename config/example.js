@@ -2,6 +2,8 @@ let config = {
   timeouts: {
     server: {
       notAuthentified: 2500,
+      postMessageForm: 2500,
+      postMessage: 2500,
     },
     client: {
       refresh: 9000,

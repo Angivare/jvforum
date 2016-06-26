@@ -34,6 +34,10 @@ function fetch(pathOrOptions, successCallback, failCallback) {
       requestOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded'
       requestOptions.headers['Content-Length'] = Buffer.byteLength(postData)
     }
+
+    if (pathOrOptions.timeout) {
+      timeout = pathOrOptions.timeout
+    }
   }
   else {
     requestOptions.path = pathOrOptions
