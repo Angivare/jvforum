@@ -18,7 +18,8 @@ let express = require('express')
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('jade', consolidate.jade)
-app.engine('dot', consolidate.dot)
+app.engine('html', consolidate.dot)
+app.set('view engine', 'html')
 
 app.use(favicon(path.join(__dirname, 'assets', 'images/favicon.png')))
 app.use(compression())

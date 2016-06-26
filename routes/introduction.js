@@ -6,7 +6,7 @@ let express = require('express')
 
 router.get('/', (req, res, next) => {
   let start = Date.now()
-  res.render('introduction.dot', {
+  res.render('introduction', {
     googleAnalyticsId: config.googleAnalyticsId,
     cacheBusting,
   }, (err, html) => {
