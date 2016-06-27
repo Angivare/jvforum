@@ -1,6 +1,0 @@
-header.header
-  .header__home-cell
-    a(class="header__home-link #{idJvf ? 'header__home-link--accompanied' : ''}" href="/") Accueil
-  if idJvf
-    .header__forum-cell
-      a.header__forum-link(href="/#{forumId}-#{forumSlug}")= forumName ? forumName : "Forum"

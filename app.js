@@ -17,7 +17,6 @@ let express = require('express')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.engine('jade', consolidate.jade)
 app.engine('html', consolidate.dot)
 app.set('view engine', 'html')
 
