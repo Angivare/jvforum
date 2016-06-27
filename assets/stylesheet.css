@@ -114,8 +114,6 @@ h1, h2, h3 {
 
 .sheet {
   background: hsl(240, 8%, 13%);
-  background-image: url(/images/beta-bg.png);
-  background-size: 45px 28px;
   padding: 5px 0 10px;
   position: relative;
   overflow: hidden;
