@@ -307,7 +307,7 @@ router.post('/refresh', (req, res, next) => {
       })
     }
     else if (newMessages.length) {
-      req.app.render('includes/topicMessages.jade', {
+      req.app.render('includes/topicMessages', {
         messages: newMessages,
       }, (err, html) => {
         data.newMessagesHTML = html

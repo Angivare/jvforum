@@ -1,0 +1,40 @@
+{{~it.messages :m:index}}
+  <div class="message" id="{{=m.id}}" data-nickname="{{=m.nickname}}" data-age={{=m.age}} data-checksum={{=m.checksum}}>
+    <div class="message__actions message__actions--nb-1">
+      <span class="js-quote message__actions-action message__actions-action--quote">Citer</span>
+    </div>
+    <div class="message__visible">
+      <div class="message__byline">
+        <div class="message__byline-author">
+          {{? !m.isNicknameDeleted }}
+            <a class="message__byline-author-link" href="http://www.jeuxvideo.com/profil/{{=m.nickname.toLowerCase()}}?mode=infos" target="_blank">
+              <span class="message__byline-author-avatar"><!--
+                {{? m.avatar }}
+                  --><img class="message__byline-author-avatar-image" src="{{=m.avatar}}">
+                {{??}}
+                  --><img class="message__byline-author-avatar-image message__byline-author-avatar-image--default" src="http://image.jeuxvideo.com/avatar-md/default.jpg">
+                {{?}}
+              </span>
+              <span class="message__byline-author-pseudo message__byline-author-pseudo--{{=m.status}}" title="{{=m.nickname}}">{{=m.nickname}}</span>
+            </a>
+          {{??}}
+            <span class="message__byline-author-link message__byline-author-link--no-link">
+              <span class="message__byline-author-avatar">
+                <img class="message__byline-author-avatar-image message__byline-author-avatar-image--default" src="http://image.jeuxvideo.com/avatar-md/default.jpg">
+              </span>
+              <span class="message__byline-author-pseudo">Pseudo supprimé</span>
+            </span>
+          {{?}}
+        </div>
+        <div class="message__byline-date">
+          <span class="js-menu js-date message__byline-date-inline" title="{{=m.dateRaw}}">{{=m.date}}</span>
+        </div>
+      </div>
+      <div class="js-content message__content">{{=m.content}}</div>
+      <div class="message__quick-actions">
+        <div class="js-quote message__quick-action message__quick-action--quote" title="Citer"></div>
+      </div>
+    </div>
+    <div class="message__end-anchor" id="after#{{=m.id}}"></div>
+  </div>
+{{~}}
