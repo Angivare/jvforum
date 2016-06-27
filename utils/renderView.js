@@ -2,7 +2,7 @@ let fs = require('fs')
   , dot = require('dot')
 
 let views = {}
-;['topic'].forEach((view) => {
+;['topic', 'forum'].forEach((view) => {
   views[view] = fs.readFileSync(`views/${view}.html`)
 })
 

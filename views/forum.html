@@ -1,0 +1,134 @@
+{{#def.layoutHead}}
+<body class="forum-{{=it.id}}">
+<div class="sheet">
+  {{#def.header}}
+  <div class="content">
+    {{? !it.error }}
+      <h1 class="page-title page-title--larger">
+        <a class="page-title__link page-title__link--with-refresh-icon" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
+        <div class="mobile-menu">
+          <div class="mobile-menu__opener">
+            <div class="mobile-menu__opener-icon"></div>
+          </div>
+          <div class="mobile-menu__items">
+            {{? !it.isFavorite }}
+              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="add">Mettre en favoris</span>
+            {{??}}
+              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="delete">Retirer des favoris</span>
+            {{?}}
+            <a class="mobile-menu__item" href={{=it.urlJvc}} target="_blank">Ouvrir sur JVC</a>
+          </div>
+        </div>
+      </h1>
+      <div class="liste-topics">
+        {{~it.topics :t:index}}
+          {{? t.label != 'ghost' }}
+            <a class="topic" href="/{{=it.id}}/{{=t.idJvf}}-{{=t.slug}}">
+              <div class="topic__label topic__label--{{=t.label}}"></div>
+              <div class="topic__text-container">
+                <div class="topic__title">{{!t.title}}</div>
+                <div class="topic__infos">
+                  <div class="topic__author topic__author--{{=t.status}}">{{=t.nickname}}</div>
+                  <div class="topic__date-and-nb-answers-container">
+                    <div class="topic__nb-answers">{{=t.answerCount}}</div>
+                    <div class="topic__date">{{=t.date}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="topic__title topic__title--desktop">{{!t.title}}</div>
+              <div class="topic__author topic__author--{{=t.status}} topic__author--desktop">{{=t.nickname}}</div>
+              <div class="topic__nb-answers topic__nb-answers--desktop">{{=t.answerCount}}</div>
+              <div class="topic__date topic__date--desktop">{{=t.date}}</div>
+            </a>
+          {{?}}
+        {{~}}
+      </div>
+      {{? it.isLocked }}
+        <div class="card">Forum verrouillé</div>
+      {{?}}
+    {{??}}
+      <div class="error">
+        {{? it.error == 'timeout'}}
+          <h1 class="error__title">Timeout</h1>
+          <div class="error__message">
+            <p>La page sur JVC mettait trop de temps à charger, elle a était arrêtée.</p>
+            <p>
+              <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
+            </p>
+          </div>
+        {{?? it.error == 'network'}}
+          <h1 class="error__title">Erreur réseau</h1>
+          <div class="error__message">
+            <p>La page n’a pas pu être récupérée depuis JVC. ({{=errorDetail}})</p>
+            <p>
+              <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
+            </p>
+          </div>
+        {{?? it.error == 'forumDoesNotExist'}}
+          <h1 class="error__title">Forum inexistant</h1>
+        {{?? it.error == '103'}}
+          <h1 class="error__title">Forum privé</h1>
+          <div class="error__message">
+            Ce forum est réservé aux modérateurs.
+          </div>
+        {{?? it.error == 'unknownRedirect'}}
+          <h1 class="error__title">Problème inconnu avec ce topic</h1>
+          <div class="error__message">
+            Il redirige vers #{errorLocation}
+          </div>
+        {{?}}
+      </div>
+    {{?}}
+  </div>
+  {{? it.error && it.subforums}}
+    <div class="menu mobile">
+      {{? it.parent}}
+        <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}
+      {{??}}
+        <a class="menu__item" href="/{{=id}}-{{=slug}}">{{=it.title}}</a>
+      {{?}}
+      {{~it.subforums :s:index}}
+        <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
+      {{~}}
+    </div>
+  {{?}}
+  <aside class="aside">
+    {{? !it.error}}
+      <div class="aside__top-buttons">
+        {{? !it.isFavorite }}
+          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite" data-action="add">
+            <span class="js-favorite-toggle-label aside__top-button-label">Mettre en favoris</span>
+          </span>
+        {{??}}
+          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite" data-action="delete">
+            <span class="js-favorite-toggle-label aside__top-button-label">Retirer des favoris</span>
+          </span>
+        {{?}}
+        <a class="aside__top-button aside__top-button--open-jeuxvideocom" href={{=t.urlJvc}} target="_blank">
+          <span class="aside__top-button-label">Ouvrir sur JVC</span>
+        </a>
+      </div>
+    {{?}}
+    <div class="js-favorites">
+      <div class="js-favorites-forums aside__menu menu">
+        <span class="menu__item menu__item--blank-state">Aucun forum favori</span>
+      </div>
+      <div class="js-favorites-topics aside__menu menu">
+        <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
+      <div>
+    </div>
+    {{? it.subforums }}
+      <div class="menu aside__menu">
+        {{? it.parent }}
+          <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!parent.title}}</a>
+        {{??}}
+          <a class="menu__item" href="/{{it.id}}-{{it.slug}}">{{it.title}}</a>
+        {{?}}
+        {{~subforums :s:index}}
+          <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
+        {{~}}
+      </div>
+    {{?}}
+  </aside>
+</div>
+{{#def.layoutFoot}}
