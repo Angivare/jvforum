@@ -5,7 +5,7 @@ let express = require('express')
   , router = express.Router()
 
 router.get('/', (req, res, next) => {
-  res.render('introduction', {
+  res.render('login', {
     googleAnalyticsId: config.googleAnalyticsId,
     cacheBusting,
   })
