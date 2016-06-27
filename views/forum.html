@@ -115,12 +115,12 @@
       </div>
       <div class="js-favorites-topics aside__menu menu">
         <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
-      <div>
+      </div>
     </div>
     {{? it.subforums }}
       <div class="menu aside__menu">
         {{? it.parent }}
-          <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!parent.title}}</a>
+          <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}</a>
         {{??}}
           <a class="menu__item" href="/{{it.id}}-{{it.slug}}">{{it.title}}</a>
         {{?}}
