@@ -85,7 +85,7 @@
       {{? it.parent}}
         <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}
       {{??}}
-        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{=it.title}}</a>
+        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
       {{?}}
       {{~it.subforums :s:index}}
         <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
@@ -122,7 +122,7 @@
         {{? it.parent }}
           <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}</a>
         {{??}}
-          <a class="menu__item" href="/{{it.id}}-{{it.slug}}">{{it.title}}</a>
+          <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
         {{?}}
         {{~it.subforums :s:index}}
           <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
