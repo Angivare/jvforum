@@ -388,20 +388,25 @@ router.post('/syncFavorites', (req, res, next) => {
     timeout: config.timeouts.server.syncFavorites,
   }, `syncFavorites/${user.id}`, (headers, body) => {
     let $ = cheerio.load(body)
+      , forums = {}
+      , topics = {}
 
-    console.log('Forums:')
     $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
-      let id = parseInt($(element).data('id'))
-        , name = $('.lien-jv', element).text().trim()
-      console.log(`${id}: ${name}`)
+      forums[$(element).data('id')] = $('.lien-jv', element).text().trim()
     })
 
-    console.log('Topics:')
     $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
-      let id = parseInt($(element).data('id'))
-        , name = $('.lien-jv', element).text().trim()
-      console.log(`${id}: ${name}`)
+      topics[$(element).data('id')] = $('.lien-jv', element).text().trim()
     })
+
+    db.insert('favorites', {
+      userId: user.id,
+      forums: JSON.stringify(forums),
+      topics: JSON.stringify(topics),
+      updatedAt: Math.floor(Date.now() / 1000),
+    })
+
+    res.json(r)
   }, (e) => {
     if (e == 'timeout') {
       res.json({error: 'Timeout'})
