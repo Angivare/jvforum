@@ -8,7 +8,7 @@ let views = {}
 
 let partials = {}
 ;['layoutHead', 'layoutFoot', 'header', 'topicMessages', 'topicPagination'].forEach((partial) => {
-  partials[partial] = fs.readFileSync(`views/includes/${partial}.html`)
+  partials[partial] = fs.readFileSync(`views/partials/${partial}.html`)
 })
 
 function render(view, locals) {

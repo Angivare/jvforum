@@ -294,7 +294,7 @@ router.post('/refresh', (req, res, next) => {
       res.json(data)
     }
     else if (lastPage != content.lastPage) {
-      req.app.render('includes/topicPagination', {
+      req.app.render('partials/topicPagination', {
         paginationPages: content.paginationPages,
         lastPage: content.lastPage,
         page: topicPage,
@@ -308,7 +308,7 @@ router.post('/refresh', (req, res, next) => {
       })
     }
     else if (newMessages.length) {
-      req.app.render('includes/topicMessages', {
+      req.app.render('partials/topicMessages', {
         messages: newMessages,
       }, (err, html) => {
         data.newMessagesHTML = html
