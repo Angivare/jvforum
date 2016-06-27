@@ -1,110 +1,161 @@
 {{#def.layoutHead}}
 <body class="forum-{{=it.forumId}} topic-{{=it.idJvf}} body--no-bottom">
-  <div class="sheet">
-    {{#def.header}}
-    .content
-      unless error
-        h1.page-title.page-title--topic
-          != title
-          .mobile-menu
-            .mobile-menu__opener
-              .mobile-menu__opener-icon
-            .mobile-menu__items
-              unless isFavorite
-                span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="add") Mettre en favoris
-              else
-                span.js-favorite-toggle.js-favorite-toggle-label.mobile-menu__item(data-action="delete") Retirer des favoris
-              a.mobile-menu__item(href=urlJvc target="_blank") Ouvrir sur JVC
-        .pagination-topic.pagination-topic--top
-          unless isLocked
-            .pagination-topic__action-button.pagination-topic__action-button--post
-              span.js-go-to-form.button.button--raised.button--cta.button--scale Répondre
-          .pagination-topic__pages
-            include ./includes/topicPagination.jade
-        .messages-list
-          include ./includes/topicMessages.jade
-        .pagination-topic.pagination-topic--bottom
-          .pagination-topic__action-button
-            a.button.button--scale(href="/#{forumId}-#{forumSlug}") Retour
-              span.pagination-topic__action-button-additional-text  forum
-          .pagination-topic__pages
-            include ./includes/topicPagination.jade
-        unless isLocked
-          form.js-form-post.form.form--touches-bottom.form--with-container
-            .form__actions-mobile
-              button.button-mobile-post(type="submit" tabindex="4")
-                .button-mobile-post__visible
-                  .button-mobile-post__icon
-            .form__container
-              .form__draft Brouillon sauvegardé.
-                span.form__draft-recover  Récupérer
-              .form__errors
-                p
-              textarea.form__textarea(placeholder="Écrivez votre #{superlative} message" tabindex="1")
-            .form__actions-desktop
-              .form__action
-              .form__action.form__action--submit
-                input.button.button--raised.button--cta.button--large.button--scale(type="submit" value="Poster" tabindex="4")
-              .form__action
-          .js-go-to-form.fab-post
-            .fab-post__inner
-              .fab-post__icon
-        else
-          .card
-            .card__header Sujet verrouillé
-            .card__body= lockRationale
-      else
-        .error
-          case error
-            when 'timeout'
-              h1.error__title Timeout
-              .error__message
-                p La page sur JVC mettait trop de temps à charger, elle a était arrêtée.
-                p
-                  a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Réessayer
-            when 'network'
-              h1.error__title Erreur réseau
-              .error__message
-                p La page n’a pas pu être récupérée depuis JVC. (#{errorDetail})
-                p
-                  a.button.button--cta.button--scale(href="/#{forumId}/#{idJvf}-#{slug}") Réessayer
-            when 'deleted'
-              h1.error__title Topic supprimé
-              .error__message
-                a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
-            when 'doesNotExist'
-              h1.error__title Topic inexistant
-              .error__message
-                a.button.button--cta.button--scale(href="/#{forumId}") Retour forum
-            when '103'
-              h1.error__title Topic privé
-              .error__message Ce topic est réservé aux modérateurs.
-            when 'unknownRedirect'
-              h1.error__title Problème inconnu avec ce topic
-              .error__message Il redirige vers #{errorLocation}
-    aside.aside
-      unless error
-        .aside__top-buttons
-          unless isFavorite
-            span.js-favorite-toggle.aside__top-button.aside__top-button--favorite(data-action="add")
-              span.js-favorite-toggle-label.aside__top-button-label Mettre en favoris
-          else
-            span.js-favorite-toggle.aside__top-button.aside__top-button--unfavorite(data-action="delete")
-              span.js-favorite-toggle-label.aside__top-button-label Retirer des favoris
-          a.aside__top-button.aside__top-button--open-jeuxvideocom(href=urlJvc target="_blank")
-            span.aside__top-button-label Ouvrir sur JVC
-      .js-favorites
-        .js-favorites-forums.aside__menu.menu
-          span.menu__item.menu__item--blank-state Aucun forum favori
-        .js-favorites-topics.js-slider.aside__menu.menu.slider
-          span.menu__item.menu__item--blank-state Aucun topic favori
+<div class="sheet">
+  {{#def.header}}
+  <div class="content">
+    {{? !it.error }}
+      <h1 class="page-title page-title--topic">
+        {{=it.title}}
+        <div class="mobile-menu">
+          <div class="mobile-menu__opener">
+            <div class="mobile-menu__opener-icon"></div>
+          </div>
+          <div class="mobile-menu__items">
+            {{? !it.isFavorite }}
+              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="add">Mettre en favoris</span>
+            {{??}}
+              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="delete">Retirer des favoris</span>
+            {{?}}
+            <a class="mobile-menu__item" href={{=it.urlJvc}} target="_blank">Ouvrir sur JVC</a>
+          </div>
+        </div>
+      </h1>
+      <div class="pagination-topic pagination-topic--top">
+        {{? !it.isLocked }}
+          <div class="pagination-topic__action-button pagination-topic__action-button--post">
+            <span class="js-go-to-form button button--raised button--cta button--scale">Répondre</span>
+          </div>
+        {{?}}
+        <div class="pagination-topic__pages">
+          {{#def.topicPagination}}
+        </div>
+      </div>
+      <div class="messages-list">
+        {{#def.topicMessages}}
+      </div>
+      <div class="pagination-topic pagination-topic--bottom">
+        <div class="pagination-topic__action-button">
+          <a class="button button--scale" href="/{{=it.forumId}}-{{=it.forumSlug}}">
+            Retour
+            <span class="pagination-topic__action-button-additional-text">forum</span>
+          </a>
+        </div>
+        <div class="pagination-topic__pages">
+          {{#def.topicPagination}}
+        </div>
+      </div>
+      {{? !it.isLocked}}
+        <form class="js-form-post form form--touches-bottom form--with-container">
+          <div class="form__actions-mobile">
+            <button class="button-mobile-post" type="submit" tabindex="4">
+              <div class="button-mobile-post__visible">
+                <div class="button-mobile-post__icon"></div>
+              </div>
+            </button>
+          </div>
+          <div class="form__container">
+            <div class="form__draft">
+              Brouillon sauvegardé.
+              <span class="form__draft-recover">Récupérer</span>
+            </div>
+            <div class="form__errors"><p></p></div>
+            <textarea class="form__textarea" placeholder="Écrivez votre {{=it.superlative}} message" tabindex="1"></textarea>
+          </div>
+          <div class="form__actions-desktop">
+            <div class="form__action"></div>
+            <div class="form__action form__action--submit">
+              <input class="button button--raised button--cta button--large button--scale" type="submit" value="Poster" tabindex="4">
+            </div>
+            <div class="form__action"></div>
+          </div>
+        </form>
+        <div class="js-go-to-form fab-post">
+          <div class="fab-post__inner">
+            <div class="fab-post__icon"></div>
+          </div>
+        </div>
+      {{??}}
+        <div class="card">
+          <div class="card__header">Sujet verrouillé</div>
+          <div class="card__body">{{=it.lockRationale}}</div>
+        </div>
+      {{?}}
+    {{??}}
+      <div class="error">
+        {{? it.error == 'timeout' }}
+          <h1 class="error__title">Timeout</h1>
+          <div class="error__message">
+            <p>La page sur JVC mettait trop de temps à charger, elle a était arrêtée.</p>
+            <p>
+              <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}">Réessayer</a>
+            </p>
+          </div>
+        {{?? it.error == 'network' }}
+          <h1 class="error__title">Erreur réseau</h1>
+          <div class="error__message">
+            <p>La page n’a pas pu être récupérée depuis JVC. ({{=it.errorDetail}})</p>
+            <p>
+              <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}">Réessayer</a>
+            </p>
+          </div>
+        {{?? it.error == 'deleted' }}
+          <h1 class="error__title">Topic supprimé</h1>
+          <div class="error__message">
+            <a class="button button--cta button--scale" href="/{{=it.forumId}}">Retour forum</a>
+          </div>
+        {{?? it.error == 'doesNotExist' }}
+          <h1 class="error__title">Topic inexistant</h1>
+          <div class="error__message">
+            <a class="button button--cta button--scale" href="/{{=it.forumId}}">Retour forum</a>
+          </div>
+        {{?? it.error == '103' }}
+          <h1 class="error__title">Topic privé</h1>
+          <div class="error__message">
+            Ce topic est réservé aux modérateurs.
+          </div>
+        {{?? it.error == 'unknownRedirect' }}
+          <h1 class="error__title">Problème inconnu avec ce topic</h1>
+          <div class="error__message">
+            Il redirige vers {{=it.errorLocation}}
+          </div>
+        {{?}}
+      </div>
+    {{?}}
   </div>
-script.
-  var forumId = #{forumId}
-    , topicMode = #{mode}
-    , topicIdLegacyOrModern = #{idLegacyOrModern}
-    , topicSlug = "#{slug}"
-    , topicPage = #{page}
-    , lastPage = #{lastPage}
-    , cacheAge = #{cacheAge * 1000}
+  <aside class="aside">
+    {{? !it.error }}
+      <div class="aside__top-buttons">
+        {{? !it.isFavorite }}
+          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite" data-action="add">
+            <span class="js-favorite-toggle-label aside__top-button-label">Mettre en favoris</span>
+          </span>
+        {{??}}
+          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite" data-action="delete">
+            <span class="js-favorite-toggle-label aside__top-button-label">Retirer des favoris</span>
+          </span>
+        {{?}}
+        <a class="aside__top-button aside__top-button--open-jeuxvideocom" href="{{=it.urlJvc}}" target="_blank">
+          <span class="aside__top-button-label">Ouvrir sur JVC</span>
+        </a>
+      </div>
+    {{?}}
+    <div class="js-favorites">
+      <div class="js-favorites-forums aside__menu menu">
+        <span class="menu__item menu__item--blank-state">Aucun forum favori</span>
+      </div>
+      <div class="js-favorites-topics js-slider aside__menu menu slider">
+        <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
+      </div>
+    </div>
+  </aside>
+</div>
+<script>
+  var forumId = {{=it.forumId}}
+    , topicMode = {{=it.mode}}
+    , topicIdLegacyOrModern = {{=it.idLegacyOrModern}}
+    , topicSlug = "{{=it.slug}}"
+    , topicPage = {{=it.page}}
+    , lastPage = {{=it.lastPage}}
+    , cacheAge = {{=it.cacheAge * 1000}}
+</script>
 {{#def.layoutFoot}}
