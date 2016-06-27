@@ -193,6 +193,13 @@ function refresh() {
   })
 }
 
+function syncFavorites() {
+  $.post({
+    url: '/ajax/syncFavorites',
+    timeout: timeouts.syncFavorites,
+  })
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -218,6 +225,7 @@ instantClick.on('change', function() {
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
 
   startRefresh()
+  syncFavorites()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)

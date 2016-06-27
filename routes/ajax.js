@@ -1,4 +1,5 @@
 let express = require('express')
+  , cheerio = require('cheerio')
   , utils = require('../utils/utils')
   , fetch = require('../utils/fetching')
   , parse = require('../utils/parsing')
@@ -17,6 +18,9 @@ router.post('/*', (req, res, next) => {
   if (!req.user && req.params[0] != 'login') {
     res.json({error: 'Déconnecté'})
     return
+  }
+  if (req.user) {
+    req.formattedJvcCookies = `coniunctio=${req.user.jvcCookies.coniunctio}; dlrowolleh=${req.user.jvcCookies.dlrowolleh}`
   }
   next()
 })
@@ -142,13 +146,12 @@ router.post('/postMessage', (req, res, next) => {
 
   let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${topicSlug}.htm`
-    , formattedJvcCookies = `coniunctio=${user.jvcCookies.coniunctio}; dlrowolleh=${user.jvcCookies.dlrowolleh}`
 
   message = utils.adaptPostedMessage(message, req.headers.host)
 
   fetch({
     path: pathJvc,
-    cookies: formattedJvcCookies,
+    cookies: reqformattedJvcCookies,
     ipAddress,
     timeout: config.timeouts.server.postMessageForm,
   }, (headers, body) => {
@@ -368,6 +371,44 @@ router.post('/refresh', (req, res, next) => {
         res.json({error: `Réseau. (${e})`})
       }
     })
+  })
+})
+
+router.post('/syncFavorites', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.connection.remoteAddress
+    , user = req.user
+
+  fetch.unique({
+    path: '/forums.htm',
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.syncFavorites,
+  }, `syncFavorites/${user.id}`, (headers, body) => {
+    let $ = cheerio.load(body)
+
+    console.log('Forums:')
+    $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
+      let id = parseInt($(element).data('id'))
+        , name = $('.lien-jv', element).text().trim()
+      console.log(`${id}: ${name}`)
+    })
+
+    console.log('Topics:')
+    $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
+      let id = parseInt($(element).data('id'))
+        , name = $('.lien-jv', element).text().trim()
+      console.log(`${id}: ${name}`)
+    })
+  }, (e) => {
+    if (e == 'timeout') {
+      res.json({error: 'Timeout'})
+    }
+    else {
+      res.json({error: `Réseau. (${e})`})
+    }
   })
 })
 
