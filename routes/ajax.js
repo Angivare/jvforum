@@ -244,6 +244,7 @@ router.post('/refresh', (req, res, next) => {
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
 
+  topicPage = parseInt(topicPage)
   messagesChecksums = JSON.parse(messagesChecksums)
 
   if (topicIdLegacyOrModern == 0) {
@@ -293,7 +294,7 @@ router.post('/refresh', (req, res, next) => {
       res.json(data)
     }
     else if (lastPage != content.lastPage) {
-      req.app.render('includes/topicPagination.jade', {
+      req.app.render('includes/topicPagination', {
         paginationPages: content.paginationPages,
         lastPage: content.lastPage,
         page: topicPage,
