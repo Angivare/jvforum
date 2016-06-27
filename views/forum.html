@@ -80,12 +80,12 @@
       </div>
     {{?}}
   </div>
-  {{? it.error && it.subforums}}
+  {{? !it.error && it.subforums}}
     <div class="menu mobile">
       {{? it.parent}}
         <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}
       {{??}}
-        <a class="menu__item" href="/{{=id}}-{{=slug}}">{{=it.title}}</a>
+        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{=it.title}}</a>
       {{?}}
       {{~it.subforums :s:index}}
         <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
@@ -124,7 +124,7 @@
         {{??}}
           <a class="menu__item" href="/{{it.id}}-{{it.slug}}">{{it.title}}</a>
         {{?}}
-        {{~subforums :s:index}}
+        {{~it.subforums :s:index}}
           <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
         {{~}}
       </div>
