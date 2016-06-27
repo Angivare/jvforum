@@ -7,7 +7,7 @@ let views = {}
 })
 
 let partials = {}
-;['layoutHead', 'layoutFoot', 'topicMessages', 'topicPagination'].forEach((partial) => {
+;['layoutHead', 'layoutFoot', 'header', 'topicMessages', 'topicPagination'].forEach((partial) => {
   partials[partial] = fs.readFileSync(`views/includes/${partial}.html`)
 })
 
