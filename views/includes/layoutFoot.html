@@ -1,0 +1,18 @@
+<div class="toast"><div class="toast__label"></div></div>
+
+<script>
+var googleAnalyticsId = '{{=it.googleAnalyticsId}}';
+var timeouts = {
+ {{ for (let name in it.timeouts) { }}
+  {{=name}}: {{=it.timeouts[name]}},
+{{ } }}
+ };
+var refreshIntervals = {
+ {{ for (let name in it.refreshIntervals) { }}
+  {{=name}}: {{=it.refreshIntervals[name]}},
+{{ } }}
+ };
+</script>
+{{ for (let name in it.cacheBusting.scripts) { }}
+<script src="/assets/scripts/{{=name}}--{{=it.cacheBusting.scripts[name]}}.js"></script>
+{{ } }}
