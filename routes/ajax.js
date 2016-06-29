@@ -394,21 +394,32 @@ router.post('/syncFavorites', (req, res, next) => {
         timeout: config.timeouts.server.syncFavorites,
       }, `syncFavorites/${user.id}`, (headers, body) => {
         let $ = cheerio.load(body)
-          , forums = {}
-          , topics = {}
+          , forums = []
+          , topics = []
 
         $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
-          forums[$(element).data('id')] = $('.lien-jv', element).text().trim()
+          let name = $('.lien-jv', element).text().trim()
+            , id = $(element).data('id')
+            , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
+          forums.push([`/${id}-${slug}`, name])
         })
+        forums = JSON.stringify(forums)
 
         $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
-          topics[$(element).data('id')] = $('.lien-jv', element).text().trim()
+          let name = $('.lien-jv', element).text().trim()
+            , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
+            , mode = urlSplit[0]
+            , forumId = urlSplit[1]
+            , id = urlSplit[2]
+            , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/${mode}-${forumId}-${id}-1-0-1-0-`.length).split('.')[0]
+          topics.push([`/${forumId}/${mode == 1 ? 0 : ''}${id}-${slug}`, name])
         })
+        topics = JSON.stringify(topics)
 
         if (results.length) {
           db.update('favorites', {
-            forums: JSON.stringify(forums),
-            topics: JSON.stringify(topics),
+            forums,
+            topics,
             updatedAt: now,
           }, {
             userId: user.id,
@@ -417,8 +428,8 @@ router.post('/syncFavorites', (req, res, next) => {
         else {
           db.insert('favorites', {
             userId: user.id,
-            forums: JSON.stringify(forums),
-            topics: JSON.stringify(topics),
+            forums,
+            topics,
             updatedAt: now,
           })
         }
