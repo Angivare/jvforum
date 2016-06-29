@@ -201,9 +201,26 @@ function parseUserCookie(cookie) {
   }
 }
 
+function getUserFavorites(userId, thenCallback) {
+  db.select('forums, topics', 'favorites', {
+    userId,
+  }, (results) => {
+    if (!results.length) {
+      thenCallback(false)
+    }
+    else {
+      thenCallback({
+        forums: JSON.parse(results[0].forums),
+        topics: JSON.parse(results[0].topics),
+      })
+    }
+  })
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
   logLogin,
   parseUserCookie,
+  getUserFavorites,
 }
