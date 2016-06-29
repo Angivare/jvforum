@@ -82,7 +82,7 @@ function adaptMessageContent(content, id) {
     if (messageId) {
       path += '#' + messageId
     }
-    return `<a href="/${path}" title="${url}" data-link-jvc="${url}">jvforum.fr${path}</a>`
+    return `<a href="${path}" title="${url}" data-link-jvc="${url}">jvforum.fr${path}</a>`
   })
 
   // Make JVC links open in a new tab
