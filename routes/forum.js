@@ -54,7 +54,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           }
         }
         else if (matches = /^\/forums\/0-([0-9]+)-0-1-0-([0-9]+)-0-([0-9a-z-]+)\.htm$/.exec(location)) {
-          res.redirect(`/${matches[1]}-${matches[3]}`)
+          return res.redirect(`/${matches[1]}-${matches[3]}`)
         }
         else {
           viewLocals.error = 'unknownRedirect'
