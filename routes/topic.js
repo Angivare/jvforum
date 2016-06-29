@@ -14,6 +14,10 @@ let express = require('express')
 router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-9]{1,5})?', (req, res, next) => {
   let user = utils.parseUserCookie(req.signedCookies.user)
 
+  if (!user) {
+    return res.redirect('/')
+  }
+
   utils.getUserFavorites(user.id, (favorites) => {
     let forumId = parseInt(req.params.forumId)
       , idJvf = req.params.idJvf
@@ -41,10 +45,6 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-
           superlative: superlative(),
           cacheAge: 0,
         }
-
-    if (!user) {
-      return res.redirect('/')
-    }
 
     if (idLegacyOrModern == 0) {
       return next()

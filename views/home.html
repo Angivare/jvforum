@@ -1,0 +1,25 @@
+{{#def.layoutHead}}
+<div class="sheet">
+  {{#def.header}}
+  <div class="content content--no-aside">
+    <div class="menu">
+      {{? it.favorites && it.favorites.forums.length }}
+        {{~it.favorites.forums :a}}
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+        {{~}}
+      {{??}}
+        <span class="menu__item menu__item--blank-state">Aucun forum favori</span>
+      {{?}}
+    </div>
+    <div class="menu">
+      {{? it.favorites && it.favorites.topics.length }}
+        {{~it.favorites.topics :a}}
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+        {{~}}
+      {{??}}
+        <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
+      {{?}}
+    </div>
+  </div>
+</div>
+{{#def.layoutFoot}}

@@ -109,25 +109,23 @@
         </a>
       </div>
     {{?}}
-    <div class="js-favorites">
-      <div class="aside__menu menu">
-        {{? it.favorites && it.favorites.forums.length }}
-          {{~it.favorites.forums :a}}
-            <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
-          {{~}}
-        {{??}}
-          <span class="menu__item menu__item--blank-state">Aucun forum favori</span>
-        {{?}}
-      </div>
-      <div class="aside__menu menu">
-        {{? it.favorites && it.favorites.topics.length }}
-          {{~it.favorites.topics :a}}
-            <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
-          {{~}}
-        {{??}}
-          <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
-        {{?}}
-      </div>
+    <div class="aside__menu menu">
+      {{? it.favorites && it.favorites.forums.length }}
+        {{~it.favorites.forums :a}}
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+        {{~}}
+      {{??}}
+        <span class="menu__item menu__item--blank-state">Aucun forum favori</span>
+      {{?}}
+    </div>
+    <div class="aside__menu menu">
+      {{? it.favorites && it.favorites.topics.length }}
+        {{~it.favorites.topics :a}}
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+        {{~}}
+      {{??}}
+        <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
+      {{?}}
     </div>
     {{? it.subforums }}
       <div class="menu aside__menu">

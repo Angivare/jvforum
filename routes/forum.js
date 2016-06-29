@@ -13,6 +13,10 @@ let express = require('express')
 router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
   let user = utils.parseUserCookie(req.signedCookies.user)
 
+  if (!user) {
+    return res.redirect('/')
+  }
+
   utils.getUserFavorites(user.id, (favorites) => {
     let id = req.params.id
       , slug = req.params.slug ? req.params.slug : '0'
@@ -31,10 +35,6 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           favorites,
           superlative: superlative(),
         }
-
-    if (!user) {
-      return res.redirect('/')
-    }
 
     let cacheId = `${id}/1`
     cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {
