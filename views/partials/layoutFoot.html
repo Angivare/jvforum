@@ -14,5 +14,5 @@ var refreshIntervals = {
  };
 </script>
 {{ for (let name in it.cacheBusting.scripts) { }}
-<script src="/assets/scripts/{{=name}}--{{=it.cacheBusting.scripts[name]}}.js"></script>
+<script src="/assets/scripts/{{=name}}--{{=it.cacheBusting.scripts[name]}}.js" data-no-instant></script>
 {{ } }}
