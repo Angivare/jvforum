@@ -377,42 +377,64 @@ router.post('/refresh', (req, res, next) => {
 router.post('/syncFavorites', (req, res, next) => {
   let r = {
       error: false,
+      updated: false,
     }
     , ipAddress = req.connection.remoteAddress
     , user = req.user
+    , now = Math.floor(new Date() / 1000)
 
-  fetch.unique({
-    path: '/forums.htm',
-    cookies: req.formattedJvcCookies,
-    ipAddress,
-    timeout: config.timeouts.server.syncFavorites,
-  }, `syncFavorites/${user.id}`, (headers, body) => {
-    let $ = cheerio.load(body)
-      , forums = {}
-      , topics = {}
+  db.select('updatedAt', 'favorites', {
+    userId: user.id,
+  }, (results) => {
+    if (!results.length || results[0].updatedAt < now - config.timeouts.cache.favorites) {
+      fetch.unique({
+        path: '/forums.htm',
+        cookies: req.formattedJvcCookies,
+        ipAddress,
+        timeout: config.timeouts.server.syncFavorites,
+      }, `syncFavorites/${user.id}`, (headers, body) => {
+        let $ = cheerio.load(body)
+          , forums = {}
+          , topics = {}
 
-    $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
-      forums[$(element).data('id')] = $('.lien-jv', element).text().trim()
-    })
+        $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
+          forums[$(element).data('id')] = $('.lien-jv', element).text().trim()
+        })
 
-    $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
-      topics[$(element).data('id')] = $('.lien-jv', element).text().trim()
-    })
+        $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
+          topics[$(element).data('id')] = $('.lien-jv', element).text().trim()
+        })
 
-    db.insert('favorites', {
-      userId: user.id,
-      forums: JSON.stringify(forums),
-      topics: JSON.stringify(topics),
-      updatedAt: Math.floor(Date.now() / 1000),
-    })
-
-    res.json(r)
-  }, (e) => {
-    if (e == 'timeout') {
-      res.json({error: 'Timeout'})
+        if (results.length) {
+          db.update('favorites', {
+            forums: JSON.stringify(forums),
+            topics: JSON.stringify(topics),
+            updatedAt: now,
+          }, {
+            userId: user.id,
+          })
+        }
+        else {
+          db.insert('favorites', {
+            userId: user.id,
+            forums: JSON.stringify(forums),
+            topics: JSON.stringify(topics),
+            updatedAt: now,
+          })
+        }
+        r.updated = true
+        res.json(r)
+      }, (e) => {
+        if (e == 'timeout') {
+          res.json({error: 'Timeout'})
+        }
+        else {
+          res.json({error: `Réseau. (${e})`})
+        }
+      })
     }
     else {
-      res.json({error: `Réseau. (${e})`})
+      res.json(r)
     }
   })
 })
