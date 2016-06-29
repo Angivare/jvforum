@@ -5,6 +5,8 @@ var isFormReadyToPost = false
   , messagesChecksums
   , refreshInterval
   , messagesEvents = []
+  , isSliderSliding
+  , sliderTopOffset
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -200,6 +202,45 @@ function syncFavorites() {
   })
 }
 
+function makeFavoritesSlideable() {
+  if (screen.width < 1025) {
+    return
+  }
+
+  if (!$('.js-slider').length) {
+    return
+  }
+
+  sliderTopOffset = $('.js-slider').offset().top - 15
+
+  adjustSliderWidth()
+  $(window).resize(adjustSliderWidth)
+
+  makeFavoritesSlide()
+  $(window).scroll(makeFavoritesSlide)
+  $(window).resize(makeFavoritesSlide)
+}
+
+function makeFavoritesSlide() {
+  if (scrollY > sliderTopOffset) {
+    if (!isSliderSliding) {
+      $('.js-slider').addClass('sliding')
+      isSliderSliding = true
+    }
+  }
+  else {
+    if (isSliderSliding) {
+      $('.js-slider').removeClass('sliding')
+      isSliderSliding = false
+    }
+  }
+}
+
+function adjustSliderWidth() {
+  // Parce que la taille ne dépend plus du parent en position fixed
+  $('.js-slider').css('width', $('.menu.js-favorites-forums').width())
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -226,6 +267,7 @@ instantClick.on('change', function() {
 
   startRefresh()
   syncFavorites()
+  makeFavoritesSlideable()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
