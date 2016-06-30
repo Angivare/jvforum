@@ -88,7 +88,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
             if (matches[4] != 1) {
               urlJvf += `/${matches[4]}`
             }
-            res.redirect(urlJvf)
+            return res.redirect(urlJvf)
           }
           else {
             viewLocals.error = 'unknownRedirect'
