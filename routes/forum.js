@@ -64,7 +64,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
             viewLocals.errorLocation = location
           }
         }
-        else {
+        else if (headers.statusCode == 200) {
           let parsed = parse.forum(body)
 
           cache.save(cacheId, parsed)
@@ -72,6 +72,9 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
+        }
+        else {
+          viewLocals.error = 'not200'
         }
 
         res.send(renderView('forum', viewLocals))

@@ -76,6 +76,8 @@
           <div class="error__message">
             Il redirige vers #{errorLocation}
           </div>
+        {{?? it.error == 'not200'}}
+          <h1 class="error__title">Page inexistante sur JVC</h1>
         {{?}}
       </div>
     {{?}}

@@ -1,6 +1,5 @@
 let cheerio = require('cheerio')
   , sha1 = require('sha1')
-  , fs = require('fs')
   , utils = require('./utils')
   , date = require('./date')
 
@@ -88,9 +87,6 @@ function forum(body) {
   r.title = false
   selection = $('.highlight')
   if (selection) {
-    if (!selection.html()) {
-      fs.writeFileSync('debug', body)
-    }
     r.title = selection.html().substr("Forum ".length)
   }
 
