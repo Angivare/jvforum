@@ -65,7 +65,7 @@ router.post('/login', (req, res, next) => {
           r.successful = true
 
           function setCookieAndSendResponse(id) {
-            res.cookie('user', [id, nickname, 0 /* is logged as moderator, for later use */, cookies.coniunctio, cookies.dlrowolleh].join('-'), {
+            res.cookie('user', [id, nickname, 0 /* is logged as moderator, for later use */, cookies.coniunctio, cookies.dlrowolleh].join('.'), {
               maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
               httpOnly: true,
               signed: true,

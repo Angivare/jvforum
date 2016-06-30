@@ -189,7 +189,7 @@ function parseUserCookie(cookie) {
     return false
   }
 
-  let split = cookie.split('-')
+  let split = cookie.split('.')
   return {
     id: parseInt(split[0]),
     nickname: split[1],
