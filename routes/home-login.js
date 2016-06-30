@@ -18,6 +18,7 @@ router.get('/', (req, res, next) => {
         cacheBusting,
         title: 'JVForum',
         favorites,
+        csrf: req.csrfToken(),
       }))
     })
   }
@@ -25,6 +26,7 @@ router.get('/', (req, res, next) => {
     res.render('login', {
       googleAnalyticsId: config.googleAnalyticsId,
       cacheBusting,
+      csrf: req.csrfToken(),
     })
   }
 })

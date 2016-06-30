@@ -166,6 +166,8 @@
     , topicSlug = "{{=it.slug}}"
     , topicPage = {{=it.page}}
     , lastPage = {{=it.lastPage}}
-    , cacheAge = {{=it.cacheAge * 1000}}
+    , cacheAge = {{=it.cacheAge * 1000}};
+
+  var _csrf = "{{=it.csrf}}";
 </script>
 {{#def.layoutFoot}}

@@ -44,6 +44,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           favorites,
           superlative: superlative(),
           cacheAge: 0,
+          csrf: req.csrfToken(),
         }
 
     if (idLegacyOrModern == 0) {

@@ -10,10 +10,6 @@ let express = require('express')
   , router = express.Router()
 
 router.post('/*', (req, res, next) => {
-  if (!('origin' in req.headers) || req.headers.origin != `${req.protocol}://${req.headers.host}`) {
-    res.json({error: 'Bad Origin'})
-    return
-  }
   req.user = utils.parseUserCookie(req.signedCookies.user)
   if (!req.user && req.params[0] != 'login') {
     res.json({error: 'Déconnecté'})

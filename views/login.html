@@ -22,6 +22,7 @@ body {
   <br>
   <input id="password" type="password" placeholder="Mot de passe">
   <div class="g-recaptcha" data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx"></div>
+  <input id="_csrf" type="hidden" name="_csrf" value="{{=it.csrf}}">
   <input id="submit" type="submit" value="Me connecter" style="font-weight: bold">
 </form>
 
@@ -51,7 +52,7 @@ geid('js-form').addEventListener('submit', function (e) {
   });
   xhr.open('POST', '/ajax/login');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send('nickname=' + geid('nickname').value + '&password=' + geid('password').value + '&captcha=' + geid('g-recaptcha-response').value);
+  xhr.send('nickname=' + geid('nickname').value + '&password=' + geid('password').value + '&captcha=' + geid('g-recaptcha-response').value + '&_csrf=' + geid('_csrf').value);
 });
 
 var googleAnalyticsId = '{{=it.googleAnalyticsId}}';

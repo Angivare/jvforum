@@ -7,6 +7,7 @@ let express = require('express')
   , compression = require('compression')
   , http = require('http')
   , consolidate = require('consolidate')
+  , csrf = require('csurf')
   , routesStaticFiles = require('./routes/staticFiles')
   , routesHomeLogin = require('./routes/home-login')
   , routesForum = require('./routes/forum')
@@ -26,6 +27,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookiesSecret))
+app.use(csrf({cookie: true}))
 
 app.use((req, res, next) => {
   req.cf_ip = req.ip

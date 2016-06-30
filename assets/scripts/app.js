@@ -62,6 +62,7 @@ function postMessage(event) {
     topicMode: topicMode,
     topicIdLegacyOrModern: topicIdLegacyOrModern,
     topicSlug: topicSlug,
+    _csrf: _csrf,
   }
 
   $.post({
@@ -146,6 +147,7 @@ function refresh() {
     topicPage: topicPage,
     lastPage: lastPage,
     messagesChecksums: JSON.stringify(messagesChecksums),
+    _csrf: _csrf,
   }
 
   $.post({
@@ -198,6 +200,9 @@ function refresh() {
 function syncFavorites() {
   $.post({
     url: '/ajax/syncFavorites',
+    data: {
+      _csrf: _csrf,
+    },
     timeout: timeouts.syncFavorites,
   })
 }

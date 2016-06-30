@@ -35,6 +35,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           isFavorite: false,
           favorites,
           superlative: superlative(),
+          csrf: req.csrfToken(),
         }
 
     let cacheId = `${id}/1`
