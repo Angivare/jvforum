@@ -1,5 +1,6 @@
 let cheerio = require('cheerio')
   , sha1 = require('sha1')
+  , fs = require('fs')
   , utils = require('./utils')
   , date = require('./date')
 
