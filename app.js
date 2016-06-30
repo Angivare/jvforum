@@ -7,6 +7,7 @@ let express = require('express')
   , compression = require('compression')
   , http = require('http')
   , consolidate = require('consolidate')
+  , cloudflare = require('cloudflare-express')
   , routesStaticFiles = require('./routes/staticFiles')
   , routesHomeLogin = require('./routes/home-login')
   , routesForum = require('./routes/forum')
@@ -26,7 +27,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookiesSecret))
-app.set('trust proxy')
+app.use(cloudflare.restore())
 
 app.use(routesStaticFiles)
 app.use(routesHomeLogin)

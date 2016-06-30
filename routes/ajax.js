@@ -29,7 +29,7 @@ router.post('/login', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.connection.remoteAddress
+    , ipAddress = req.cf_ip
 
   let missingParams = false
   ;['nickname', 'password', 'captcha'].forEach((varName) => {
@@ -131,7 +131,7 @@ router.post('/postMessage', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.connection.remoteAddress
+    , ipAddress = req.cf_ip
     , user = req.user
 
   let missingParams = false
@@ -379,7 +379,7 @@ router.post('/syncFavorites', (req, res, next) => {
       error: false,
       updated: false,
     }
-    , ipAddress = req.connection.remoteAddress
+    , ipAddress = req.cf_ip
     , user = req.user
     , now = Math.floor(new Date() / 1000)
 
