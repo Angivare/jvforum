@@ -33,8 +33,8 @@ CREATE TABLE `logins` (
 
 CREATE TABLE `favorites` (
   `userId` int unsigned NOT NULL,
-  `forums` varchar(5000) NOT NULL,
-  `topics` varchar(5000) NOT NULL,
+  `forums` mediumtext NOT NULL,
+  `topics` mediumtext NOT NULL,
   `updatedAt` int NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
