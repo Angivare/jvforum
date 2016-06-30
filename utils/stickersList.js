@@ -170,6 +170,19 @@ let stickersList = {
     '1mya': 'quoi',
     '1my5': 'cpa',
   },
+  'store': {
+    '1n2c': 'store1',
+    '1n2d': 'store2',
+    '1n2g': 'store3',
+    '1n2h': 'store4',
+    '1n2i': 'store5',
+    '1n2j': 'store6',
+    '1n2k': 'store7',
+    '1n2l': 'store8',
+    '1n2m': 'store9',
+    '1n2n': 'store10',
+    '1n2o': 'store11',
+  },
 }
 
 for (let category in stickersList) {
