@@ -87,6 +87,9 @@ function forum(body) {
   r.title = false
   selection = $('.highlight')
   if (selection) {
+    if (!selection.html()) {
+      fs.writeFileSync('debug', body)
+    }
     r.title = selection.html().substr("Forum ".length)
   }
 
