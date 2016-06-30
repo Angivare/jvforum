@@ -6,7 +6,7 @@ CREATE TABLE `messages_posted` (
   `isTopic` tinyint NOT NULL,
   `forumId` int NOT NULL,
   `topicMode` tinyint NOT NULL,
-  `topicId` int NOT NULL,
+  `topicIdLegacyOrModern` int NOT NULL,
   `ipAddress` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
