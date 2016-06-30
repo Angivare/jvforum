@@ -11,7 +11,7 @@ let express = require('express')
   , config = require('../config')
   , router = express.Router()
 
-router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,9})-:slug([a-z0-9-]+)/:page([0-9]{1,5})?', (req, res, next) => {
+router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0-9]{1,5})?', (req, res, next) => {
   let user = utils.parseUserCookie(req.signedCookies.user)
 
   if (!user) {
