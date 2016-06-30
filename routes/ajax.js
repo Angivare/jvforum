@@ -151,7 +151,7 @@ router.post('/postMessage', (req, res, next) => {
 
   fetch({
     path: pathJvc,
-    cookies: reqformattedJvcCookies,
+    cookies: req.formattedJvcCookies,
     ipAddress,
     timeout: config.timeouts.server.postMessageForm,
   }, (headers, body) => {
@@ -171,7 +171,7 @@ router.post('/postMessage', (req, res, next) => {
         let dbId = results.insertId
         fetch({
           path: pathJvc,
-          cookies: formattedJvcCookies,
+          cookies: req.formattedJvcCookies,
           ipAddress,
           postData: form,
           timeout: config.timeouts.server.postMessage,
