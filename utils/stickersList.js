@@ -218,7 +218,7 @@ let stickersList = {
     '1n6z': 'yeah3es',
     '1n70': 'vamos',
     '1n71': 'que',
-    '1n72': 'yeah2',
+    '1n72': 'yeah2es',
     '1n73': 'victoria',
   },
 }
