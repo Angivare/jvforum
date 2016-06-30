@@ -95,6 +95,7 @@ function forum(body) {
   selection.each((index, element) => {
     let url = $('.topic-title', element).attr('href')
       , urlSplit = url.split('/forums/')[1].split('-')
+      , dateRaw = $('.topic-date span', element).text().trim()
 
     r.topics.push({
       id: $(element).data('id'),
@@ -105,7 +106,8 @@ function forum(body) {
       status: !$('.topic-author', element).attr('style') ? $('.topic-author', element).attr('class').split(' ')[2].substr('user-'.length) : 'deleted',
       nickname: $('.topic-author', element).text().trim(),
       answerCount: parseInt($('.topic-count', element).text().trim()),
-      date: date.convertTopicList($('.topic-date span', element).text().trim()),
+      date: date.convertTopicList(dateRaw),
+      dateRaw,
     })
   })
 

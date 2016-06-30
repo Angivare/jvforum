@@ -5,6 +5,7 @@ let express = require('express')
   , cacheBusting = require('../utils/prepareCacheBusting')
   , renderView = require('../utils/renderView')
   , cache = require('../utils/caching')
+  , date = require('../utils/date')
   , superlative = require('../utils/superlative')
   , utils = require('../utils/utils')
   , config = require('../config')
@@ -38,6 +39,10 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
 
     let cacheId = `${id}/1`
     cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {
+      for (let i = 0; i < content.topics.length; i++) {
+        let dateConversion =
+        content.topics[i].date = date.convertTopicList(content.topics[i].dateRaw)
+      }
       Object.keys(content).forEach((key) => {
         viewLocals[key] = content[key]
       })
