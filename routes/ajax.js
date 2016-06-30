@@ -397,7 +397,7 @@ router.post('/syncFavorites', (req, res, next) => {
           , forums = []
           , topics = []
 
-        $('.line-ellipsis', '#liste-forums-preferes').each((index, element) => {
+        $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
           let name = $('.lien-jv', element).text().trim()
             , id = $(element).data('id')
             , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
@@ -405,7 +405,7 @@ router.post('/syncFavorites', (req, res, next) => {
         })
         forums = JSON.stringify(forums)
 
-        $('.line-ellipsis', '#liste-sujet-prefere').each((index, element) => {
+        $('.line-ellipsis[data-id]', '#liste-sujet-prefere').each((index, element) => {
           let name = $('.lien-jv', element).text().trim()
             , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
             , mode = urlSplit[0]
