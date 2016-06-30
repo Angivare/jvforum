@@ -241,6 +241,14 @@ function adjustSliderWidth() {
   $('.js-slider').css('width', $('.menu.js-favorites-forums').width())
 }
 
+function goToForm() {
+  if (!$('#newmessage')) {
+    return
+  }
+  $('.js-form-post .form__textarea').focus()
+  scrollTo(0, $('.js-form-post').offset().top + 1)
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -264,6 +272,7 @@ instantClick.on('change', function() {
   isFormReadyToPost = false
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
+  $('.js-go-to-form').click(goToForm)
 
   startRefresh()
   syncFavorites()
