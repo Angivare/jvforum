@@ -7,7 +7,6 @@ let express = require('express')
   , compression = require('compression')
   , http = require('http')
   , consolidate = require('consolidate')
-  , cloudflare = require('cloudflare-express')
   , routesStaticFiles = require('./routes/staticFiles')
   , routesHomeLogin = require('./routes/home-login')
   , routesForum = require('./routes/forum')
@@ -27,7 +26,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookiesSecret))
-app.use(cloudflare.restore())
+
+app.use((req, res, next) => {
+  req.cf_ip = req.ip
+  if (config.useCloudFlare && 'cf-connecting-ip' in req.headers) {
+    req.cf_ip = req.headers['cf-connecting-ip']
+  }
+  next()
+})
 
 app.use(routesStaticFiles)
 app.use(routesHomeLogin)

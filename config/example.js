@@ -7,6 +7,7 @@ let config = {
     database: 'jvforum',
   },
   googleAnalyticsId: '',
+  useCloudFlare: false,
 
   /* ------------------------ */
 
