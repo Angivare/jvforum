@@ -1,6 +1,7 @@
 let http = require('http')
-, querystring = require('querystring')
-, config = require('../config')
+  , querystring = require('querystring')
+  , fs = require('fs')
+  , config = require('../config')
 
 http.globalAgent.keepAlive = true
 http.globalAgent.maxSockets = 30
@@ -89,6 +90,9 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
   }]
 
   fetch(pathOrOptions, (headers, body) => {
+    if (!(id in uniquesBeingFetched)) {
+      fs.writeFileSync('debug_unique', id + "\r\n" + headers + "\r\n\r\n" + body)
+    }
     for (let i of uniquesBeingFetched[id]) {
       i.successCallback(headers, body)
     }
