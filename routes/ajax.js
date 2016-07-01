@@ -412,23 +412,14 @@ router.post('/syncFavorites', (req, res, next) => {
         })
         topics = JSON.stringify(topics)
 
-        if (results.length) {
-          db.update('favorites', {
-            forums,
-            topics,
-            updatedAt: now,
-          }, {
-            userId: user.id,
-          })
-        }
-        else {
-          db.insert('favorites', {
-            userId: user.id,
-            forums,
-            topics,
-            updatedAt: now,
-          })
-        }
+        db.insertOrUpdate('favorites', {
+          forums,
+          topics,
+          updatedAt: now,
+        }, {
+          userId: user.id,
+        })
+
         r.updated = true
         res.json(r)
       }, (e) => {

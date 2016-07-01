@@ -33,8 +33,17 @@ function update(tableName, data, where) {
   })
 }
 
+function insertOrUpdate(tableName, updateData, where) {
+  let insertData = where
+  for (let i in updateData) {
+    insertData[i] = updateData[i]
+  }
+  c.query(`INSERT INTO ${tableName} SET ? ON DUPLICATE KEY UPDATE ?`, [insertData, updateData])
+}
+
 module.exports = {
   select,
   insert,
   update,
+  insertOrUpdate,
 }

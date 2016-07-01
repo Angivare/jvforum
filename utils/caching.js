@@ -21,7 +21,6 @@ let lastSaved = {}
 function save(id, content, successCallback) {
   let now = +new Date
     , row = {
-        id,
         content: JSON.stringify(content),
         fetchedAt: now,
       }
@@ -46,12 +45,9 @@ function save(id, content, successCallback) {
   }
 
   lastSaved[id] = now
-  this.get(id, null, (results) => {
-    db.update('cache', row, {
-      id,
-    })
-  }, () => {
-    db.insert('cache', row)
+
+  db.insertOrUpdate('cache', row, {
+    id,
   })
 }
 
