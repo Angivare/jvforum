@@ -5,8 +5,8 @@ var isFormReadyToPost = false
   , messagesChecksums
   , refreshInterval
   , messagesEvents = []
-  , isSliderSliding
-  , sliderTopOffset
+  , isSliderSliding = false
+  , sliderTopOffset = 0
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -208,6 +208,10 @@ function syncFavorites() {
   })
 }
 
+function setSliderTopOffset() {
+  sliderTopOffset = $('.js-slider').offset().top - 15
+}
+
 function makeFavoritesSlideable() {
   if (screen.width < 1025) {
     return
@@ -217,7 +221,8 @@ function makeFavoritesSlideable() {
     return
   }
 
-  sliderTopOffset = $('.js-slider').offset().top - 15
+  setSliderTopOffset()
+  $(window).resize(setSliderTopOffset)
 
   adjustSliderWidth()
   $(window).resize(adjustSliderWidth)
@@ -228,7 +233,7 @@ function makeFavoritesSlideable() {
 }
 
 function makeFavoritesSlide() {
-  if (scrollY > sliderTopOffset) {
+  if (sliderTopOffset > 0 && scrollY > sliderTopOffset) {
     if (!isSliderSliding) {
       $('.js-slider').addClass('sliding')
       isSliderSliding = true
