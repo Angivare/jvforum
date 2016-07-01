@@ -4,7 +4,7 @@ let http = require('http')
   , config = require('../config')
 
 http.globalAgent.keepAlive = true
-http.globalAgent.maxSockets = 30
+http.globalAgent.maxSockets = config.maxSimultaneousRequests
 
 function fetch(pathOrOptions, successCallback, failCallback) {
   let path = pathOrOptions

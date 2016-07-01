@@ -6,6 +6,7 @@ let config = {
     password: '',
     database: 'jvforum',
   },
+  maxSimultaneousRequests: 30,
   googleAnalyticsId: '',
   useCloudFlare: false,
 
