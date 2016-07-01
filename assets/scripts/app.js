@@ -192,7 +192,8 @@ function refresh() {
       $('.pagination-topic__pages').html(data.paginationHTML)
       lastPage = data.lastPage
     }
-
+  })
+  .always(function () {
     instantClick.setTimeout(refresh, refreshInterval)
   })
 }
