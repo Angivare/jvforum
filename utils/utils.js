@@ -165,7 +165,7 @@ function adaptPostedMessage(message, hostname) {
   for (let category in stickersList) {
     for (let id in stickersList[category]) {
       let {code} = stickersList[category][id]
-      message = message.replace(`:${code}:`, `[[sticker:p/${id}]]`)
+      message = message.replace(new RegExp(`:${code}:`, 'gi'), `[[sticker:p/${id}]]`)
     }
   }
 
