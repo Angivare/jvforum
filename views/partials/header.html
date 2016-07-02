@@ -4,7 +4,7 @@
   </div>
   {{? it.idJvf }}
     <div class="header__forum-cell">
-      <a class="header__forum-link" href="/{{=it.forumId}}-{{=it.forumSlug}}">{{=it.forumName || 'Forum'}}</a>
+      <a class="header__forum-link" href="/{{=it.forumId}}-{{=it.forumSlug}}">{{!it.forumName || 'Forum'}}</a>
     </div>
   {{?}}
 </header>

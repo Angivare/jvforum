@@ -4,19 +4,28 @@ let cheerio = require('cheerio')
   , date = require('./date')
 
 function topic(body) {
-  let retour = {}
-    , matches
+  let $ = cheerio.load(body)
+    , selection
+    , r = retour = {}
+
+  let matches
     , regex
 
-  retour.title = false
-  if (matches = body.match(/<span id="bloc-title-forum">(.+)<\/span>/)) {
-    retour.title = matches[1]
+  r.title = false
+  selection = $('#bloc-title-forum')
+  if (selection) {
+    r.title = selection.text()
   }
 
-  retour.forumSlug = retour.forumName = false
-  if (matches = body.match(/<span><a href="\/forums\/0-(?:[0-9]+)-0-1-0-1-0-([a-zA-Z0-9-]+)\.htm">Forum ([^<]+)<\/a><\/span>/)) {
-    retour.forumSlug = matches[1]
-    retour.forumName = matches[2]
+  r.forumSlug = r.forumName = false
+  selection = $('.fil-ariane-crumb span a')
+  if (selection) {
+    selection.each((index, element) => {
+      if ($(element).html().substr(0, 6) == 'Forum ') {
+        r.forumName = $(element).text().substr(6)
+        r.forumSlug = $(element).attr('href').split('-').slice(7).join('-').split('.')[0]
+      }
+    })
   }
 
   retour.messages = []
@@ -76,7 +85,7 @@ function topic(body) {
     retour.lockRationale = matches[1]
   }
 
-  return retour
+  return r
 }
 
 function forum(body) {
@@ -87,7 +96,7 @@ function forum(body) {
   r.title = false
   selection = $('.highlight')
   if (selection) {
-    r.title = selection.html().substr("Forum ".length)
+    r.title = selection.text().substr("Forum ".length)
   }
 
   r.topics = []
