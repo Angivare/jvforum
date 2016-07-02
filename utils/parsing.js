@@ -32,7 +32,6 @@ function topic(body) {
   regex = /<div class="bloc-message-forum " data-id="([0-9]+)">\s+<div class="conteneur-message">\s+(?:<div class="bloc-avatar-msg">\s+<div class="back-img-msg">\s+<div>\s+<span[^>]+>\s+<img src="[^"]+" data-srcset="([^"]+)"[^>]+>\s+<\/span>\s+<\/div>\s+<\/div>\s+<\/div>\s+)?<div class="inner-head-content">[\s\S]+?(?:<span class="JvCare [0-9A-F]+ bloc-pseudo-msg text-([^"]+)"|<div class="bloc-pseudo-msg")[^>]+>\s+([\s\S]+?)\s+<[\s\S]+?<div class="bloc-date-msg">\s+(?:<span[^>]+>)?([0-9][\s\S]+?)(?:<\/span>)?\s+<\/div>[\s\S]+?<div class="txt-msg  text-enrichi-forum ">([\s\S]+?)<\/div><\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g
   while (matches = regex.exec(body)) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
-      , dateConversion = date.convertMessage(matches[5])
       , content = utils.adaptMessageContent(matches[6], matches[1])
     retour.messages.push({
       id: parseInt(matches[1]),
@@ -40,9 +39,7 @@ function topic(body) {
       status: matches[3],
       nickname: matches[4],
       isNicknameDeleted,
-      date: dateConversion.text,
       dateRaw: matches[5],
-      age: dateConversion.diff,
       content,
       checksum: sha1(content).substr(0, 8),
     })
@@ -115,7 +112,6 @@ function forum(body) {
       status: !$('.topic-author', element).attr('style') ? $('.topic-author', element).attr('class').split(' ')[2].substr('user-'.length) : 'deleted',
       nickname: $('.topic-author', element).text().trim(),
       answerCount: parseInt($('.topic-count', element).text().trim()),
-      date: date.convertTopicList(dateRaw),
       dateRaw,
     })
   })

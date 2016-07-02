@@ -41,13 +41,15 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
     let cacheId = `${id}/1`
     cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {
       for (let i = 0; i < content.topics.length; i++) {
-        let dateConversion =
         content.topics[i].date = date.convertTopicList(content.topics[i].dateRaw)
       }
+
       Object.keys(content).forEach((key) => {
         viewLocals[key] = content[key]
       })
+
       viewLocals.cacheAge = age
+
       res.send(renderView('forum', viewLocals))
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
@@ -74,6 +76,10 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           let parsed = parse.forum(body)
 
           cache.save(cacheId, parsed)
+
+          for (let i = 0; i < parsed.topics.length; i++) {
+            parsed.topics[i].date = date.convertTopicList(parsed.topics[i].dateRaw)
+          }
 
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]

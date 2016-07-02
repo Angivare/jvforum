@@ -58,10 +58,13 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         content.messages[i].date = dateConversion.text
         content.messages[i].age = dateConversion.diff
       }
+
       Object.keys(content).forEach((key) => {
         viewLocals[key] = content[key]
       })
+
       viewLocals.cacheAge = age
+
       res.send(renderView('topic', viewLocals))
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
@@ -103,6 +106,12 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           let parsed = parse.topic(body)
 
           cache.save(cacheId, parsed)
+
+          for (let i = 0; i < parsed.messages.length; i++) {
+            let dateConversion = date.convertMessage(parsed.messages[i].dateRaw)
+            parsed.messages[i].date = dateConversion.text
+            parsed.messages[i].age = dateConversion.diff
+          }
 
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
