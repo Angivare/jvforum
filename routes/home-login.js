@@ -31,4 +31,8 @@ router.get('/', (req, res, next) => {
   }
 })
 
+router.get('/accueil', (req, res, next) => {
+  res.redirect(301, '/')
+})
+
 module.exports = router
