@@ -118,6 +118,11 @@
           <div class="error__message">
             Il redirige vers {{=it.errorLocation}}
           </div>
+        {{?? it.error == 'not200'}}
+          <h1 class="error__title">JVC n’arrive pas à servir la page</h1>
+          <p>
+            <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}">Réessayer</a>
+          </p>
         {{?}}
       </div>
     {{?}}

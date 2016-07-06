@@ -102,7 +102,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         else if (headers.statusCode == 404) {
           viewLocals.error = 'doesNotExist'
         }
-        else {
+        else if (headers.statusCode == 200) {
           let parsed = parse.topic(body)
 
           cache.save(cacheId, parsed)
@@ -116,6 +116,9 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
+        }
+        else {
+          viewLocals.error = 'not200'
         }
 
         res.send(renderView('topic', viewLocals))
