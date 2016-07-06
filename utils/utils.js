@@ -133,7 +133,7 @@ function adaptMessageContent(content, id) {
     return `<a class="long-link" ${attributes}>` + text.substr(0, 85) + '<span class="long-link__hidden-part">' + text.substr(85) + '</span></a>'
   })
 
-  if (content.length > 32000) {
+  if (content.length > 40000) {
     content = '<div class="message__content-text"><p><small>Message trop gros pour être affiché par JVForum.</small></p></div>'
   }
 
