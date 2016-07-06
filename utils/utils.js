@@ -134,7 +134,7 @@ function adaptMessageContent(content, id) {
   })
 
   if (content.length > 40000) {
-    content = '<div class="message__content-text"><p><small>Message trop gros pour être affiché par JVForum.</small></p></div>'
+    content = '<div class="message__content-text"><p><div class="too-big-notice">Message trop gros pour être affiché par JVForum.</div></p></div>'
   }
 
   return content
