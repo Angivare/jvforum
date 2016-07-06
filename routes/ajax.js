@@ -365,10 +365,13 @@ router.post('/refresh', (req, res, next) => {
       else if (headers.statusCode == 404) {
         res.json({error: 'Topic inexistant'})
       }
-      else {
+      else if (headers.statusCode == 200) {
         let parsed = parse.topic(body)
         serveContent(parsed)
         cache.save(cacheId, parsed)
+      }
+      else {
+        res.json({error: 'JVC n’arrive pas à servir la page'})
       }
     }, (e) => {
       if (e == 'timeout') {
