@@ -111,8 +111,8 @@ function readyFormToPost() {
 
 function startRefresh() {
   var lastMessageAge = $('.message').last().data('age')
-  if (lastMessageAge == undefined) {
-    return
+  if (lastMessageAge == undefined) { // No messages on the page due to a bug with JVC
+    lastMessageAge = 0
   }
 
   messagesChecksums = {}
@@ -285,9 +285,12 @@ instantClick.on('change', function() {
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
   $('.js-go-to-form').click(goToForm)
 
-  startRefresh()
   syncFavorites()
   makeFavoritesSlideable()
+
+  $('script[type=queued]').each(function() {
+    eval($(this).html())
+  })
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)

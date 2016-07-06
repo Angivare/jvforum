@@ -166,8 +166,10 @@
     , topicSlug = "{{=it.slug}}"
     , topicPage = {{=it.page}}
     , lastPage = {{=it.lastPage}}
-    , cacheAge = {{=it.cacheAge * 1000}};
-
-  var _csrf = "{{=it.csrf}}";
+    , cacheAge = {{=it.cacheAge * 1000}}
+    , _csrf = "{{=it.csrf}}";
+</script>
+<script type="queued">
+  startRefresh();
 </script>
 {{#def.layoutFoot}}
