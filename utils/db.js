@@ -1,6 +1,7 @@
 let mysql = require('mysql')
   , config = require('../config')
 
+config.databaseConnection.charset = 'utf8mb4_unicode_ci'
 let c = mysql.createConnection(config.databaseConnection)
 
 function select(what, tableName, where, successCallback) {
