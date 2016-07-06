@@ -403,38 +403,43 @@ router.post('/syncFavorites', (req, res, next) => {
         ipAddress,
         timeout: config.timeouts.server.syncFavorites,
       }, `syncFavorites/${user.id}`, (headers, body) => {
-        let $ = cheerio.load(body)
-          , forums = []
-          , topics = []
+        if (headers.statusCode == 200) {
+          let $ = cheerio.load(body)
+            , forums = []
+            , topics = []
 
-        $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
-          let name = $('.lien-jv', element).text().trim()
-            , id = $(element).data('id')
-            , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
-          forums.push([`/${id}-${slug}`, name])
-        })
-        forums = JSON.stringify(forums)
+          $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
+            let name = $('.lien-jv', element).text().trim()
+              , id = $(element).data('id')
+              , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
+            forums.push([`/${id}-${slug}`, name])
+          })
+          forums = JSON.stringify(forums)
 
-        $('.line-ellipsis[data-id]', '#liste-sujet-prefere').each((index, element) => {
-          let name = $('.lien-jv', element).text().trim()
-            , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
-            , mode = urlSplit[0]
-            , forumId = urlSplit[1]
-            , id = urlSplit[2]
-            , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/${mode}-${forumId}-${id}-1-0-1-0-`.length).split('.')[0]
-          topics.push([`/${forumId}/${mode == 1 ? 0 : ''}${id}-${slug}`, name])
-        })
-        topics = JSON.stringify(topics)
+          $('.line-ellipsis[data-id]', '#liste-sujet-prefere').each((index, element) => {
+            let name = $('.lien-jv', element).text().trim()
+              , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
+              , mode = urlSplit[0]
+              , forumId = urlSplit[1]
+              , id = urlSplit[2]
+              , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/${mode}-${forumId}-${id}-1-0-1-0-`.length).split('.')[0]
+            topics.push([`/${forumId}/${mode == 1 ? 0 : ''}${id}-${slug}`, name])
+          })
+          topics = JSON.stringify(topics)
 
-        db.insertOrUpdate('favorites', {
-          forums,
-          topics,
-          updatedAt: now,
-        }, {
-          userId: user.id,
-        })
+          db.insertOrUpdate('favorites', {
+            forums,
+            topics,
+            updatedAt: now,
+          }, {
+            userId: user.id,
+          })
 
-        r.updated = true
+          r.updated = true
+        }
+        else {
+          r.error = 'JVC n’arrive pas à servir la page'
+        }
         res.json(r)
       }, (e) => {
         if (e == 'timeout') {
