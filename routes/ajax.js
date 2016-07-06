@@ -259,9 +259,9 @@ router.post('/refresh', (req, res, next) => {
     for (let i = 0; i < content.messages.length; i++) {
       let id = content.messages[i].id
       data.messages[id] = {}
+      let dateConversion = date.convertMessage(content.messages[i].dateRaw)
 
       if (id in messagesChecksums) {
-        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
         data.messages[id].date = dateConversion.text
         data.messages[id].age = dateConversion.diff
 
@@ -271,6 +271,9 @@ router.post('/refresh', (req, res, next) => {
         }
       }
       else {
+        content.messages[i].date = dateConversion.text
+        content.messages[i].age = dateConversion.diff
+
         newMessages.push(content.messages[i])
         data.messages[id].checksum = content.messages[i].checksum
       }
