@@ -182,11 +182,11 @@ router.post('/postMessage', (req, res, next) => {
             if ('location' in headers) {
               r.error = `La redirection renvoyée par JVC est invalide (${headers.location}).`
             }
-            else {
+            else if (headers.statusCode == 200) {
               if (matches = body.match(/<div class="alert-row"> (.+?) <\/div>/)) {
                 let error = matches[1]
                 if (error == 'Le captcha est invalide.') {
-                  r.error = 'JVC demande un captcha. Retentez de poster dans un instant.'
+                  r.error = 'JVC demande un captcha. Repostez dans un instant.'
                 }
                 else {
                   r.error = `JVC a renvoyé l’erreur « ${error} » à l’envoi du message.`
@@ -195,6 +195,9 @@ router.post('/postMessage', (req, res, next) => {
               else {
                 r.error = 'Il y a une erreur (pas de redirection de JVC), mais JVC ne précise vraisemblablement pas l’erreur.'
               }
+            }
+            else {
+              r.error = 'JVC n’arrive pas à servir la page d’envoi.'
             }
           }
           res.json(r)
@@ -210,7 +213,12 @@ router.post('/postMessage', (req, res, next) => {
       })
     }
     else {
-      r.error = 'JVForum n’a pas pu parser le formulaire.'
+      if (headers.statusCode == 200) {
+        r.error = 'JVForum n’a pas pu parser le formulaire.'
+      }
+      else {
+        r.error = 'JVC n’arrive pas à servir la page de récupération du formulaire.'
+      }
       res.json(r)
     }
   }, (error) => {
