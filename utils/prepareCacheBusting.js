@@ -11,7 +11,6 @@ content = content.replace(/url\(\/images\/([^.]+)\.([a-z]+)\)/g, (all, filename,
 
 let scriptsList = [
       'jquery',
-      'fastclick',
       'instantclick',
       'instantclick-loading-indicator',
       'app',

@@ -276,8 +276,6 @@ if (googleAnalyticsId) {
 }
 
 instantClick.on('change', function() {
-  FastClick.attach(document.body)
-
   $('.js-form-post').submit(postMessage)
   $('.js-form-post .form__textarea').on('input', readyFormToPost)
   isFormReadyToPost = false
