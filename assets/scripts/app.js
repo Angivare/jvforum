@@ -7,6 +7,7 @@ var isFormReadyToPost = false
   , messagesEvents = []
   , isSliderSliding = false
   , sliderTopOffset = 0
+  , icdl = ''
 
 function setAsHavingTouch() {
   $('html').addClass('has-touch')
@@ -260,6 +261,10 @@ function goToForm() {
   scrollTo(0, $('.js-form-post').offset().top + 1)
 }
 
+function showInstantClickDebugLog() {
+  alert(icdl)
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -282,6 +287,7 @@ instantClick.on('change', function() {
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
   $('.js-go-to-form').click(goToForm)
+  $('.header__instantclick-debug-button').click(showInstantClickDebugLog)
 
   syncFavorites()
   makeFavoritesSlideable()
