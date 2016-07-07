@@ -159,6 +159,9 @@ var instantClick
 
     instantanize()
     if (pop) {
+      $xhr.abort()
+      setPreloadingAsHalted()
+
       triggerPageEvent('restore')
     }
     else {
