@@ -108,7 +108,7 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
     for (let i of uniquesBeingFetched[id]) {
       i.failCallback(error)
     }
-    uniquesErrors[id].push('' + error)
+    uniquesErrors[id] = '' + error
     delete uniquesBeingFetched[id]
   })
 }
