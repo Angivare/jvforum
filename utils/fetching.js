@@ -74,6 +74,7 @@ function fetch(pathOrOptions, successCallback, failCallback) {
 }
 
 let uniquesBeingFetched = {}
+  , uniquesErrors = {}
 
 fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
   if (id in uniquesBeingFetched) {
@@ -91,7 +92,13 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
 
   fetch(pathOrOptions, (headers, body) => {
     if (!(id in uniquesBeingFetched)) {
-      fs.writeFileSync('debug_unique', id + "\r\n" + headers + "\r\n\r\n" + body)
+      /* This shouldn't happen, but sometimes does, for an unknown reason. We
+         handle this otherwise the app crashes. When the bug happens, fail
+         callbacks are called first and then success callbacks are called too,
+         with an incomplete body.
+      */
+      fs.appendFile('debug_unique', (new Date().toISOString()) + "\r\n" + id + "\r\n" + uniquesErrors[id] + "\r\n" + body.length + "\r\n\r\n", () => {})
+      return
     }
     for (let i of uniquesBeingFetched[id]) {
       i.successCallback(headers, body)
@@ -101,6 +108,7 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
     for (let i of uniquesBeingFetched[id]) {
       i.failCallback(error)
     }
+    uniquesErrors[id].push('' + error)
     delete uniquesBeingFetched[id]
   })
 }
