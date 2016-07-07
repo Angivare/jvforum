@@ -2102,7 +2102,10 @@ color: hsl(240, 8%, 27%);
 }
 
 .too-big-notice {
+  font-size: 95%;
   background: #660;
+  color: hsla(0, 100%, 100%, .87);
   display: inline-block;
-  padding: 2px 4px;
+  padding: 6px 10px;
+  border-radius: 2px;
 }
