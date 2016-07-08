@@ -66,7 +66,7 @@ function postMessage(event) {
     _csrf: _csrf,
   }
 
-  $.post({
+  instantClick.xhr($.post({
     url: '/ajax/postMessage',
     data: data,
     timeout: timeouts.postMessage,
@@ -92,7 +92,7 @@ function postMessage(event) {
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
     showErrors('Erreur Ajax (' + textStatus + ': ' + errorThrown + ')')
-  })
+  }))
 }
 
 function readyFormToPost() {
@@ -151,7 +151,7 @@ function refresh() {
     _csrf: _csrf,
   }
 
-  $.post({
+  instantClick.xhr($.post({
     url: '/ajax/refresh',
     data: data,
     timeout: timeouts.refresh,
@@ -194,19 +194,21 @@ function refresh() {
       lastPage = data.lastPage
     }
   })
-  .always(function () {
-    instantClick.setTimeout(refresh, refreshInterval)
-  })
+  .always(function (_, textStatus) {
+    if (textStatus != 'abort') { // InstantClick page change
+      instantClick.setTimeout(refresh, refreshInterval)
+    }
+  }))
 }
 
 function syncFavorites() {
-  $.post({
+  instantClick.xhr($.post({
     url: '/ajax/syncFavorites',
     data: {
       _csrf: _csrf,
     },
     timeout: timeouts.syncFavorites,
-  })
+  }))
 }
 
 function setSliderTopOffset() {
