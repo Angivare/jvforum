@@ -483,6 +483,7 @@ var instantClick
     }
     triggerPageEvent('fetch')
     $xhr.open('GET', url)
+    $xhr.timeout = 90000 // Must be set after `open()` with IE
     $xhr.send()
   }
 
