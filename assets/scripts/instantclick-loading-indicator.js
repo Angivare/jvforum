@@ -89,6 +89,7 @@
   }
 
   function remove() {
+    clearTimeout($timer)
     if (document.getElementById($container.id)) {
       document.body.removeChild($container)
     }
@@ -123,8 +124,7 @@
       done()
     }
   })
-
   instantClick.on('wait', start)
-
+  instantClick.on('fail', remove)
   instantClick.on('restore', remove) // Should be removed in a `beforechange` event instead
 })();
