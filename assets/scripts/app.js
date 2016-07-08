@@ -195,7 +195,7 @@ function refresh() {
     }
   })
   .always(function (_, textStatus) {
-    if (textStatus != 'abort') { // InstantClick page change
+    if (textStatus != 'abort') { // Not an InstantClick page change
       instantClick.setTimeout(refresh, refreshInterval)
     }
   }))
