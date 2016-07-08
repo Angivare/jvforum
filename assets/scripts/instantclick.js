@@ -30,6 +30,7 @@ var instantClick
         receive: [],
         wait: [],
         change: [],
+        fail: [],
         restore: []
       }
     , $currentPageTimers = []
@@ -306,8 +307,9 @@ var instantClick
       return
     }
     if ($xhr.status == 0) {
-      /* Request failed or aborted */
+      /* Request timeouted (timeout event), failed (error event) or aborted (abort event) */
       if ($isWaitingForCompletion) {
+        triggerPageEvent('fail')
         location.href = $url
       }
       return
