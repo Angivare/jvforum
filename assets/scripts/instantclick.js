@@ -651,7 +651,7 @@ var instantClick
     return timer
   }
 
-  function trackXhr(xhr) {
+  function xhr(xhr) {
     $currentPageXhrs.push(xhr)
   }
 
@@ -665,7 +665,7 @@ var instantClick
     on: on,
     setTimeout: setTimeout,
     setInterval: setInterval,
-    trackXhr: trackXhr
+    xhr: xhr
   }
 
 }(document, location, navigator.userAgent);
