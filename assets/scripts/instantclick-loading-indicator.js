@@ -125,6 +125,6 @@
     }
   })
   instantClick.on('wait', start)
-  instantClick.on('fail', remove)
+  instantClick.on('exit', remove)
   instantClick.on('restore', remove) // Should be removed in a `beforechange` event instead
 })();
