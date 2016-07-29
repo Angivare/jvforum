@@ -85,8 +85,8 @@ function adaptMessageContent(content, id) {
     return `<a href="${path}" title="${url}" data-link-jvc="${url}">jvforum.fr${path}</a>`
   })
 
-  // Make JVC links open in a new tab
-  content = content.replace(/<a href="(https?:\/\/(?:www|m)\.jeuxvideo\.com\/[^"]+)" title/g, '<a href="$1" target="_blank" title')
+  // Make all non-JVF links open in a new tab for those that normally don't (jeuxvideo.com, wearefans.com, allocine.fr, etc.)
+  content = content.replace(/<a href="([^"]+)"( title|>)/g, '<a href="$1" target="_blank"$2')
 
   // Smileys
   content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.gif" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="//image.jeuxvideo.com/smileys_img/$1.gif" data-code="$2" title="$2" alt="$2">')
