@@ -59,7 +59,7 @@
         {{?? it.error == 'network'}}
           <h1 class="error__title">Erreur réseau</h1>
           <div class="error__message">
-            <p>La page n’a pas pu être récupérée depuis JVC. ({{=errorDetail}})</p>
+            <p>La page n’a pas pu être récupérée depuis JVC. ({{=it.errorDetail}})</p>
             <p>
               <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
             </p>
