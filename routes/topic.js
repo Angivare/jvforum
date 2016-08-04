@@ -73,8 +73,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
       if (nicknames.length) {
         utils.getAvatars(nicknames, (avatars) => {
-          viewLocals.avatars = avatars
-          for (nickname in avatars) {
+          for (let nickname in avatars) {
             let url = avatars[nickname]
             for (let i = 0; i < viewLocals.messages.length; i++) {
               if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
@@ -147,8 +146,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
           if (nicknames.length) {
             utils.getAvatars(nicknames, (avatars) => {
-              viewLocals.avatars = avatars
-              for (nickname in avatars) {
+              for (let nickname in avatars) {
                 let url = avatars[nickname]
                 for (let i = 0; i < viewLocals.messages.length; i++) {
                   if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {

@@ -263,6 +263,7 @@ router.post('/refresh', (req, res, next) => {
         messages: {},
       }
       , newMessages = []
+      , avatarsNicknames = []
 
     for (let i = 0; i < content.messages.length; i++) {
       let id = content.messages[i].id
@@ -282,6 +283,11 @@ router.post('/refresh', (req, res, next) => {
         content.messages[i].date = dateConversion.text
         content.messages[i].age = dateConversion.diff
 
+        let nickname = content.messages[i].nickname.toLowerCase()
+        if (!avatarsNicknames.includes(nickname)) {
+          avatarsNicknames.push(nickname)
+        }
+
         newMessages.push(content.messages[i])
         data.messages[id].checksum = content.messages[i].checksum
       }
@@ -290,7 +296,7 @@ router.post('/refresh', (req, res, next) => {
     let renderings = 0
     function sendJSONAfterRenderings() {
       renderings++
-      if (lastPage != content.lastPage && newMessages.length) {
+      if (lastPage != content.lastPage && newMessagesId.length) {
         if (renderings == 2) {
           res.json(data)
         }
@@ -318,11 +324,22 @@ router.post('/refresh', (req, res, next) => {
       })
     }
     else if (newMessages.length) {
-      req.app.render('partials/topicMessages', {
-        messages: newMessages,
-      }, (err, html) => {
-        data.newMessagesHTML = html
-        sendJSONAfterRenderings()
+      utils.getAvatars(avatarsNicknames, (avatars) => {
+        for (let nickname in avatars) {
+          let url = avatars[nickname]
+          for (let i = 0; i < newMessages.length; i++) {
+            if (newMessages[i].nickname.toLowerCase() == nickname) {
+              newMessages[i].avatar = url
+            }
+          }
+        }
+
+        req.app.render('partials/topicMessages', {
+          messages: newMessages,
+        }, (err, html) => {
+          data.newMessagesHTML = html
+          sendJSONAfterRenderings()
+        })
       })
     }
   }
