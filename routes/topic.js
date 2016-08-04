@@ -129,15 +129,37 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
           cache.save(cacheId, parsed)
 
+          let nicknames = []
           for (let i = 0; i < parsed.messages.length; i++) {
             let dateConversion = date.convertMessage(parsed.messages[i].dateRaw)
             parsed.messages[i].date = dateConversion.text
             parsed.messages[i].age = dateConversion.diff
+
+            let nickname = parsed.messages[i].nickname.toLowerCase()
+            if (!nicknames.includes(nickname)) {
+              nicknames.push(nickname)
+            }
           }
 
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
+
+          if (nicknames.length) {
+            utils.getAvatars(nicknames, (avatars) => {
+              viewLocals.avatars = avatars
+              for (nickname in avatars) {
+                let url = avatars[nickname]
+                for (let i = 0; i < viewLocals.messages.length; i++) {
+                  if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                    viewLocals.messages[i].avatar = url
+                  }
+                }
+              }
+              res.send(renderView('topic', viewLocals))
+            })
+            return
+          }
         }
         else {
           viewLocals.error = 'not200'
