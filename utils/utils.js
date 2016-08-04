@@ -218,7 +218,6 @@ function getUserFavorites(userId, thenCallback) {
 }
 
 function saveAvatar(nickname, url) {
-  nickname = nickname.toLowerCase()
   db.insertOrUpdate('avatars', {url}, {nickname})
 }
 

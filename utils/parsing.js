@@ -30,6 +30,7 @@ function topic(body) {
 
   retour.messages = []
   regex = /<div class="bloc-message-forum " data-id="([0-9]+)">\s+<div class="conteneur-message">\s+(?:<div class="bloc-avatar-msg">\s+<div class="back-img-msg">\s+<div>\s+<span[^>]+>\s+<img src="[^"]+" data-srcset="([^"]+)"[^>]+>\s+<\/span>\s+<\/div>\s+<\/div>\s+<\/div>\s+)?<div class="inner-head-content">[\s\S]+?(?:<span class="JvCare [0-9A-F]+ bloc-pseudo-msg text-([^"]+)"|<div class="bloc-pseudo-msg")[^>]+>\s+([\s\S]+?)\s+<[\s\S]+?<div class="bloc-date-msg">\s+(?:<span[^>]+>)?([0-9][\s\S]+?)(?:<\/span>)?\s+<\/div>[\s\S]+?<div class="txt-msg  text-enrichi-forum ">([\s\S]+?)<\/div><\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g
+  let avatars = {}
   while (matches = regex.exec(body)) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
       , content = utils.adaptMessageContent(matches[6], matches[1])
@@ -44,7 +45,10 @@ function topic(body) {
       content,
       checksum: sha1(content).substr(0, 8),
     })
-    utils.saveAvatar(nickname, avatar)
+    avatars[nickname.toLowerCase()] = avatar
+  }
+  for (let nickname in avatars) {
+    utils.saveAvatar(nickname, avatars[nickname])
   }
 
   let page = false
