@@ -33,16 +33,18 @@ function topic(body) {
   while (matches = regex.exec(body)) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
       , content = utils.adaptMessageContent(matches[6], matches[1])
+      , avatar = isNicknameDeleted || matches[2].includes('/default.jpg') ? '' : matches[2]
+      , nickname = matches[4]
     retour.messages.push({
       id: parseInt(matches[1]),
-      avatar: isNicknameDeleted || matches[2].includes('/default.jpg') ? false : matches[2],
       status: matches[3],
-      nickname: matches[4],
+      nickname,
       isNicknameDeleted,
       dateRaw: matches[5],
       content,
       checksum: sha1(content).substr(0, 8),
     })
+    utils.saveAvatar(nickname, avatar)
   }
 
   let page = false

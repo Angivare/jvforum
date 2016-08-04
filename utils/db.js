@@ -15,6 +15,18 @@ function select(what, tableName, where, successCallback) {
   })
 }
 
+function selectIn(what, tableName, whereField, whereIn, successCallback) {
+  let questionMarks = '?' + ',?'.repeat(whereIn.length - 1)
+  c.query(`SELECT ${what} FROM ${tableName} WHERE ${whereField} IN (${questionMarks})`, whereIn, (err, results, fields) => {
+    if (err) {
+      throw err
+    }
+    if (successCallback) {
+      successCallback(results)
+    }
+  })
+}
+
 function insert(tableName, data, successCallback) {
   c.query(`INSERT INTO ${tableName} SET ?`, data, (err, results, fields) => {
     if (err) {
@@ -44,6 +56,7 @@ function insertOrUpdate(tableName, updateData, where) {
 
 module.exports = {
   select,
+  selectIn,
   insert,
   update,
   insertOrUpdate,

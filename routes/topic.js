@@ -53,10 +53,16 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
     let cacheId = `${forumId}/${idJvf}/${page}`
     cache.get(cacheId, config.timeouts.topicDisplay, (content, age) => {
+      let nicknames = []
       for (let i = 0; i < content.messages.length; i++) {
         let dateConversion = date.convertMessage(content.messages[i].dateRaw)
         content.messages[i].date = dateConversion.text
         content.messages[i].age = dateConversion.diff
+
+        let nickname = content.messages[i].nickname.toLowerCase()
+        if (!nicknames.includes(nickname)) {
+          nicknames.push(nickname)
+        }
       }
 
       Object.keys(content).forEach((key) => {
@@ -65,7 +71,23 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
       viewLocals.cacheAge = age
 
-      res.send(renderView('topic', viewLocals))
+      if (nicknames.length) {
+        utils.getAvatars(nicknames, (avatars) => {
+          viewLocals.avatars = avatars
+          for (nickname in avatars) {
+            let url = avatars[nickname]
+            for (let i = 0; i < viewLocals.messages.length; i++) {
+              if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                viewLocals.messages[i].avatar = url
+              }
+            }
+          }
+          res.send(renderView('topic', viewLocals))
+        })
+      }
+      else {
+        res.send(renderView('topic', viewLocals))
+      }
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
         if ('location' in headers) {

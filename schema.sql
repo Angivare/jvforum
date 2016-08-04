@@ -38,3 +38,9 @@ CREATE TABLE `favorites` (
   `updatedAt` int NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `avatars` (
+  `nickname` varchar(16) NOT NULL,
+  `url` varchar(128) NOT NULL,
+  PRIMARY KEY (`nickname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

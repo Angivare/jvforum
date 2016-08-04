@@ -217,10 +217,30 @@ function getUserFavorites(userId, thenCallback) {
   })
 }
 
+function saveAvatar(nickname, url) {
+  nickname = nickname.toLowerCase()
+  db.insertOrUpdate('avatars', {url}, {nickname})
+}
+
+function getAvatars(nicknames, successCallback) {
+  let avatars = {}
+  for (let nickname of nicknames) {
+    avatars[nickname] = ''
+  }
+  db.selectIn('nickname, url', 'avatars', 'nickname', nicknames, (results) => {
+    for (let result of results) {
+      avatars[result.nickname] = result.url
+    }
+    successCallback(avatars)
+  })
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
   logLogin,
   parseUserCookie,
   getUserFavorites,
+  saveAvatar,
+  getAvatars,
 }
