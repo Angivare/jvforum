@@ -296,7 +296,7 @@ router.post('/refresh', (req, res, next) => {
     let renderings = 0
     function sendJSONAfterRenderings() {
       renderings++
-      if (lastPage != content.lastPage && newMessagesId.length) {
+      if (lastPage != content.lastPage && newMessages.length) {
         if (renderings == 2) {
           res.json(data)
         }
