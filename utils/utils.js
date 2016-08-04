@@ -234,6 +234,10 @@ function getAvatars(nicknames, successCallback) {
   })
 }
 
+function saveForum(id, name, slug, isLocked, parentId, subforumsIds) {
+  subforumsIds = subforumsIds.join(',')
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
@@ -242,4 +246,5 @@ module.exports = {
   getUserFavorites,
   saveAvatar,
   getAvatars,
+  saveForum,
 }

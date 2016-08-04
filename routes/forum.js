@@ -75,7 +75,8 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         else if (headers.statusCode == 200) {
           let parsed = parse.forum(body)
 
-          cache.save(cacheId, parsed)
+          cache.save(cacheId, parsed.topics)
+          utils.saveForum(id, parsed.name, slug, parsed.isLocked, parsed.parentId, parsed.subforumsIds)
 
           for (let i = 0; i < parsed.topics.length; i++) {
             parsed.topics[i].date = date.convertTopicList(parsed.topics[i].dateRaw)
@@ -84,6 +85,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
+          viewLocals.title = viewLocals.name
         }
         else {
           viewLocals.error = 'not200'

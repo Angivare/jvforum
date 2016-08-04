@@ -96,10 +96,10 @@ function forum(body) {
     , r = {}
     , selection
 
-  r.title = false
+  r.name = ''
   selection = $('.highlight')
   if (selection) {
-    r.title = selection.text().substr("Forum ".length)
+    r.name = selection.text().substr("Forum ".length)
   }
 
   r.topics = []
@@ -125,7 +125,7 @@ function forum(body) {
   // Text on JVC: Vous ne pouvez pas créer un nouveau sujet sur ce forum car il est fermé.
   r.isLocked = $('#bloc-formulaire-forum .alert').length > 0
 
-  r.parent = false
+  r.parentId = 0
   if (2 in $('.fil-ariane-crumb span a')) {
     let element = $('.fil-ariane-crumb span a')[2]
       , elementText = $(element).text()
@@ -133,27 +133,15 @@ function forum(body) {
 
     if (elementText.substr(0, 'Forum principal '.length) == 'Forum principal ') {
       // Game forums, but not their subforums, have their breadcrumb include a link to the game's info page
-      r.parent = {
-        title: $(element).text().substr('Forum principal '.length),
-        id: parseInt(url.split('-')[1]),
-        slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
-      }
+      r.parentId = parseInt(url.split('-')[1])
     }
   }
 
-  r.subforums = []
+  r.subforumsIds = []
   $('.liste-sous-forums .lien-jv').each((index, element) => {
     let url = $(element).attr('href')
-
-    r.subforums.push({
-      title: $(element).text().trim(),
-      id: parseInt(url.split('-')[1]),
-      slug: url.substr(url.indexOf('-1-0-1-0-') + '-1-0-1-0-'.length).split('.')[0],
-    })
+    r.subforumsIds.push(parseInt(url.split('-')[1]))
   })
-  if (r.subforums.length == 0) {
-    r.subforums = false
-  }
 
   return r
 }

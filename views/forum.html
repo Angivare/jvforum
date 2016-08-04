@@ -5,7 +5,7 @@
   <div class="content">
     {{? !it.error }}
       <h1 class="page-title page-title--larger">
-        <a class="page-title__link page-title__link--with-refresh-icon" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
+        <a class="page-title__link page-title__link--with-refresh-icon" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
         <div class="mobile-menu">
           <div class="mobile-menu__opener">
             <div class="mobile-menu__opener-icon"></div>
@@ -85,15 +85,15 @@
       </div>
     {{?}}
   </div>
-  {{? !it.error && it.subforums}}
+  {{? !it.error && it.subforumsIds.length}}
     <div class="menu mobile">
-      {{? it.parent}}
-        <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}
+      {{? it.parentId}}
+        <a class="menu__item" href="/{{=it.parentId}}">#{{=it.parentId}}
       {{??}}
-        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
+        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
       {{?}}
-      {{~it.subforums :s:index}}
-        <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
+      {{~it.subforumsIds :sId:index}}
+        <a class="menu__item" href="/{{=sId}}">#{{=sId}}</a>
       {{~}}
     </div>
   {{?}}
@@ -132,15 +132,15 @@
         <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
       {{?}}
     </div>
-    {{? it.subforums }}
+    {{? it.subforumsIds.length }}
       <div class="menu aside__menu">
-        {{? it.parent }}
-          <a class="menu__item" href="/{{=it.parent.id}}-{{=it.parent.slug}}">{{!it.parent.title}}</a>
+        {{? it.parentId }}
+          <a class="menu__item" href="/{{=it.parentId}}">#{{=it.parentId}}</a>
         {{??}}
-          <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.title}}</a>
+          <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
         {{?}}
-        {{~it.subforums :s:index}}
-          <a class="menu__item" href="/{{=s.id}}-{{=s.slug}}">{{!s.title}}</a>
+        {{~it.subforumsIds :sId:index}}
+          <a class="menu__item" href="/{{=sId}}">#{{=sId}}</a>
         {{~}}
       </div>
     {{?}}
