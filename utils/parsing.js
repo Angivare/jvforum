@@ -142,6 +142,9 @@ function forum(body) {
     let url = $(element).attr('href')
     r.subforumsIds.push(parseInt(url.split('-')[1]))
   })
+  r.subforumsIds = r.subforumsIds.sort((a, b) => {
+    return a - b
+  })
 
   return r
 }
