@@ -39,18 +39,21 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         }
 
     let cacheId = `${id}/1`
-    cache.get(cacheId, config.timeouts.cache.forumDisplay, (content, age) => {
-      for (let i = 0; i < content.topics.length; i++) {
-        content.topics[i].date = date.convertTopicList(content.topics[i].dateRaw)
+    cache.get(cacheId, config.timeouts.cache.forumDisplay, (topics, age) => {
+      for (let i = 0; i < topics.length; i++) {
+        topics[i].date = date.convertTopicList(topics[i].dateRaw)
       }
-
-      Object.keys(content).forEach((key) => {
-        viewLocals[key] = content[key]
-      })
 
       viewLocals.cacheAge = age
 
-      res.send(renderView('forum', viewLocals))
+      viewLocals.topics = topics
+      utils.getForum(id, (content) => {
+        Object.keys(content).forEach((key) => {
+          viewLocals[key] = content[key]
+        })
+
+        res.send(renderView('forum', viewLocals))
+      })
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
         if ('location' in headers) {

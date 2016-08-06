@@ -236,6 +236,30 @@ function getAvatars(nicknames, successCallback) {
 
 function saveForum(id, name, slug, isLocked, parentId, subforumsIds) {
   subforumsIds = subforumsIds.join(',')
+  db.insertOrUpdate('forums', {
+    name,
+    slug,
+    isLocked,
+    parentId,
+    subforumsIds,
+  }, {id})
+}
+
+function getForum(id, thenCallback) {
+  db.select('name, slug, isLocked, parentId, subforumsIds', 'forums', {id}, (results) => {
+    if (!results.length) {
+      thenCallback(false)
+      return
+    }
+    subforumsIds = results[0].subforumsIds.split(',').map(Number)
+    thenCallback({
+      name: results[0].name,
+      slug: results[0].slug,
+      isLocked: parseInt(results[0].isLocked),
+      parentId: parseInt(results[0].parentId),
+      subforumsIds: subforumsIds,
+    })
+  })
 }
 
 module.exports = {
@@ -247,4 +271,5 @@ module.exports = {
   saveAvatar,
   getAvatars,
   saveForum,
+  getForum,
 }
