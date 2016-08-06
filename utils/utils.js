@@ -251,7 +251,10 @@ function getForum(id, thenCallback) {
       thenCallback(false)
       return
     }
-    subforumsIds = results[0].subforumsIds.split(',').map(Number)
+    let subforumsIds = []
+    if (results[0].subforumsIds.length) {
+      results[0].subforumsIds.split(',').map(Number)
+    }
     thenCallback({
       name: results[0].name,
       slug: results[0].slug,
@@ -259,6 +262,22 @@ function getForum(id, thenCallback) {
       parentId: parseInt(results[0].parentId),
       subforumsIds: subforumsIds,
     })
+  })
+}
+
+function getForumsNamesAndSlugs(forumsIds, thenCallback) {
+  db.selectIn('id, name, slug', 'forums', 'id', forumsIds, (results) => {
+    let names = {}
+      , slugs = {}
+    for (let id of forumsIds) {
+      names[id] = `#${id}`
+      slugs[id] = '0'
+    }
+    for (let r of results) {
+      names[r.id] = r.name
+      slugs[r.id] = r.slug
+    }
+    thenCallback({names, slugs})
   })
 }
 
@@ -272,4 +291,5 @@ module.exports = {
   getAvatars,
   saveForum,
   getForum,
+  getForumsNamesAndSlugs,
 }

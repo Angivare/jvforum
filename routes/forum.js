@@ -51,8 +51,24 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         Object.keys(content).forEach((key) => {
           viewLocals[key] = content[key]
         })
-
-        res.send(renderView('forum', viewLocals))
+        viewLocals.title = viewLocals.name
+        let forumsIdsWhichNeedTheirSlugAndName = []
+        if (content.parentId) {
+          forumsIdsWhichNeedTheirSlugAndName.push(content.parentId)
+        }
+        if (content.subforumsIds.length) {
+          forumsIdsWhichNeedTheirSlugAndName = forumsIdsWhichNeedTheirSlugAndName.concat(content.subforumsIds)
+        }
+        if (forumsIdsWhichNeedTheirSlugAndName.length) {
+          utils.getForumsNamesAndSlugs(forumsIdsWhichNeedTheirSlugAndName, (content) => {
+            viewLocals.forumNames = content.names
+            viewLocals.forumSlugs = content.slugs
+            res.send(renderView('forum', viewLocals))
+          })
+        }
+        else {
+          res.send(renderView('forum', viewLocals))
+        }
       })
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
@@ -89,6 +105,25 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
             viewLocals[key] = parsed[key]
           })
           viewLocals.title = viewLocals.name
+
+          let forumsIdsWhichNeedTheirSlugAndName = []
+          if (parsed.parentId) {
+            forumsIdsWhichNeedTheirSlugAndName.push(parsed.parentId)
+          }
+          if (parsed.subforumsIds.length) {
+            forumsIdsWhichNeedTheirSlugAndName = forumsIdsWhichNeedTheirSlugAndName.concat(parsed.subforumsIds)
+          }
+          if (forumsIdsWhichNeedTheirSlugAndName.length) {
+            utils.getForumsNamesAndSlugs(forumsIdsWhichNeedTheirSlugAndName, (content) => {
+              viewLocals.forumNames = content.names
+              viewLocals.forumSlugs = content.slugs
+              res.send(renderView('forum', viewLocals))
+            })
+          }
+          else {
+            res.send(renderView('forum', viewLocals))
+          }
+          return
         }
         else {
           viewLocals.error = 'not200'

@@ -88,12 +88,12 @@
   {{? !it.error && it.subforumsIds.length}}
     <div class="menu mobile">
       {{? it.parentId}}
-        <a class="menu__item" href="/{{=it.parentId}}">#{{=it.parentId}}
+        <a class="menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}
       {{??}}
         <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
       {{?}}
       {{~it.subforumsIds :sId:index}}
-        <a class="menu__item" href="/{{=sId}}">#{{=sId}}</a>
+        <a class="menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
       {{~}}
     </div>
   {{?}}
@@ -135,12 +135,12 @@
     {{? it.subforumsIds.length }}
       <div class="menu aside__menu">
         {{? it.parentId }}
-          <a class="menu__item" href="/{{=it.parentId}}">#{{=it.parentId}}</a>
+          <a class="menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}</a>
         {{??}}
           <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
         {{?}}
         {{~it.subforumsIds :sId:index}}
-          <a class="menu__item" href="/{{=sId}}">#{{=sId}}</a>
+          <a class="menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
         {{~}}
       </div>
     {{?}}
