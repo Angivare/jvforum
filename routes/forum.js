@@ -52,14 +52,11 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           viewLocals[key] = content[key]
         })
         viewLocals.title = viewLocals.name
-        let forumsIdsWhichNeedTheirSlugAndName = []
-        if (content.parentId) {
-          forumsIdsWhichNeedTheirSlugAndName.push(content.parentId)
-        }
         if (content.subforumsIds.length) {
-          forumsIdsWhichNeedTheirSlugAndName = forumsIdsWhichNeedTheirSlugAndName.concat(content.subforumsIds)
-        }
-        if (forumsIdsWhichNeedTheirSlugAndName.length) {
+          let forumsIdsWhichNeedTheirSlugAndName = [].concat(content.subforumsIds)
+          if (content.parentId) {
+            forumsIdsWhichNeedTheirSlugAndName.push(content.parentId)
+          }
           utils.getForumsNamesAndSlugs(forumsIdsWhichNeedTheirSlugAndName, (content) => {
             viewLocals.forumNames = content.names
             viewLocals.forumSlugs = content.slugs
@@ -106,14 +103,11 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           })
           viewLocals.title = viewLocals.name
 
-          let forumsIdsWhichNeedTheirSlugAndName = []
-          if (parsed.parentId) {
-            forumsIdsWhichNeedTheirSlugAndName.push(parsed.parentId)
-          }
           if (parsed.subforumsIds.length) {
-            forumsIdsWhichNeedTheirSlugAndName = forumsIdsWhichNeedTheirSlugAndName.concat(parsed.subforumsIds)
-          }
-          if (forumsIdsWhichNeedTheirSlugAndName.length) {
+            let forumsIdsWhichNeedTheirSlugAndName = [].concat(parsed.subforumsIds)
+            if (parsed.parentId) {
+              forumsIdsWhichNeedTheirSlugAndName.push(parsed.parentId)
+            }
             utils.getForumsNamesAndSlugs(forumsIdsWhichNeedTheirSlugAndName, (content) => {
               viewLocals.forumNames = content.names
               viewLocals.forumSlugs = content.slugs
