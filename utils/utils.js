@@ -294,6 +294,44 @@ function saveTopic(idModern, idLegacy, forumId, name, slug, numberOfPages, isDel
   }, {idModern})
 }
 
+function getTopic(where, thenCallback) {
+  db.select('idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale', 'topics', where, (results) => {
+    if (!results.length) {
+      thenCallback(false)
+      return
+    }
+    thenCallback({
+      idModern: parseInt(results[0].idModern),
+      name: results[0].name,
+      slug: results[0].slug,
+      numberOfPages: parseInt(results[0].numberOfPages),
+      isDeleted: parseInt(results[0].isDeleted),
+      isLocked: parseInt(results[0].isLocked),
+      lockRationale: results[0].lockRationale,
+    })
+  })
+}
+
+function makePaginationPages(page, numberOfPages) {
+  let paginationPages = []
+
+  if (page >= 5) {
+    paginationPages.push(1)
+  }
+  for (let i = Math.max(1, page - 3); i < page; i++) { // Previous three pages
+    paginationPages.push(i)
+  }
+  paginationPages.push(page)
+  if (page < numberOfPages) {
+    for (let i = page + 1; i < Math.min(page + 4, numberOfPages); i++) {
+      paginationPages.push(i)
+    }
+    paginationPages.push(numberOfPages)
+  }
+
+  return paginationPages
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
@@ -306,4 +344,6 @@ module.exports = {
   getForum,
   getForumsNamesAndSlugs,
   saveTopic,
+  getTopic,
+  makePaginationPages,
 }

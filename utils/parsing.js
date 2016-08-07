@@ -17,17 +17,6 @@ function topic(body) {
     r.name = selection.text()
   }
 
-  r.forumSlug = r.forumName = false
-  selection = $('.fil-ariane-crumb span a')
-  if (selection) {
-    selection.each((index, element) => {
-      if ($(element).html().substr(0, 6) == 'Forum ') {
-        r.forumName = $(element).text().substr(6)
-        r.forumSlug = $(element).attr('href').split('-').slice(7).join('-').split('.')[0]
-      }
-    })
-  }
-
   retour.messages = []
   regex = /<div class="bloc-message-forum " data-id="([0-9]+)">\s+<div class="conteneur-message">\s+(?:<div class="bloc-avatar-msg">\s+<div class="back-img-msg">\s+<div>\s+<span[^>]+>\s+<img src="[^"]+" data-srcset="([^"]+)"[^>]+>\s+<\/span>\s+<\/div>\s+<\/div>\s+<\/div>\s+)?<div class="inner-head-content">[\s\S]+?(?:<span class="JvCare [0-9A-F]+ bloc-pseudo-msg text-([^"]+)"|<div class="bloc-pseudo-msg")[^>]+>\s+([\s\S]+?)\s+<[\s\S]+?<div class="bloc-date-msg">\s+(?:<span[^>]+>)?([0-9][\s\S]+?)(?:<\/span>)?\s+<\/div>[\s\S]+?<div class="txt-msg  text-enrichi-forum ">([\s\S]+?)<\/div><\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g
   let avatars = {}
@@ -64,21 +53,6 @@ function topic(body) {
   }
   if (page > retour.lastPage) {
     retour.lastPage = page
-  }
-
-  retour.paginationPages = []
-  if (page >= 5) {
-    retour.paginationPages.push(1)
-  }
-  for (let i = Math.max(1, page - 3); i < page; i++) { // Previous three pages
-    retour.paginationPages.push(i)
-  }
-  retour.paginationPages.push(page)
-  if (page < retour.lastPage) {
-    for (let i = page + 1; i < Math.min(page + 4, retour.lastPage); i++) {
-      retour.paginationPages.push(i)
-    }
-    retour.paginationPages.push(retour.lastPage)
   }
 
   retour.isLocked = 0

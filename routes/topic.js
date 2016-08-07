@@ -24,6 +24,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
       , mode = idJvf[0] == '0' ? 1 : 42
       , idLegacyOrModern = parseInt(idJvf)
       , idLegacy = mode == 1 ? idLegacyOrModern : 0
+      , idModern = mode == 42 ? idLegacyOrModern : 0
       , slug = req.params.slug
       , page = req.params.page ? parseInt(req.params.page) : 1
       , pathJvc = `/forums/${mode}-${forumId}-${idLegacyOrModern}-${page}-0-1-0-${slug}.htm`
@@ -53,42 +54,63 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
     }
 
     let cacheId = `${forumId}/${idJvf}/${page}`
-    cache.get(cacheId, config.timeouts.topicDisplay, (content, age) => {
+    cache.get(cacheId, config.timeouts.topicDisplay, (messages, age) => {
       let nicknames = []
-      for (let i = 0; i < content.messages.length; i++) {
-        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
-        content.messages[i].date = dateConversion.text
-        content.messages[i].age = dateConversion.diff
+      for (let i = 0; i < messages.length; i++) {
+        let dateConversion = date.convertMessage(messages[i].dateRaw)
+        messages[i].date = dateConversion.text
+        messages[i].age = dateConversion.diff
 
-        let nickname = content.messages[i].nickname.toLowerCase()
+        let nickname = messages[i].nickname.toLowerCase()
         if (!nicknames.includes(nickname)) {
           nicknames.push(nickname)
         }
       }
 
-      Object.keys(content).forEach((key) => {
-        viewLocals[key] = content[key]
-      })
-      viewLocals.title = viewLocals.name
-
       viewLocals.cacheAge = age
 
-      if (nicknames.length) {
-        utils.getAvatars(nicknames, (avatars) => {
-          for (let nickname in avatars) {
-            let url = avatars[nickname]
-            for (let i = 0; i < viewLocals.messages.length; i++) {
-              if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
-                viewLocals.messages[i].avatar = url
-              }
-            }
+      viewLocals.messages = messages
+      let topicDbSelector =
+        mode == 1
+        ? {
+            idLegacy,
+            forumId,
           }
-          res.send(renderView('topic', viewLocals))
+        : {
+            idModern,
+          }
+      utils.getTopic(topicDbSelector, (content) => {
+        Object.keys(content).forEach((key) => {
+          viewLocals[key] = content[key]
         })
-      }
-      else {
-        res.send(renderView('topic', viewLocals))
-      }
+        viewLocals.title = viewLocals.name
+        viewLocals.lastPage = content.numberOfPages
+        viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
+
+        utils.getForumsNamesAndSlugs([forumId], (content) => {
+          if (forumId in content.names) {
+            viewLocals.forumName = content.names[forumId]
+            viewLocals.forumSlug = content.slugs[forumId]
+          }
+
+          if (nicknames.length) {
+            utils.getAvatars(nicknames, (avatars) => {
+              for (let nickname in avatars) {
+                let url = avatars[nickname]
+                for (let i = 0; i < viewLocals.messages.length; i++) {
+                  if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                    viewLocals.messages[i].avatar = url
+                  }
+                }
+              }
+              res.send(renderView('topic', viewLocals))
+            })
+          }
+          else {
+            res.send(renderView('topic', viewLocals))
+          }
+        })
+      })
     }, () => {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
         if ('location' in headers) {
@@ -128,8 +150,9 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         else if (headers.statusCode == 200) {
           let parsed = parse.topic(body)
 
-          cache.save(cacheId, parsed)
+          cache.save(cacheId, parsed.messages)
           utils.saveTopic(parsed.idModern, idLegacy, forumId, parsed.name, slug, parsed.lastPage, 0, parsed.isLocked, parsed.lockRationale)
+          viewLocals.paginationPages = utils.makePaginationPages(page, parsed.lastPage)
 
           let nicknames = []
           for (let i = 0; i < parsed.messages.length; i++) {

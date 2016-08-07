@@ -250,6 +250,8 @@ router.post('/refresh', (req, res, next) => {
   let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, lastPage, messagesChecksums} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
+    , topicIdLegacy = topicMode == 1 ? topicIdLegacyOrModern : 0
+    , topicIdModern = topicMode == 42 ? topicIdLegacyOrModern : 0
 
   topicPage = parseInt(topicPage)
   messagesChecksums = JSON.parse(messagesChecksums)
@@ -345,8 +347,28 @@ router.post('/refresh', (req, res, next) => {
   }
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
-  cache.get(cacheId, config.timeouts.cache.refresh, (content, age) => {
-    serveContent(content)
+  cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
+    let contentToServe = {messages}
+
+    let topicDbSelector =
+      topicMode == 1
+      ? {
+          idLegacy: topicIdLegacy,
+          forumId,
+        }
+      : {
+          idModern: topicIdModern,
+        }
+    utils.getTopic(topicDbSelector, (content) => {
+      Object.keys(content).forEach((key) => {
+        contentToServe[key] = content[key]
+      })
+      contentToServe.title = content.name
+      contentToServe.lastPage = content.numberOfPages
+      contentToServe.paginationPages = utils.makePaginationPages(topicPage, content.numberOfPages)
+
+      serveContent(contentToServe)
+    })
   }, () => {
     fetch.unique(pathJvc, cacheId, (headers, body) => {
       if ('location' in headers) {
@@ -384,8 +406,10 @@ router.post('/refresh', (req, res, next) => {
       }
       else if (headers.statusCode == 200) {
         let parsed = parse.topic(body)
+        parsed.paginationPages = utils.makePaginationPages(topicPage, parsed.lastPage)
         serveContent(parsed)
-        cache.save(cacheId, parsed)
+        cache.save(cacheId, parsed.messages)
+        utils.saveTopic(parsed.idModern, topicIdLegacy, forumId, parsed.name, topicSlug, parsed.lastPage, 0, parsed.isLocked, parsed.lockRationale)
       }
       else {
         res.json({error: 'JVC n’arrive pas à servir la page'})
