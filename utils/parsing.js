@@ -88,6 +88,12 @@ function topic(body) {
     retour.lockRationale = matches[1]
   }
 
+  retour.idModern = 0
+  regex = /var id_topic = ([0-9]+);\s+\/\/ \]\]>/
+  if (matches = regex.exec(body)) {
+    retour.idModern = parseInt(matches[1])
+  }
+
   return r
 }
 
