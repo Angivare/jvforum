@@ -281,6 +281,19 @@ function getForumsNamesAndSlugs(forumsIds, thenCallback) {
   })
 }
 
+function saveTopic(idModern, idLegacy, forumId, name, slug, numberOfPages, isDeleted, isLocked, lockRationale) {
+  db.insertOrUpdate('topics', {
+    idLegacy,
+    forumId,
+    name,
+    slug,
+    numberOfPages,
+    isDeleted,
+    isLocked,
+    lockRationale,
+  }, {idModern})
+}
+
 module.exports = {
   adaptMessageContent,
   adaptPostedMessage,
@@ -292,4 +305,5 @@ module.exports = {
   saveForum,
   getForum,
   getForumsNamesAndSlugs,
+  saveTopic,
 }

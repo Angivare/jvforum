@@ -23,6 +23,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
       , idJvf = req.params.idJvf
       , mode = idJvf[0] == '0' ? 1 : 42
       , idLegacyOrModern = parseInt(idJvf)
+      , idLegacy = mode == 1 ? idLegacyOrModern : 0
       , slug = req.params.slug
       , page = req.params.page ? parseInt(req.params.page) : 1
       , pathJvc = `/forums/${mode}-${forumId}-${idLegacyOrModern}-${page}-0-1-0-${slug}.htm`
@@ -128,6 +129,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           let parsed = parse.topic(body)
 
           cache.save(cacheId, parsed)
+          utils.saveTopic(parsed.idModern, idLegacy, forumId, parsed.name, slug, parsed.lastPage, 0, parsed.isLocked, parsed.lockRationale)
 
           let nicknames = []
           for (let i = 0; i < parsed.messages.length; i++) {

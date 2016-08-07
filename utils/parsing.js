@@ -81,10 +81,11 @@ function topic(body) {
     retour.paginationPages.push(retour.lastPage)
   }
 
-  retour.isLocked = retour.lockRationale = false
+  retour.isLocked = 0
+  retour.lockRationale = ''
   regex = /<div class="message-lock-topic">\s+Sujet fermé pour la raison suivante :\s+<span>([^<]+)<\/span>\s+<\/div>/
   if (matches = regex.exec(body)) {
-    retour.isLocked = true
+    retour.isLocked = 1
     retour.lockRationale = matches[1]
   }
 

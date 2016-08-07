@@ -15,6 +15,21 @@ CREATE TABLE `forums` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `topics` (
+  `idModern` int NOT NULL,
+  `idLegacy` int NOT NULL,
+  `forumId` mediumint NOT NULL,
+  `name` varchar(256) NOT NULL,
+  `slug` varchar(256) NOT NULL,
+  `numberOfPages` smallint NOT NULL,
+  `isDeleted` tinyint NOT NULL,
+  `isLocked` tinyint NOT NULL,
+  `lockRationale` varchar(1024) NOT NULL,
+  PRIMARY KEY (`idModern`),
+  KEY `idLegacy` (`idLegacy`),
+  KEY `forumId` (`forumId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `avatars` (
   `nickname` varchar(16) NOT NULL,
   `url` varchar(128) NOT NULL,
