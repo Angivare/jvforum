@@ -162,20 +162,31 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           })
           viewLocals.title = viewLocals.name
 
-          if (nicknames.length) {
-            utils.getAvatars(nicknames, (avatars) => {
-              for (let nickname in avatars) {
-                let url = avatars[nickname]
-                for (let i = 0; i < viewLocals.messages.length; i++) {
-                  if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
-                    viewLocals.messages[i].avatar = url
+          utils.getForumsNamesAndSlugs([forumId], (content) => {
+            if (forumId in content.names) {
+              viewLocals.forumName = content.names[forumId]
+              viewLocals.forumSlug = content.slugs[forumId]
+            }
+
+            if (nicknames.length) {
+              utils.getAvatars(nicknames, (avatars) => {
+                for (let nickname in avatars) {
+                  let url = avatars[nickname]
+                  for (let i = 0; i < viewLocals.messages.length; i++) {
+                    if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                      viewLocals.messages[i].avatar = url
+                    }
                   }
                 }
-              }
+                res.send(renderView('topic', viewLocals))
+              })
+            }
+            else {
               res.send(renderView('topic', viewLocals))
-            })
-            return
-          }
+            }
+          })
+
+          return
         }
         else {
           viewLocals.error = 'not200'
