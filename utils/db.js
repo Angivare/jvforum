@@ -4,6 +4,17 @@ let mysql = require('mysql')
 config.databaseConnection.charset = 'utf8mb4_unicode_ci'
 let c = mysql.createConnection(config.databaseConnection)
 
+function query(what, options, successCallback) {
+  c.query(what, options, (err, results, fields) => {
+    if (err) {
+      throw err
+    }
+    if (successCallback) {
+      successCallback(results)
+    }
+  })
+}
+
 function select(what, tableName, where, successCallback) {
   c.query(`SELECT ${what} FROM ${tableName} WHERE ?`, where, (err, results, fields) => {
     if (err) {
@@ -55,6 +66,7 @@ function insertOrUpdate(tableName, updateData, where) {
 }
 
 module.exports = {
+  query,
   select,
   selectIn,
   insert,

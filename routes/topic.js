@@ -70,16 +70,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
       viewLocals.cacheAge = age
 
       viewLocals.messages = messages
-      let topicDbSelector =
-        mode == 1
-        ? {
-            idLegacy,
-            forumId,
-          }
-        : {
-            idModern,
-          }
-      utils.getTopic(topicDbSelector, (content) => {
+      utils.getTopic(mode == 1 ? `idLegacy = ${idLegacy} AND forumId = ${forumId}` : `idModern = ${idModern}`, (content) => {
         Object.keys(content).forEach((key) => {
           viewLocals[key] = content[key]
         })

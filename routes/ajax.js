@@ -350,16 +350,7 @@ router.post('/refresh', (req, res, next) => {
   cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
     let contentToServe = {messages}
 
-    let topicDbSelector =
-      topicMode == 1
-      ? {
-          idLegacy: topicIdLegacy,
-          forumId,
-        }
-      : {
-          idModern: topicIdModern,
-        }
-    utils.getTopic(topicDbSelector, (content) => {
+    utils.getTopic(topicMode == 1 ? `idLegacy = ${topicIdLegacy} AND forumId = ${forumId}` : `idModern = ${topicIdModern}`, (content) => {
       Object.keys(content).forEach((key) => {
         contentToServe[key] = content[key]
       })

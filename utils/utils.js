@@ -295,7 +295,7 @@ function saveTopic(idModern, idLegacy, forumId, name, slug, numberOfPages, isDel
 }
 
 function getTopic(where, thenCallback) {
-  db.select('idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale', 'topics', where, (results) => {
+  db.query(`SELECT idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale FROM topics WHERE ${where}`, null, (results) => {
     if (!results.length) {
       thenCallback(false)
       return
