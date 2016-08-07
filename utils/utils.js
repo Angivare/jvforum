@@ -253,7 +253,7 @@ function getForum(id, thenCallback) {
     }
     let subforumsIds = []
     if (results[0].subforumsIds.length) {
-      results[0].subforumsIds.split(',').map(Number)
+      subforumsIds = results[0].subforumsIds.split(',').map(Number)
     }
     thenCallback({
       name: results[0].name,
