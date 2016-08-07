@@ -11,10 +11,10 @@ function topic(body) {
   let matches
     , regex
 
-  r.title = false
+  r.name = false
   selection = $('#bloc-title-forum')
   if (selection) {
-    r.title = selection.text()
+    r.name = selection.text()
   }
 
   r.forumSlug = r.forumName = false

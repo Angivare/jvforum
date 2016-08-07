@@ -68,6 +68,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
       Object.keys(content).forEach((key) => {
         viewLocals[key] = content[key]
       })
+      viewLocals.title = viewLocals.name
 
       viewLocals.cacheAge = age
 
@@ -143,6 +144,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
+          viewLocals.title = viewLocals.name
 
           if (nicknames.length) {
             utils.getAvatars(nicknames, (avatars) => {
