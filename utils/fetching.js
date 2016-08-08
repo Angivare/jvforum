@@ -96,15 +96,6 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
   }]
 
   fetch(pathOrOptions, (headers, body) => {
-    if (!(id in uniquesBeingFetched)) {
-      /* This shouldn't happen, but sometimes does, for an unknown reason. We
-         handle this otherwise the app crashes. When the bug happens, fail
-         callbacks are called first and then success callbacks are called too,
-         with an incomplete body.
-      */
-      fs.appendFile('debug_unique', (new Date().toISOString()) + "\r\n" + id + "\r\n" + uniquesErrors[id] + "\r\n" + body.length + "\r\n\r\n", () => {})
-      return
-    }
     for (let i of uniquesBeingFetched[id]) {
       i.successCallback(headers, body)
     }
