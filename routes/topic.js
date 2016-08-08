@@ -143,34 +143,34 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
     }
 
     function serveTopic(content, error) {
-      if (error) {
-        viewLocals.error = error
-        res.send(renderView('topic', viewLocals))
-        return
-      }
-
-      let nicknames = []
-      for (let i = 0; i < content.messages.length; i++) {
-        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
-        content.messages[i].date = dateConversion.text
-        content.messages[i].age = dateConversion.diff
-
-        let nickname = content.messages[i].nickname.toLowerCase()
-        if (!nicknames.includes(nickname)) {
-          nicknames.push(nickname)
+      utils.getForumsNamesAndSlugs([forumId], (content2) => {
+        if (forumId in content2.names) {
+          viewLocals.forumName = content2.names[forumId]
+          viewLocals.forumSlug = content2.slugs[forumId]
         }
-      }
 
-      Object.keys(content).forEach((key) => {
-        viewLocals[key] = content[key]
-      })
-      viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
-
-      utils.getForumsNamesAndSlugs([forumId], (content) => {
-        if (forumId in content.names) {
-          viewLocals.forumName = content.names[forumId]
-          viewLocals.forumSlug = content.slugs[forumId]
+        if (error) {
+          viewLocals.error = error
+          res.send(renderView('topic', viewLocals))
+          return
         }
+
+        let nicknames = []
+        for (let i = 0; i < content.messages.length; i++) {
+          let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+          content.messages[i].date = dateConversion.text
+          content.messages[i].age = dateConversion.diff
+
+          let nickname = content.messages[i].nickname.toLowerCase()
+          if (!nicknames.includes(nickname)) {
+            nicknames.push(nickname)
+          }
+        }
+
+        Object.keys(content).forEach((key) => {
+          viewLocals[key] = content[key]
+        })
+        viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
 
         utils.getAvatars(nicknames, (avatars) => {
           for (let nickname in avatars) {
