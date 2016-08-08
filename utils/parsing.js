@@ -46,13 +46,13 @@ function topic(body) {
     page = parseInt(matches[1])
   }
 
-  retour.lastPage = false
+  retour.numberOfPages = false
   regex = /<span><a href="\/forums\/[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9a-z-]+\.htm" class="lien-jv">([0-9]+)<\/a><\/span>/g
   while (matches = regex.exec(body)) {
-    retour.lastPage = parseInt(matches[1])
+    retour.numberOfPages = parseInt(matches[1])
   }
-  if (page > retour.lastPage) {
-    retour.lastPage = page
+  if (page > retour.numberOfPages) {
+    retour.numberOfPages = page
   }
 
   retour.isLocked = 0

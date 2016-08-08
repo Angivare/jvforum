@@ -146,7 +146,7 @@ function refresh() {
     topicIdLegacyOrModern: topicIdLegacyOrModern,
     topicSlug: topicSlug,
     topicPage: topicPage,
-    lastPage: lastPage,
+    numberOfPages: numberOfPages,
     messagesChecksums: JSON.stringify(messagesChecksums),
     _csrf: _csrf,
   }
@@ -191,7 +191,7 @@ function refresh() {
 
     if ('paginationHTML' in data) {
       $('.pagination-topic__pages').html(data.paginationHTML)
-      lastPage = data.lastPage
+      numberOfPages = data.numberOfPages
     }
   })
   .always(function (_, textStatus) {

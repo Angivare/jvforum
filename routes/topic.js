@@ -75,7 +75,6 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           viewLocals[key] = content[key]
         })
         viewLocals.title = viewLocals.name
-        viewLocals.lastPage = content.numberOfPages
         viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
 
         utils.getForumsNamesAndSlugs([forumId], (content) => {
@@ -153,12 +152,12 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
             forumId,
             name: parsed.name,
             slug,
-            numberOfPages: parsed.lastPage,
+            numberOfPages: parsed.numberOfPages,
             isDeleted: 0,
             isLocked: parsed.isLocked,
             lockRationale: parsed.lockRationale,
           })
-          viewLocals.paginationPages = utils.makePaginationPages(page, parsed.lastPage)
+          viewLocals.paginationPages = utils.makePaginationPages(page, parsed.numberOfPages)
 
           let nicknames = []
           for (let i = 0; i < parsed.messages.length; i++) {

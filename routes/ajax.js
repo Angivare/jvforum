@@ -238,7 +238,7 @@ router.post('/refresh', (req, res, next) => {
     }
 
   let missingParams = false
-  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'lastPage', 'messagesChecksums'].forEach((varName) => {
+  ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'numberOfPages', 'messagesChecksums'].forEach((varName) => {
     if (!(varName in req.body)) {
       missingParams = true
     }
@@ -247,7 +247,7 @@ router.post('/refresh', (req, res, next) => {
     return res.json({error: 'Paramètres manquants'})
   }
 
-  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, lastPage, messagesChecksums} = req.body
+  let {forumId, topicMode, topicIdLegacyOrModern, topicSlug, topicPage, numberOfPages, messagesChecksums} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     , idJvf = (topicMode == 1 ? '0' : '') + topicIdLegacyOrModern
     , topicIdLegacy = topicMode == 1 ? topicIdLegacyOrModern : 0
@@ -298,7 +298,7 @@ router.post('/refresh', (req, res, next) => {
     let renderings = 0
     function sendJSONAfterRenderings() {
       renderings++
-      if (lastPage != content.lastPage && newMessages.length) {
+      if (numberOfPages != content.numberOfPages && newMessages.length) {
         if (renderings == 2) {
           res.json(data)
         }
@@ -308,20 +308,20 @@ router.post('/refresh', (req, res, next) => {
       }
     }
 
-    if (newMessages.length == 0 && lastPage == content.lastPage) {
+    if (newMessages.length == 0 && numberOfPages == content.numberOfPages) {
       res.json(data)
     }
-    else if (lastPage != content.lastPage) {
+    else if (numberOfPages != content.numberOfPages) {
       req.app.render('partials/topicPagination', {
         paginationPages: content.paginationPages,
-        lastPage: content.lastPage,
+        numberOfPages: content.numberOfPages,
         page: topicPage,
         forumId,
         idJvf,
         slug: topicSlug,
       }, (err, html) => {
         data.paginationHTML = html
-        data.lastPage = content.lastPage
+        data.numberOfPages = content.numberOfPages
         sendJSONAfterRenderings()
       })
     }
@@ -355,7 +355,6 @@ router.post('/refresh', (req, res, next) => {
         contentToServe[key] = content[key]
       })
       contentToServe.title = content.name
-      contentToServe.lastPage = content.numberOfPages
       contentToServe.paginationPages = utils.makePaginationPages(topicPage, content.numberOfPages)
 
       serveContent(contentToServe)
@@ -403,7 +402,7 @@ router.post('/refresh', (req, res, next) => {
       }
       else if (headers.statusCode == 200) {
         let parsed = parse.topic(body)
-        parsed.paginationPages = utils.makePaginationPages(topicPage, parsed.lastPage)
+        parsed.paginationPages = utils.makePaginationPages(topicPage, parsed.numberOfPages)
         serveContent(parsed)
         cache.save(cacheId, parsed.messages)
         utils.saveTopic(parsed.idModern, {
@@ -411,7 +410,7 @@ router.post('/refresh', (req, res, next) => {
           forumId,
           name: parsed.name,
           slug: topicSlug,
-          numberOfPages: parsed.lastPage,
+          numberOfPages: parsed.numberOfPages,
           isDeleted: 0,
           isLocked: parsed.isLocked,
           lockRationale: parsed.lockRationale,
