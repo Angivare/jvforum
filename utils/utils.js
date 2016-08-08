@@ -285,13 +285,13 @@ function saveTopic(idModern, params) {
   db.insertOrUpdate('topics', params, {idModern})
 }
 
-function getTopic(where, thenCallback) {
+function getTopic(where, successCallback, failCallback) {
   db.query(`SELECT idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale FROM topics WHERE ${where}`, null, (results) => {
     if (!results.length) {
-      thenCallback(false)
+      failCallback()
       return
     }
-    thenCallback({
+    successCallback({
       idModern: parseInt(results[0].idModern),
       name: results[0].name,
       slug: results[0].slug,

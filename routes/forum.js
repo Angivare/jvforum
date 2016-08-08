@@ -52,7 +52,6 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         Object.keys(content).forEach((key) => {
           viewLocals[key] = content[key]
         })
-        viewLocals.title = viewLocals.name
         if (content.subforumsIds.length) {
           let forumsIdsWhichNeedTheirSlugAndName = [].concat(content.subforumsIds)
           if (content.parentId) {
@@ -102,7 +101,6 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
           Object.keys(parsed).forEach((key) => {
             viewLocals[key] = parsed[key]
           })
-          viewLocals.title = viewLocals.name
 
           if (parsed.subforumsIds.length) {
             let forumsIdsWhichNeedTheirSlugAndName = [].concat(parsed.subforumsIds)

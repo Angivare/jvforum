@@ -260,12 +260,104 @@ router.post('/refresh', (req, res, next) => {
     return res.json({error: 'topicIdLegacyOrModern == 0'})
   }
 
-  function serveContent(content) {
+  let cacheId = `${forumId}/${idJvf}/${topicPage}`
+  utils.getTopic(topicIdModern ? `idModern = ${topicIdModern}` : `idLegacy = ${topicIdLegacy} AND forumId = ${forumId}`, (content) => {
+    cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
+      if (content.isDeleted) {
+        serveTopic(null, 'deleted')
+        return
+      }
+      content.messages = messages
+      serveTopic(content)
+    }, () => {
+      fetchTopic()
+    })
+  }, () => {
+    fetchTopic()
+  })
+
+  function fetchTopic() {
+    fetch.unique(pathJvc, cacheId, (headers, body) => {
+      if ('location' in headers) {
+        let {location} = headers
+          , matches
+        if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+          if (topicIdModern) {
+            // The table's primary key being `idModern` we can only do this when it's not a legacy URL
+            utils.saveTopic(topicIdModern, {
+              forumId,
+              isDeleted: 1,
+            })
+          }
+          serveTopic(null, 'deleted')
+        }
+        else if (location == '//www.jeuxvideo.com/forums.htm') {
+          serveTopic(null, '103')
+        }
+        else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
+          /* Known possible cases:
+           * - Topic with 42 mode redirected to 1 mode, or in reverse
+           * - Topic has been moved to another forum
+           * - Topic's title and its slug has been modified
+           * - The page we try to access doesn't exist and JVC redirects to the first page
+           */
+          let urlJvf = `/${matches[2]}/`
+          if (matches[1] == 1) {
+            urlJvf += '0'
+          }
+          urlJvf += `${matches[3]}-${matches[5]}`
+          if (matches[4] != 1) {
+            urlJvf += `/${matches[4]}`
+          }
+          serveTopic(null, 'redirect')
+        }
+        else {
+          serveTopic(null, 'unknownRedirect')
+        }
+      }
+      else if (headers.statusCode == 404) {
+        serveTopic(null, 'doesNotExist')
+      }
+      else if (headers.statusCode != 200) {
+        serveTopic(null, 'not200')
+      }
+      else {
+        let content = parse.topic(body)
+        cache.save(cacheId, content.messages)
+        utils.saveTopic(content.idModern, {
+          idLegacy: topicIdLegacy,
+          forumId,
+          name: content.name,
+          slug: topicSlug,
+          numberOfPages: content.numberOfPages,
+          isDeleted: 0,
+          isLocked: content.isLocked,
+          lockRationale: content.lockRationale,
+        })
+        serveTopic(content)
+      }
+    }, (error) => {
+      if (error == 'timeout') {
+        serveTopic(null, 'timeout')
+      }
+      else {
+        serveTopic(null, 'network')
+      }
+    })
+  }
+
+  function serveTopic(content, error) {
+    if (error) {
+      res.json({error})
+      return
+    }
+
     let data = {
         messages: {},
       }
       , newMessages = []
       , avatarsNicknames = []
+      , paginationPages = utils.makePaginationPages(topicPage, content.numberOfPages)
 
     for (let i = 0; i < content.messages.length; i++) {
       let id = content.messages[i].id
@@ -313,7 +405,7 @@ router.post('/refresh', (req, res, next) => {
     }
     else if (numberOfPages != content.numberOfPages) {
       req.app.render('partials/topicPagination', {
-        paginationPages: content.paginationPages,
+        paginationPages,
         numberOfPages: content.numberOfPages,
         page: topicPage,
         forumId,
@@ -345,89 +437,6 @@ router.post('/refresh', (req, res, next) => {
       })
     }
   }
-
-  let cacheId = `${forumId}/${idJvf}/${topicPage}`
-  cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
-    let contentToServe = {messages}
-
-    utils.getTopic(topicMode == 1 ? `idLegacy = ${topicIdLegacy} AND forumId = ${forumId}` : `idModern = ${topicIdModern}`, (content) => {
-      Object.keys(content).forEach((key) => {
-        contentToServe[key] = content[key]
-      })
-      contentToServe.title = content.name
-      contentToServe.paginationPages = utils.makePaginationPages(topicPage, content.numberOfPages)
-
-      serveContent(contentToServe)
-    })
-  }, () => {
-    fetch.unique(pathJvc, cacheId, (headers, body) => {
-      if ('location' in headers) {
-        let {location} = headers
-          , matches
-        if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
-          if (topicIdModern) {
-            utils.saveTopic(topicIdModern, {
-              forumId,
-              isDeleted: 1,
-            })
-          }
-          res.json({error: 'Topic supprimé'})
-        }
-        else if (location == '//www.jeuxvideo.com/forums.htm') {
-          res.json({error: 'Topic privé'})
-        }
-        else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
-          /* Known possible cases:
-           * - Topic with 42 mode redirected to 1 mode, or in reverse
-           * - Topic has been moved to another forum
-           * - Topic's title and its slug has been modified
-           * - The page we try to access doesn't exists and JVC redirects to the first one
-           */
-          let urlJvf = `/${matches[2]}/`
-          if (matches[1] == 1) {
-            urlJvf += '0'
-          }
-          urlJvf += `${matches[3]}-${matches[5]}`
-          if (matches[4] != 1) {
-            urlJvf += `/${matches[4]}`
-          }
-          res.json({error: 'Redirection'})
-        }
-        else {
-          res.json({error: `Redirection inconnue (${location})`})
-        }
-      }
-      else if (headers.statusCode == 404) {
-        res.json({error: 'Topic inexistant'})
-      }
-      else if (headers.statusCode == 200) {
-        let parsed = parse.topic(body)
-        parsed.paginationPages = utils.makePaginationPages(topicPage, parsed.numberOfPages)
-        serveContent(parsed)
-        cache.save(cacheId, parsed.messages)
-        utils.saveTopic(parsed.idModern, {
-          idLegacy: topicIdLegacy,
-          forumId,
-          name: parsed.name,
-          slug: topicSlug,
-          numberOfPages: parsed.numberOfPages,
-          isDeleted: 0,
-          isLocked: parsed.isLocked,
-          lockRationale: parsed.lockRationale,
-        })
-      }
-      else {
-        res.json({error: 'JVC n’arrive pas à servir la page'})
-      }
-    }, (e) => {
-      if (e == 'timeout') {
-        res.json({error: 'Timeout'})
-      }
-      else {
-        res.json({error: `Réseau. (${e})`})
-      }
-    })
-  })
 })
 
 router.post('/syncFavorites', (req, res, next) => {

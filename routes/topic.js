@@ -54,76 +54,46 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
     }
 
     let cacheId = `${forumId}/${idJvf}/${page}`
-    cache.get(cacheId, config.timeouts.topicDisplay, (messages, age) => {
-      let nicknames = []
-      for (let i = 0; i < messages.length; i++) {
-        let dateConversion = date.convertMessage(messages[i].dateRaw)
-        messages[i].date = dateConversion.text
-        messages[i].age = dateConversion.diff
-
-        let nickname = messages[i].nickname.toLowerCase()
-        if (!nicknames.includes(nickname)) {
-          nicknames.push(nickname)
-        }
+    utils.getTopic(idModern ? `idModern = ${idModern}` : `idLegacy = ${idLegacy} AND forumId = ${forumId}`, (content) => {
+      if (content.isDeleted) {
+        serveTopic(null, 'deleted')
+        return
       }
-
-      viewLocals.cacheAge = age
-
-      viewLocals.messages = messages
-      utils.getTopic(mode == 1 ? `idLegacy = ${idLegacy} AND forumId = ${forumId}` : `idModern = ${idModern}`, (content) => {
-        Object.keys(content).forEach((key) => {
-          viewLocals[key] = content[key]
-        })
-        viewLocals.title = viewLocals.name
-        viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
-
-        utils.getForumsNamesAndSlugs([forumId], (content) => {
-          if (forumId in content.names) {
-            viewLocals.forumName = content.names[forumId]
-            viewLocals.forumSlug = content.slugs[forumId]
-          }
-
-          if (nicknames.length) {
-            utils.getAvatars(nicknames, (avatars) => {
-              for (let nickname in avatars) {
-                let url = avatars[nickname]
-                for (let i = 0; i < viewLocals.messages.length; i++) {
-                  if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
-                    viewLocals.messages[i].avatar = url
-                  }
-                }
-              }
-              res.send(renderView('topic', viewLocals))
-            })
-          }
-          else {
-            res.send(renderView('topic', viewLocals))
-          }
-        })
+      cache.get(cacheId, config.timeouts.topicDisplay, (messages, age) => {
+        content.messages = messages
+        viewLocals.cacheAge = age
+        serveTopic(content)
+      }, () => {
+        fetchTopic()
       })
     }, () => {
+      fetchTopic()
+    })
+
+    function fetchTopic() {
       fetch.unique(pathJvc, cacheId, (headers, body) => {
         if ('location' in headers) {
           let {location} = headers
             , matches
           if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
             if (idModern) {
+              // The table's primary key being `idModern` we can only do this when it's not a legacy URL
               utils.saveTopic(idModern, {
                 forumId,
                 isDeleted: 1,
               })
             }
-            viewLocals.error = 'deleted'
+            serveTopic(null, 'deleted')
           }
           else if (location == '//www.jeuxvideo.com/forums.htm') {
-            viewLocals.error = '103'
+            serveTopic(null, '103')
           }
           else if (matches = /^\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-[0-9]+-[0-9]+-[0-9]+-([0-9a-z-]+)\.htm$/.exec(location)) {
             /* Known possible cases:
              * - Topic with 42 mode redirected to 1 mode, or in reverse
              * - Topic has been moved to another forum
              * - Topic's title and its slug has been modified
-             * - The page we try to access doesn't exists and JVC redirects to the first one
+             * - The page we try to access doesn't exist and JVC redirects to the first page
              */
             let urlJvf = `/${matches[2]}/`
             if (matches[1] == 1) {
@@ -133,91 +103,88 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
             if (matches[4] != 1) {
               urlJvf += `/${matches[4]}`
             }
-            return res.redirect(urlJvf)
+            res.redirect(urlJvf)
           }
           else {
-            viewLocals.error = 'unknownRedirect'
             viewLocals.errorLocation = location
+            serveTopic(null, 'unknownRedirect')
           }
         }
         else if (headers.statusCode == 404) {
-          viewLocals.error = 'doesNotExist'
+          serveTopic(null, 'doesNotExist')
         }
-        else if (headers.statusCode == 200) {
-          let parsed = parse.topic(body)
-
-          cache.save(cacheId, parsed.messages)
-          utils.saveTopic(parsed.idModern, {
+        else if (headers.statusCode != 200) {
+          serveTopic(null, 'not200')
+        }
+        else {
+          let content = parse.topic(body)
+          cache.save(cacheId, content.messages)
+          utils.saveTopic(content.idModern, {
             idLegacy,
             forumId,
-            name: parsed.name,
+            name: content.name,
             slug,
-            numberOfPages: parsed.numberOfPages,
+            numberOfPages: content.numberOfPages,
             isDeleted: 0,
-            isLocked: parsed.isLocked,
-            lockRationale: parsed.lockRationale,
+            isLocked: content.isLocked,
+            lockRationale: content.lockRationale,
           })
-          viewLocals.paginationPages = utils.makePaginationPages(page, parsed.numberOfPages)
+          serveTopic(content)
+        }
+      }, (error) => {
+        if (error == 'timeout') {
+          serveTopic(null, 'timeout')
+        }
+        else {
+          viewLocals.errorDetail = error
+          serveTopic(null, 'network')
+        }
+      })
+    }
 
-          let nicknames = []
-          for (let i = 0; i < parsed.messages.length; i++) {
-            let dateConversion = date.convertMessage(parsed.messages[i].dateRaw)
-            parsed.messages[i].date = dateConversion.text
-            parsed.messages[i].age = dateConversion.diff
+    function serveTopic(content, error) {
+      if (error) {
+        viewLocals.error = error
+        res.send(renderView('topic', viewLocals))
+        return
+      }
 
-            let nickname = parsed.messages[i].nickname.toLowerCase()
-            if (!nicknames.includes(nickname)) {
-              nicknames.push(nickname)
+      let nicknames = []
+      for (let i = 0; i < content.messages.length; i++) {
+        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+        content.messages[i].date = dateConversion.text
+        content.messages[i].age = dateConversion.diff
+
+        let nickname = content.messages[i].nickname.toLowerCase()
+        if (!nicknames.includes(nickname)) {
+          nicknames.push(nickname)
+        }
+      }
+
+      Object.keys(content).forEach((key) => {
+        viewLocals[key] = content[key]
+      })
+      viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
+
+      utils.getForumsNamesAndSlugs([forumId], (content) => {
+        if (forumId in content.names) {
+          viewLocals.forumName = content.names[forumId]
+          viewLocals.forumSlug = content.slugs[forumId]
+        }
+
+        utils.getAvatars(nicknames, (avatars) => {
+          for (let nickname in avatars) {
+            let url = avatars[nickname]
+            for (let i = 0; i < viewLocals.messages.length; i++) {
+              if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                viewLocals.messages[i].avatar = url
+              }
             }
           }
-
-          Object.keys(parsed).forEach((key) => {
-            viewLocals[key] = parsed[key]
-          })
-          viewLocals.title = viewLocals.name
-
-          utils.getForumsNamesAndSlugs([forumId], (content) => {
-            if (forumId in content.names) {
-              viewLocals.forumName = content.names[forumId]
-              viewLocals.forumSlug = content.slugs[forumId]
-            }
-
-            if (nicknames.length) {
-              utils.getAvatars(nicknames, (avatars) => {
-                for (let nickname in avatars) {
-                  let url = avatars[nickname]
-                  for (let i = 0; i < viewLocals.messages.length; i++) {
-                    if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
-                      viewLocals.messages[i].avatar = url
-                    }
-                  }
-                }
-                res.send(renderView('topic', viewLocals))
-              })
-            }
-            else {
-              res.send(renderView('topic', viewLocals))
-            }
-          })
-
-          return
-        }
-        else {
-          viewLocals.error = 'not200'
-        }
-
-        res.send(renderView('topic', viewLocals))
-      }, (e) => {
-        if (e == 'timeout') {
-          viewLocals.error = 'timeout'
-        }
-        else {
-          viewLocals.error = 'network'
-          viewLocals.errorDetail = e
-        }
-        res.send(renderView('topic', viewLocals))
+          res.send(renderView('topic', viewLocals))
+        })
       })
-    })
+    }
   })
 })
 
