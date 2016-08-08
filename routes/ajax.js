@@ -366,6 +366,12 @@ router.post('/refresh', (req, res, next) => {
         let {location} = headers
           , matches
         if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+          if (topicIdModern) {
+            utils.saveTopic(topicIdModern, {
+              forumId,
+              isDeleted: 1,
+            })
+          }
           res.json({error: 'Topic supprimé'})
         }
         else if (location == '//www.jeuxvideo.com/forums.htm') {
@@ -400,7 +406,16 @@ router.post('/refresh', (req, res, next) => {
         parsed.paginationPages = utils.makePaginationPages(topicPage, parsed.lastPage)
         serveContent(parsed)
         cache.save(cacheId, parsed.messages)
-        utils.saveTopic(parsed.idModern, topicIdLegacy, forumId, parsed.name, topicSlug, parsed.lastPage, 0, parsed.isLocked, parsed.lockRationale)
+        utils.saveTopic(parsed.idModern, {
+          idLegacy: topicIdLegacy,
+          forumId,
+          name: parsed.name,
+          slug: topicSlug,
+          numberOfPages: parsed.lastPage,
+          isDeleted: 0,
+          isLocked: parsed.isLocked,
+          lockRationale: parsed.lockRationale,
+        })
       }
       else {
         res.json({error: 'JVC n’arrive pas à servir la page'})

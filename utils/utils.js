@@ -281,17 +281,8 @@ function getForumsNamesAndSlugs(forumsIds, thenCallback) {
   })
 }
 
-function saveTopic(idModern, idLegacy, forumId, name, slug, numberOfPages, isDeleted, isLocked, lockRationale) {
-  db.insertOrUpdate('topics', {
-    idLegacy,
-    forumId,
-    name,
-    slug,
-    numberOfPages,
-    isDeleted,
-    isLocked,
-    lockRationale,
-  }, {idModern})
+function saveTopic(idModern, params) {
+  db.insertOrUpdate('topics', params, {idModern})
 }
 
 function getTopic(where, thenCallback) {

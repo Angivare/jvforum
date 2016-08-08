@@ -108,6 +108,12 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           let {location} = headers
             , matches
           if (location.indexOf(`/forums/0-${forumId}-`) == 0) {
+            if (idModern) {
+              utils.saveTopic(idModern, {
+                forumId,
+                isDeleted: 1,
+              })
+            }
             viewLocals.error = 'deleted'
           }
           else if (location == '//www.jeuxvideo.com/forums.htm') {
@@ -142,7 +148,16 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           let parsed = parse.topic(body)
 
           cache.save(cacheId, parsed.messages)
-          utils.saveTopic(parsed.idModern, idLegacy, forumId, parsed.name, slug, parsed.lastPage, 0, parsed.isLocked, parsed.lockRationale)
+          utils.saveTopic(parsed.idModern, {
+            idLegacy,
+            forumId,
+            name: parsed.name,
+            slug,
+            numberOfPages: parsed.lastPage,
+            isDeleted: 0,
+            isLocked: parsed.isLocked,
+            lockRationale: parsed.lockRationale,
+          })
           viewLocals.paginationPages = utils.makePaginationPages(page, parsed.lastPage)
 
           let nicknames = []
