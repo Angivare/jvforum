@@ -29,7 +29,7 @@ function select(what, tableName, where, successCallback) {
 
 function selectIn(what, tableName, whereField, whereIn, successCallback) {
   if (whereIn.length == 0) {
-    fs.appendFileSync('debug-selectIn', [what, tableName, whereField].split("\n") + "\n\n")
+    fs.appendFileSync('debug-selectIn', [new Date, what, tableName, whereField].join("\n") + "\n\n")
   }
   let questionMarks = '?' + ',?'.repeat(whereIn.length - 1)
   c.query(`SELECT ${what} FROM ${tableName} WHERE ${whereField} IN (${questionMarks})`, whereIn, (err, results, fields) => {
