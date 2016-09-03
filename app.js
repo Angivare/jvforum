@@ -1,6 +1,5 @@
 let express = require('express')
   , path = require('path')
-  , favicon = require('serve-favicon')
   , logger = require('morgan')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
@@ -21,7 +20,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', consolidate.dot)
 app.set('view engine', 'html')
 
-app.use(favicon(path.join(__dirname, 'assets', 'images/favicon.png')))
 app.use(compression())
 app.use(logger('dev'));
 app.use(bodyParser.json());
