@@ -20,6 +20,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', consolidate.dot)
 app.set('view engine', 'html')
 
+app.set('trust proxy', true)
+
 app.use(compression())
 app.use(logger('dev'));
 app.use(bodyParser.json());
