@@ -1,5 +1,4 @@
 let mysql = require('mysql')
-  , fs = require('fs')
   , config = require('../config')
 
 config.databaseConnection.charset = 'utf8mb4_unicode_ci'
@@ -28,9 +27,6 @@ function select(what, tableName, where, successCallback) {
 }
 
 function selectIn(what, tableName, whereField, whereIn, successCallback) {
-  if (whereIn.length == 0) {
-    fs.appendFileSync('debug-selectIn', [new Date, what, tableName, whereField].join("\n") + "\n\n")
-  }
   let questionMarks = '?' + ',?'.repeat(whereIn.length - 1)
   c.query(`SELECT ${what} FROM ${tableName} WHERE ${whereField} IN (${questionMarks})`, whereIn, (err, results, fields) => {
     if (err) {

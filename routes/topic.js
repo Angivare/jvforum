@@ -1,4 +1,5 @@
 let express = require('express')
+  , fs = require('fs')
   , http = require('http')
   , parse = require('../utils/parsing')
   , fetch = require('../utils/fetching')
@@ -172,17 +173,23 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         })
         viewLocals.paginationPages = utils.makePaginationPages(page, content.numberOfPages)
 
-        utils.getAvatars(nicknames, (avatars) => {
-          for (let nickname in avatars) {
-            let url = avatars[nickname]
-            for (let i = 0; i < viewLocals.messages.length; i++) {
-              if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
-                viewLocals.messages[i].avatar = url
+        if (nicknames.length == 0) {
+          res.send(renderView('topic', viewLocals))
+          fs.appendFile('debug-no-nicknames', `${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
+        }
+        else {
+          utils.getAvatars(nicknames, (avatars) => {
+            for (let nickname in avatars) {
+              let url = avatars[nickname]
+              for (let i = 0; i < viewLocals.messages.length; i++) {
+                if (viewLocals.messages[i].nickname.toLowerCase() == nickname) {
+                  viewLocals.messages[i].avatar = url
+                }
               }
             }
-          }
-          res.send(renderView('topic', viewLocals))
-        })
+            res.send(renderView('topic', viewLocals))
+          })
+        }
       })
     }
   })
