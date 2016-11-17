@@ -1,13 +1,15 @@
 <header class="header">
-  <div class="header__home-cell">
-    <a class="header__home-link {{? it.idJvf }}header__home-link--accompanied{{?}}" href="/">Accueil</a>
-  </div>
-  {{? it.idJvf }}
-    <div class="header__forum-cell">
-      <a class="header__forum-link" href="/{{=it.forumId}}-{{=it.forumSlug}}">{{!it.forumName || 'Forum'}}</a>
+  <div class="header__container">
+    <div class="header__home-cell">
+      <a class="header__home-link {{? it.idJvf }}header__home-link--accompanied{{?}}" href="/">Accueil</a>
     </div>
-  {{?}}
-  {{? false }}
-    <div class="header__instantclick-debug-button"></div>
-  {{?}}
+    {{? it.idJvf }}
+      <div class="header__forum-cell">
+        <a class="header__forum-link" href="/{{=it.forumId}}-{{=it.forumSlug}}">{{!it.forumName || 'Forum'}}</a>
+      </div>
+    {{?}}
+    {{? false }}
+      <div class="header__instantclick-debug-button"></div>
+    {{?}}
+  </div>
 </header>

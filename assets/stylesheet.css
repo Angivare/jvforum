@@ -41,71 +41,6 @@ h1, h2, h3 {
 
 /* =PAGE */
 
-/* HEADER */
-
-.header {
-  display: table;
-  width: 100%;
-  padding-left: 30px;
-  margin-left: -30px;
-  width: 110%;
-  font-size: 16px;
-  font-weight: bold;
-  background: hsl(240,8%,18%);
-  box-shadow: inset 0 -2px 2px hsl(240,8%,11%);
-  position: relative;
-}
-
-@media (min-width: 1025px) {
-  .header {
-    padding-left: 0;
-  }
-}
-
-.header__home-cell {
-  display: table-cell;
-  width: 1px;
-}
-
-.header__home-link {
-  color: hsl(240, 8%, 67%);
-  padding: 10px 20px;
-  display: inline-block;
-}
-
-.header__home-link--accompanied {
-  box-shadow: inset -2px 0 3px hsla(240,8%,7%, .3);
-}
-
-.header__forum-cell {
-  display: table-cell;
-  text-transform: none;
-  background: hsl(240,8%,21%);
-  box-shadow: inset -3px -2px 2px hsl(240,8%,11%); /* 3px to the left to hide the shadow so it doesn't clash with .header__home-link--accompanied's shadow */
-  white-space: nowrap;
-}
-
-.header__forum-link {
-  color: hsl(240, 8%, 70%);
-  padding: 10px 20px;
-  display: inline-block;
-}
-
-@media (MAX-width: 399px) {
-  .header__home-link--accompanied,
-  .header__forum-link {
-    padding: 10px 13px;
-  }
-}
-
-.header__instantclick-debug-button {
-  position: absolute;
-  width: 41px;
-  height: 41px;
-  left: 200px;
-  background: lightblue;
-}
-
 /* SHEET */
 
 @media (min-width: 1025px) {
@@ -2075,6 +2010,13 @@ color: hsl(240, 8%, 27%);
 
 :root {
   --background: hsl(240, 8%, 13%);
+  --container-max-width: 1440px;
+  --header-background: hsl(240, 8%, 18%);
+  --header-box-shadow-color: hsl(240, 8%, 11%);
+  --header__home-link-color: hsl(240, 8%, 67%);
+  --header__home-link--accompanied-box-shadow-color: hsla(240, 8%, 7%, .3);
+  --header__forum-cell-background: hsl(240, 8%, 21%);
+  --header__forum-link-color: hsl(240, 8%, 70%);
 }
 
 html {
@@ -2090,6 +2032,69 @@ body {
   background: var(--background);
 }
 
+.header {
+  width: 100%;
+  background: var(--header-background);
+  box-shadow: inset 0 -2px 2px var(--header-box-shadow-color);
+  font-size: 16px;
+  font-weight: bold;
+  overflow-x: hidden;
+}
+
+.header__container {
+  display: table;
+  padding-left: calc((100% - var(--container-max-width)) / 2);
+  width: 110%; /* hides .header__forum-cell's box-shadow right part */
+}
+
+.header {
+  width: 100%;
+  position: relative;
+}
+
+.header__home-cell {
+  display: table-cell;
+  width: 1px;
+}
+
+.header__home-link {
+  color: var(--header__home-link-color);
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+.header__home-link--accompanied {
+  box-shadow: inset -2px 0 3px var(--header__home-link--accompanied-box-shadow-color);
+}
+
+.header__forum-cell {
+  display: table-cell;
+  background: var(--header__forum-cell-background);
+  box-shadow: inset -3px -2px 2px hsl(240,8%,11%); /* 3px to the left to hide the shadow so it doesn't clash with .header__home-link--accompanied's shadow */
+  white-space: nowrap;
+}
+
+.header__forum-link {
+  color: var(--header__forum-link-color);
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+@media (MAX-width: 399px) {
+  .header__home-link--accompanied,
+  .header__forum-link {
+    padding: 10px 13px;
+  }
+}
+
+.header__instantclick-debug-button {
+  position: absolute;
+  width: 41px;
+  height: 41px;
+  left: 200px;
+  background: lightblue;
+}
+
 .sheet {
   padding-bottom: 10px;
   position: relative;
@@ -2099,7 +2104,7 @@ body {
 @media (min-width: 1025px) {
   .sheet {
     margin: auto;
-    max-width: 1440px;
+    max-width: var(--container-max-width);
     padding: 0 30px 14px;
   }
 }
