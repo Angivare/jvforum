@@ -46,7 +46,6 @@ h1, h2, h3 {
 .header {
   display: table;
   width: 100%;
-  margin-top: -5px;
   padding-left: 30px;
   margin-left: -30px;
   width: 110%;
@@ -59,7 +58,6 @@ h1, h2, h3 {
 
 @media (min-width: 1025px) {
   .header {
-    margin-top: -10px;
     padding-left: 0;
   }
 }
@@ -109,41 +107,6 @@ h1, h2, h3 {
 }
 
 /* SHEET */
-
-.sheet {
-  background: hsl(240, 8%, 13%);
-  padding: 5px 0 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-.body--no-bottom .sheet {
-  padding-bottom: 0;
-}
-
-.sheet--nothing-over {
-  border-width: 0;
-  padding-top: 0;
-}
-
-@media (min-width: 1025px) {
-  .sheet {
-    margin: auto;
-    max-width: 1440px;
-    padding: 10px 30px 14px;
-    min-height: 100%;
-    box-shadow: 0 0 20px hsl(0, 0%, 0%);
-  }
-
-  .body--no-bottom .sheet {
-    padding-bottom: 14px;
-  }
-
-  .sheet--nothing-over {
-    border-width: 0;
-    padding-top: 0;
-  }
-}
 
 @media (min-width: 1025px) {
   .content {
@@ -2110,6 +2073,10 @@ color: hsl(240, 8%, 27%);
 
 /* 2017 */
 
+:root {
+  --background: hsl(240, 8%, 13%);
+}
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -2117,4 +2084,22 @@ html {
 
 *, *:before, *:after {
   box-sizing: inherit;
+}
+
+body {
+  background: var(--background);
+}
+
+.sheet {
+  padding-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1025px) {
+  .sheet {
+    margin: auto;
+    max-width: 1440px;
+    padding: 0 30px 14px;
+  }
 }
