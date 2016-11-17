@@ -9,10 +9,14 @@ var isFormReadyToPost = false
   , sliderTopOffset = 0
   , icdl = ''
 
+function qs(selectors) {
+  return document.querySelector(selectors)
+}
+
 function setAsHavingTouch() {
-  $('html').addClass('has-touch')
+  qs('html').classList.add('has-touch')
   hasTouch = true
-  $(document.body).off('touchstart', setAsHavingTouch)
+  document.body.removeEventListener('touchstart', setAsHavingTouch)
 }
 
 function showErrors(errors) {
@@ -301,4 +305,4 @@ instantClick.on('change', function() {
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 
-$(document.body).on('touchstart', setAsHavingTouch)
+document.body.addEventListener('touchstart', setAsHavingTouch)
