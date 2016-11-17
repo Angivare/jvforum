@@ -1,4 +1,4 @@
-var isFormReadyToPost = false
+let isFormReadyToPost = false
   , hasTouch = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
@@ -41,7 +41,7 @@ function addMessagesEvent(element, type, listener) {
 
 function toggleSpoil(event) {
   event.stopPropagation()
-  var target = $(event.target)
+  let target = $(event.target)
   if (target.is('a, .sticker, .noelshack-link__thumb')) {
     return
   }
@@ -51,7 +51,7 @@ function toggleSpoil(event) {
 function postMessage(event) {
   event.preventDefault()
 
-  var message = $('.form__textarea').val()
+  let message = $('.form__textarea').val()
 
   if (message.length == 0) {
     $('.form__textarea').focus()
@@ -61,7 +61,7 @@ function postMessage(event) {
   $('.button-mobile-post__visible').addClass('button-mobile-post__visible--sending')
   $('.button-mobile-post').blur()
 
-  var data = {
+  let data = {
     message: message,
     forumId: forumId,
     topicMode: topicMode,
@@ -115,7 +115,7 @@ function readyFormToPost() {
 }
 
 function startRefresh() {
-  var lastMessageAge = $('.message').last().data('age')
+  let lastMessageAge = $('.message').last().data('age')
   if (lastMessageAge == undefined) { // No messages on the page due to a bug with JVC
     lastMessageAge = 0
   }
@@ -125,7 +125,7 @@ function startRefresh() {
     messagesChecksums[element.id] = $(element).data('checksum')
   })
 
-  var isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
+  let isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
   if (isLastPage || lastMessageAge < 5 * 60) {
     refreshInterval = refreshIntervals.recent
     instantClick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
@@ -144,7 +144,7 @@ function restartRefreshIfNeeded() {
 
 function refresh() {
   lastRefreshTimestamp = +new Date
-  var data = {
+  let data = {
     forumId: forumId,
     topicMode: topicMode,
     topicIdLegacyOrModern: topicIdLegacyOrModern,
@@ -169,13 +169,13 @@ function refresh() {
       $('.messages-list').append(data.newMessagesHTML)
     }
 
-    for (var id in data.messages) {
-      var message = data.messages[id]
+    for (let id in data.messages) {
+      let message = data.messages[id]
 
       if (!(id in messagesChecksums)) {
         // New message
         messagesChecksums[id] = message.checksum
-        for (var i = 0; i < messagesEvents.length; i++) {
+        for (let i = 0; i < messagesEvents.length; i++) {
           $('#' + id + ' ' + messagesEvents[i].element)[messagesEvents[i].type](messagesEvents[i].listener)
         }
         continue
