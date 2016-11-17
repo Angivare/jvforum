@@ -233,7 +233,7 @@ let stickersList = {
 for (let category in stickersList) {
   for (let id in stickersList[category]) {
     let code = stickersList[category][id]
-      , checksum = sha1(fs.readFileSync(`./assets/images/stickers/140/${code}.png`)).substr(0, 8)
+      , checksum = '00000000'
     stickersList[category][id] = {
       code,
       checksum,
