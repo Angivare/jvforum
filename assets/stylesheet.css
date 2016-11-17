@@ -2087,14 +2087,6 @@ body {
   }
 }
 
-.header__instantclick-debug-button {
-  position: absolute;
-  width: 41px;
-  height: 41px;
-  left: 200px;
-  background: lightblue;
-}
-
 .sheet {
   padding-bottom: 10px;
   position: relative;
