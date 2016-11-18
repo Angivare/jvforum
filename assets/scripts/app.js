@@ -327,6 +327,7 @@ function toggleMobileMenu() {
   qs('.menu-mobile__items').classList.toggle('menu-mobile__items--shown')
   qs('.menu-mobile__opener').classList.toggle('menu-mobile__opener--hidden')
   qs('.overlay').classList.toggle('overlay--shown')
+  qs('.overlay').addEventListener('click', toggleMobileMenu)
 }
 
 instantClick.init()
@@ -345,23 +346,30 @@ if (googleAnalyticsId) {
 }
 
 instantClick.on('change', function() {
-  $('.js-form-post').submit(postMessage)
+  qs('.js-form-post', (element) => {
+    element.addEventListener('submit', postMessage)
+  })
   qs('.js-form-post .form__textarea', (element) => {
     element.addEventListener('input', readyFormToPost)
   })
   isFormReadyToPost = false
 
-  $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
-  $('.js-go-to-form').click(goToForm)
+  qsa('.js-favorite-toggle, .js-quote', (element) => {
+    element.addEventListener('click', alertPlaceholder)
+  })
+  qsa('.js-go-to-form', (element) => {
+    element.addEventListener('click', goToForm)
+  })
 
-  qs('.menu-mobile').addEventListener('click', toggleMobileMenu)
-  qs('.overlay').addEventListener('click', toggleMobileMenu)
+  qs('.menu-mobile', (element) => {
+    element.addEventListener('click', toggleMobileMenu)
+  })
 
   syncFavorites()
   makeFavoritesSlideable()
 
-  $('script[type=queued]').each(function() {
-    eval($(this).html())
+  qsa('script[type=queued]', (element) => {
+    eval(element.textContent)
   })
 })
 
