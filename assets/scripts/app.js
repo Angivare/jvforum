@@ -56,32 +56,32 @@ function toggleSpoil(event) {
 function postMessage(event) {
   event.preventDefault()
 
-  let message = $('.form__textarea').val()
+  let message = qs('.form__textarea').value
 
   if (message.length == 0) {
-    $('.form__textarea').focus()
+    qs('.form__textarea').focus()
     return
   }
 
-  $('.button-mobile-post__visible').addClass('button-mobile-post__visible--sending')
-  $('.button-mobile-post').blur()
+  qs('.button-mobile-post__visible').classList.add('button-mobile-post__visible--sending')
+  qs('.button-mobile-post').blur()
 
   let data = {
-    message: message,
-    forumId: forumId,
-    topicMode: topicMode,
-    topicIdLegacyOrModern: topicIdLegacyOrModern,
-    topicSlug: topicSlug,
-    _csrf: _csrf,
+    message,
+    forumId,
+    topicMode,
+    topicIdLegacyOrModern,
+    topicSlug,
+    _csrf,
   }
 
   instantClick.xhr($.post({
     url: '/ajax/postMessage',
-    data: data,
+    data,
     timeout: timeouts.postMessage,
   })
   .always(function() {
-    $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--sending')
+    qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--sending')
   })
   .done(function(data, textStatus, jqXHR) {
     if (data.error) {
@@ -89,18 +89,18 @@ function postMessage(event) {
       return
     }
 
-    $('.form__errors').hide()
-    $('.form__textarea').val('')
+    qs('.form__errors').classList.remove('form__errors--shown')
+    qs('.form__textarea').value = ''
 
     isFormReadyToPost = false
-    $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
+    qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--ready-to-post')
 
     if (!hasTouch) {
-      $('.form__textarea').focus()
+      qs('.form__textarea').focus()
     }
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    showErrors('Erreur Ajax (' + textStatus + ': ' + errorThrown + ')')
+    showErrors(`Erreur Ajax (${textStatus}: ${errorThrown})`)
   }))
 }
 
