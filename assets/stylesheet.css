@@ -9,10 +9,6 @@ body {
   height: 100%;
 }
 
-.body--no-bottom {
-  padding-bottom: 0;
-}
-
 @media (min-width: 1025px) {
   body {
     background: hsl(0,0%,5%);
@@ -2035,6 +2031,10 @@ body {
   padding-bottom: 10px;
   position: relative;
   overflow: hidden;
+}
+
+.sheet--hooked-bottom {
+  padding-bottom: 0;
 }
 
 @media (min-width: 1025px) {
