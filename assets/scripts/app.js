@@ -169,7 +169,7 @@ function startRefreshCycle() {
 
   messagesChecksums = {}
   qsa('.message', (element) => {
-    messagesChecksums[element.id] = element.dataset.checksum
+    messagesChecksums[element.id.substr(1)] = element.dataset.checksum
   })
 
   let isLastPage = false
@@ -229,7 +229,7 @@ function refresh() {
           messagesChecksums[id] = message.checksum
 
           for (let i = 0; i < messagesEvents.length; i++) {
-            qsa(`[id="${id}"] ${messagesEvents[i].element}`, (element) => {
+            qsa(`#m${id} ${messagesEvents[i].element}`, (element) => {
               element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
             })
           }
@@ -237,16 +237,16 @@ function refresh() {
         }
 
         // Update
-        qs(`[id="${id}"]`).dataset.age = message.age
-        qs(`[id="${id}"] .js-date`).innerHTML = message.date
+        qs(`#m${id}`).dataset.age = message.age
+        qs(`#m${id} .js-date`).innerHTML = message.date
         if ('content' in message) {
-          qs(`[id="${id}"]`).dataset.checksum = message.checksum
+          qs(`#m${id}`).dataset.checksum = message.checksum
           messagesChecksums[id] = message.checksum
 
-          qs(`[id="${id}"] .js-content`).innerHTML = message.content
+          qs(`#m${id} .js-content`).innerHTML = message.content
 
           for (let i = 0; i < messagesEvents.length; i++) {
-            qsa(`[id="${id}"] ${messagesEvents[i].element}`, (element) => {
+            qsa(`#m${id} ${messagesEvents[i].element}`, (element) => {
               element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
             })
           }
