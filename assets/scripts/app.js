@@ -316,11 +316,8 @@ function adjustSliderWidth() {
 }
 
 function goToForm() {
-  if (!$('#newmessage')) {
-    return
-  }
-  $('.js-form-post .form__textarea').focus()
-  scrollTo(0, $('.js-form-post').offset().top + 1)
+  qs('.js-form-post .form__textarea').focus()
+  scrollTo(0, qs('.js-form-post').getBoundingClientRect().top + pageYOffset)
 }
 
 function toggleMobileMenu() {
