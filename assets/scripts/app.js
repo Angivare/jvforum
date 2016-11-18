@@ -151,17 +151,22 @@ function readyFormToPost() {
 }
 
 function startRefreshCycle() {
-  let lastMessageAge = $('.message').last().data('age')
-  if (lastMessageAge == undefined) { // No messages on the page due to a bug with JVC
-    lastMessageAge = 0
+  let lastMessageElement = qs('.message:last-child')
+    , lastMessageAge = 0
+  if (lastMessageElement) {
+    lastMessageAge = parseInt(lastMessageElement.dataset.age)
   }
 
   messagesChecksums = {}
-  $('.message').each(function(index, element) {
-    messagesChecksums[element.id] = $(element).data('checksum')
+  qsa('.message', (element) => {
+    messagesChecksums[element.id] = element.dataset.checksum
   })
 
-  let isLastPage = $('.pagination-topic__page-link').last().hasClass('pagination-topic__page-link--active')
+  let lastPageElement = qs('.pagination-topic__page-link:last-child')
+    , isLastPage = false
+  if (lastPageElement) {
+    isLastPage = lastPageElement.classList.contains('pagination-topic__page-link--active')
+  }
   if (isLastPage || lastMessageAge < 5 * 60) {
     refreshInterval = refreshIntervals.recent
     instantClick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
