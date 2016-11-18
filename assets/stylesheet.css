@@ -2017,6 +2017,9 @@ color: hsl(240, 8%, 27%);
   --header__home-link--accompanied-box-shadow-color: hsla(240, 8%, 7%, .3);
   --header__forum-cell-background: hsl(240, 8%, 21%);
   --header__forum-link-color: hsl(240, 8%, 70%);
+
+  --sheet-desktop-padding-x: 30px;
+  --header__forum-link-over400-padding-x: 20px;
 }
 
 html {
@@ -2043,7 +2046,7 @@ body {
 
 .header__container {
   display: table;
-  padding-left: calc((100% - var(--container-max-width)) / 2);
+  padding-left: calc((100% - var(--container-max-width)) / 2 + (var(--sheet-desktop-padding-x) - var(--header__forum-link-over400-padding-x)) );
   width: 110%; /* hides .header__forum-cell's box-shadow right part */
 }
 
@@ -2076,7 +2079,7 @@ body {
 
 .header__forum-link {
   color: var(--header__forum-link-color);
-  padding: 10px 20px;
+  padding: 10px var(--header__forum-link-over400-padding-x);
   display: inline-block;
 }
 
@@ -2097,6 +2100,6 @@ body {
   .sheet {
     margin: auto;
     max-width: var(--container-max-width);
-    padding: 0 30px 14px;
+    padding: 0 var(--sheet-desktop-padding-x) 14px;
   }
 }
