@@ -172,11 +172,10 @@ function startRefreshCycle() {
     messagesChecksums[element.id] = element.dataset.checksum
   })
 
-  let lastPageElement = qs('.pagination-topic__page-link:last-child')
-    , isLastPage = false
-  if (lastPageElement) {
-    isLastPage = lastPageElement.classList.contains('pagination-topic__page-link--active')
-  }
+  let isLastPage = false
+  qs('.pagination-topic--bottom .pagination-topic__page:last-child .pagination-topic__page-link', (element) => {
+    isLastPage = element.classList.contains('pagination-topic__page-link--active')
+  })
   if (isLastPage || lastMessageAge < 5 * 60) {
     refreshInterval = refreshIntervals.recent
     instantClick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
