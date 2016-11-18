@@ -19,8 +19,8 @@ function setAsHavingTouch() {
 }
 
 function showErrors(errors) {
-  $('.form__errors p').html(errors)
-  $('.form__errors').show()
+  qs('.form__errors p').innerHTML = errors
+  qs('.form__errors').classList.add('form__errors--shown')
 }
 
 function alertPlaceholder() {

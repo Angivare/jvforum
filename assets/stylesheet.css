@@ -2103,3 +2103,7 @@ body {
     padding: 0 var(--sheet-desktop-padding-x) 14px;
   }
 }
+
+.form__errors--shown {
+  display: block;
+}
