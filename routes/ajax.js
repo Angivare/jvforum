@@ -321,7 +321,8 @@ router.post('/refresh', (req, res, next) => {
           if (matches[4] != 1) {
             urlJvf += `/${matches[4]}`
           }
-          serveTopic(null, 'redirect')
+
+          serveTopic(null, `redirect=${urlJvf}`) // unused
         }
         else {
           serveTopic(null, 'unknownRedirect')
