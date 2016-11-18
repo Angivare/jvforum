@@ -12,6 +12,10 @@ function qs(selectors) {
   return document.querySelector(selectors)
 }
 
+function qsa(selectors, callback) {
+  ;[].forEach.call(document.querySelectorAll(selectors), callback)
+}
+
 function setAsHavingTouch() {
   qs('html').classList.add('has-touch')
   hasTouch = true
@@ -29,12 +33,14 @@ function alertPlaceholder() {
 
 function addMessagesEvent(element, type, listener) {
   messagesEvents.push({
-    element: element,
-    type: type,
-    listener: listener,
+    element,
+    type,
+    listener,
   })
   instantClick.on('change', function() {
-    $('.message ' + element)[type](listener)
+    qsa('.message ' + element, (element) => {
+      element.addEventListener(type, listener)
+    })
   })
 }
 
