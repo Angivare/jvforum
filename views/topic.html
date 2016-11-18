@@ -4,22 +4,18 @@
 <div class="sheet">
   <div class="content">
     {{? !it.error }}
-      <h1 class="page-title page-title--topic">
-        {{!it.name}}
-        <div class="mobile-menu">
-          <div class="mobile-menu__opener">
-            <div class="mobile-menu__opener-icon"></div>
-          </div>
-          <div class="mobile-menu__items">
-            {{? !it.isFavorite }}
-              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="add">Mettre en favoris</span>
-            {{??}}
-              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="delete">Retirer des favoris</span>
-            {{?}}
-            <a class="mobile-menu__item" href={{=it.urlJvc}} target="_blank">Ouvrir sur JVC</a>
-          </div>
+      <h1 class="page-title page-title--topic">{{!it.name}}</h1>
+      <div class="menu-mobile">
+        <div class="menu-mobile__opener"></div>
+        <div class="menu-mobile__items">
+          {{? !it.isFavorite }}
+            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="add">Mettre en favoris</span>
+          {{??}}
+            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="delete">Retirer des favoris</span>
+          {{?}}
+          <a class="menu-mobile__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
         </div>
-      </h1>
+      </div>
       <div class="pagination-topic pagination-topic--top">
         {{? !it.isLocked }}
           <div class="pagination-topic__action-button pagination-topic__action-button--post">

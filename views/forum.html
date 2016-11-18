@@ -6,20 +6,18 @@
     {{? !it.error }}
       <h1 class="page-title page-title--larger">
         <a class="page-title__link page-title__link--with-refresh-icon" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
-        <div class="mobile-menu">
-          <div class="mobile-menu__opener">
-            <div class="mobile-menu__opener-icon"></div>
-          </div>
-          <div class="mobile-menu__items">
-            {{? !it.isFavorite }}
-              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="add">Mettre en favoris</span>
-            {{??}}
-              <span class="js-favorite-toggle js-favorite-toggle-label mobile-menu__item" data-action="delete">Retirer des favoris</span>
-            {{?}}
-            <a class="mobile-menu__item" href={{=it.urlJvc}} target="_blank">Ouvrir sur JVC</a>
-          </div>
-        </div>
       </h1>
+      <div class="menu-mobile">
+        <div class="menu-mobile__opener"></div>
+        <div class="menu-mobile__items">
+          {{? !it.isFavorite }}
+            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="add">Mettre en favoris</span>
+          {{??}}
+            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="delete">Retirer des favoris</span>
+          {{?}}
+          <a class="menu-mobile__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
+        </div>
+      </div>
       <div class="liste-topics">
         {{~it.topics :t:index}}
           {{? t.label != 'ghost' }}

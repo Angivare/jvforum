@@ -305,6 +305,12 @@ function goToForm() {
   scrollTo(0, $('.js-form-post').offset().top + 1)
 }
 
+function toggleMobileMenu() {
+  qs('.menu-mobile__items').classList.toggle('menu-mobile__items--shown')
+  qs('.menu-mobile__opener').classList.toggle('menu-mobile__opener--hidden')
+  qs('.overlay').classList.toggle('overlay--shown')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -327,6 +333,9 @@ instantClick.on('change', function() {
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
   $('.js-go-to-form').click(goToForm)
+
+  qs('.menu-mobile').addEventListener('click', toggleMobileMenu)
+  qs('.overlay').addEventListener('click', toggleMobileMenu)
 
   syncFavorites()
   makeFavoritesSlideable()
