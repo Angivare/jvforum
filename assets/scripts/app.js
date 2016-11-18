@@ -16,7 +16,7 @@ function qsa(selectors, callback) {
   ;[].forEach.call(document.querySelectorAll(selectors), callback)
 }
 
-function ajax(url, objectData, timeout) {
+function ajax(url, timeout, objectData = {}, callback = () => {}) {
   let data = [
         `_csrf=${_csrf}`,
       ]
@@ -31,6 +31,18 @@ function ajax(url, objectData, timeout) {
   xhr.open('POST', url)
   xhr.timeout = timeout
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  xhr.addEventListener('readystatechange', () => {
+    if (xhr.readyState < 4) {
+      return
+    }
+
+    let status = xhr.status
+      , response = xhr.responseText
+    if (status == 200) {
+      response = JSON.parse(response)
+    }
+    callback(status, response, xhr)
+  })
   xhr.send(data)
 }
 
@@ -93,17 +105,21 @@ function postMessage(event) {
     _csrf,
   }
 
-  instantClick.xhr($.post({
-    url: '/ajax/postMessage',
-    data,
-    timeout: timeouts.postMessage,
-  })
-  .always(function() {
+  ajax('/ajax/postMessage', timeouts.postMessage, {
+    message,
+    forumId,
+    topicMode,
+    topicIdLegacyOrModern,
+    topicSlug,
+  }, (status, response, xhr) => {
     qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--sending')
-  })
-  .done(function(data, textStatus, jqXHR) {
-    if (data.error) {
-      showErrors(data.error)
+
+    if (status != 200) {
+      showErrors(`Problème réseau`)
+      return
+    }
+    if (response.error) {
+      showErrors(response.error)
       return
     }
 
@@ -117,9 +133,6 @@ function postMessage(event) {
       qs('.form__textarea').focus()
     }
   })
-  .fail(function(jqXHR, textStatus, errorThrown) {
-    showErrors(`Erreur Ajax (${textStatus}: ${errorThrown})`)
-  }))
 }
 
 function readyFormToPost() {
@@ -237,7 +250,7 @@ function refresh() {
 }
 
 function syncFavorites() {
-  ajax('/ajax/syncFavorites', {}, timeouts.syncFavorites)
+  ajax('/ajax/syncFavorites', timeouts.syncFavorites)
 }
 
 function setSliderTopOffset() {
