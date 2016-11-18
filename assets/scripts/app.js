@@ -46,6 +46,12 @@ function ajax(url, timeout, objectData = {}, callback = () => {}) {
   xhr.send(data)
 }
 
+function stringToElement(string) {
+  let template = document.createElement('template')
+  template.innerHTML = string
+  return template.content.firstElementChild
+}
+
 function setAsHavingTouch() {
   qs('html').classList.add('has-touch')
   hasTouch = true
@@ -185,7 +191,8 @@ function restartRefreshIfNeeded() {
 
 function refresh() {
   lastRefreshTimestamp = +new Date
-  let data = {
+
+  ajax('/ajax/refresh', timeouts.refresh, {
     forumId: forumId,
     topicMode: topicMode,
     topicIdLegacyOrModern: topicIdLegacyOrModern,
@@ -193,65 +200,68 @@ function refresh() {
     topicPage: topicPage,
     numberOfPages: numberOfPages,
     messagesChecksums: JSON.stringify(messagesChecksums),
-    _csrf: _csrf,
-  }
+  }, (status, response, xhr) => {
+    if (status == 200) {
+      if (response.error) {
+        if (response.error == 'deleted' && numberOfPages) { // non-zero numberOfPages means we're not already on an error page
+          location.href = location.pathname
+        }
+        return
+      }
 
-  instantClick.xhr($.post({
-    url: '/ajax/refresh',
-    data: data,
-    timeout: timeouts.refresh,
-  })
-  .done(function(data, textStatus, jqXHR) {
-    if (data.error) {
-      if (data.error == 'deleted' && numberOfPages) { // non-zero numberOfPages means we're not already on an error page
+      if (numberOfPages == 0 && response.numberOfPages) {
+        // We're on an error page and there's no more error (such as a topic that's no longer deleted)
         location.href = location.pathname
       }
-      return
-    }
 
-    if (numberOfPages == 0 && data.numberOfPages) {
-      // We're on an error page and there's no more error (such as a topic that's no longer deleted)
-      location.href = location.pathname
-    }
+      if ('newMessagesHTML' in response) {
+        qs('.messages-list').appendChild(stringToElement(response.newMessagesHTML))
+      }
 
-    if ('newMessagesHTML' in data) {
-      $('.messages-list').append(data.newMessagesHTML)
-    }
+      for (let id in response.messages) {
+        let message = response.messages[id]
 
-    for (let id in data.messages) {
-      let message = data.messages[id]
+        if (!(id in messagesChecksums)) {
+          // New message
+          messagesChecksums[id] = message.checksum
 
-      if (!(id in messagesChecksums)) {
-        // New message
-        messagesChecksums[id] = message.checksum
-        for (let i = 0; i < messagesEvents.length; i++) {
-          $('#' + id + ' ' + messagesEvents[i].element)[messagesEvents[i].type](messagesEvents[i].listener)
+          for (let i = 0; i < messagesEvents.length; i++) {
+            qsa(`[id="${id}"] ${messagesEvents[i].element}`, (element) => {
+              element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
+            })
+          }
+          continue
         }
-        continue
+
+        // Update
+        qs(`[id="${id}"]`).dataset.age = message.age
+        qs(`[id="${id}"] .js-date`).innerHTML = message.date
+        if ('content' in message) {
+          qs(`[id="${id}"]`).dataset.checksum = message.checksum
+          messagesChecksums[id] = message.checksum
+
+          qs(`[id="${id}"] .js-content`).innerHTML = message.content
+
+          for (let i = 0; i < messagesEvents.length; i++) {
+            qsa(`[id="${id}"] ${messagesEvents[i].element}`, (element) => {
+              element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
+            })
+          }
+        }
       }
 
-      // Update
-      $('#' + id).data('age', message.age)
-      $('#' + id + ' .js-date').html(message.date)
-      if ('content' in message) {
-        $('#' + id).data('checksum', message.checksum)
-        messagesChecksums[id] = message.checksum
-
-        $('#' + id + ' .js-content').html(message.content)
-        $('#' + id + ' .spoil').click(toggleSpoil)
+      if ('paginationHTML' in response) {
+        qsa('.pagination-topic__pages', (element) => {
+          element.innerHTML = response.paginationHTML
+        })
+        numberOfPages = response.numberOfPages
       }
     }
 
-    if ('paginationHTML' in data) {
-      $('.pagination-topic__pages').html(data.paginationHTML)
-      numberOfPages = data.numberOfPages
-    }
-  })
-  .always(function (_, textStatus) {
-    if (textStatus != 'abort') { // Not an InstantClick page change
+    if (!xhr.instantKilled) {
       instantClick.setTimeout(refresh, refreshInterval)
     }
-  }))
+  })
 }
 
 function syncFavorites() {
