@@ -262,6 +262,10 @@ router.post('/refresh', (req, res, next) => {
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
   utils.getTopic(topicIdModern ? `idModern = ${topicIdModern}` : `idLegacy = ${topicIdLegacy} AND forumId = ${forumId}`, (content) => {
+    if (content.slug != topicSlug) {
+      topicSlug = content.slug
+      pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
+    }
     cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
       if (content.isDeleted) {
         serveTopic(null, 'deleted')
@@ -301,6 +305,14 @@ router.post('/refresh', (req, res, next) => {
            * - Topic's title and its slug has been modified
            * - The page we try to access doesn't exist and JVC redirects to the first page
            */
+
+          if (matches[1] != 0 && topicSlug != matches[5]) {
+            // The slug has been modified
+            utils.saveTopic(topicIdModern, { // If it has been modified, it necessarily has a modern ID (unless an admin changed the title of an old topic, which is unlikely)
+              slug: matches[5],
+            })
+          }
+
           let urlJvf = `/${matches[2]}/`
           if (matches[1] == 1) {
             urlJvf += '0'
