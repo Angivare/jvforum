@@ -46,11 +46,11 @@ function addMessagesEvent(element, type, listener) {
 
 function toggleSpoil(event) {
   event.stopPropagation()
-  let target = $(event.target)
-  if (target.is('a, .sticker, .noelshack-link__thumb')) {
+  let target = event.target
+  if (target.tagName == 'A' || target.classList.contains('sticker') || target.classList.contains('noelshack-link__thumb')) {
     return
   }
-  $(this).toggleClass('spoil--revealed')
+  this.classList.toggle('spoil--revealed')
 }
 
 function postMessage(event) {
