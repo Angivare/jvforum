@@ -1,37 +1,38 @@
-/* InstantClick 3.1.0 | (C) 2014-2015 Alexandre Dieulot | http://instantclick.io/license */
+/* InstantClick 3.1.0 | (C) 2014-2016 Alexandre Dieulot | http://instantclick.io/license */
 
 var instantClick
   , InstantClick = instantClick = function(document, location, $userAgent) {
   // Internal variables
-  var $isChromeForIOS = $userAgent.indexOf(' CriOS/') > -1
-    , $currentLocationWithoutHash
+  var $currentLocationWithoutHash
     , $urlToPreload
     , $preloadTimer
     , $lastTouchTimestamp
     , $hasBeenInitialized
+    , $touchEndedWithoutClickTimer
 
   // Preloading-related variables
     , $history = {}
     , $xhr
     , $url = false
     , $title = false
-    , $mustRedirect = false
+    , $isContentTypeNotHTML
+    , $areTrackedAssetsDifferent
     , $body = false
-    , $timing = {}
+    , $lastDisplayTimestamp = 0
     , $isPreloading = false
     , $isWaitingForCompletion = false
     , $trackedAssets = []
 
   // Variables defined by public functions
     , $preloadOnMousedown
-    , $delayBeforePreload
+    , $delayBeforePreload = 65
     , $eventsCallbacks = {
-        fetch: [],
+        preload: [],
         receive: [],
         wait: [],
         change: [],
-        exit: [],
-        restore: []
+        restore: [],
+        exit: []
       }
     , $currentPageTimers = []
     , $currentPageXhrs = []
@@ -42,131 +43,159 @@ var instantClick
 
   function removeHash(url) {
     var index = url.indexOf('#')
-    if (index < 0) {
+    if (index == -1) {
       return url
     }
     return url.substr(0, index)
   }
 
-  function getLinkTarget(target) {
-    while (target && target.nodeName != 'A') {
-      target = target.parentNode
+  function getParentLinkElement(element) {
+    while (element && element.nodeName != 'A') {
+      element = element.parentNode
     }
-    return target
+    // `element` will be null if no link element is found
+    return element
   }
 
-  function isBlacklisted(elem) {
+  function isBlacklisted(element) {
     do {
-      if (!elem.hasAttribute) { // Parent of <html>
+      if (!element.hasAttribute) { // Parent of <html>
         break
       }
-      if (elem.hasAttribute('data-instant')) {
+      if (element.hasAttribute('data-instant')) {
         return false
       }
-      if (elem.hasAttribute('data-no-instant')) {
+      if (element.hasAttribute('data-no-instant')) {
         return true
       }
     }
-    while (elem = elem.parentNode)
+    while (element = element.parentNode)
     return false
   }
 
-  function isPreloadable(a) {
+  function isPreloadable(linkElement) {
     var domain = location.protocol + '//' + location.host
 
-    if (a.target // target="_blank" etc.
-        || a.hasAttribute('download')
-        || a.href.indexOf(domain + '/') != 0 // Another domain, or no href attribute
-        || (a.href.indexOf('#') > -1
-            && removeHash(a.href) == $currentLocationWithoutHash) // Anchor
-        || isBlacklisted(a)
+    if (linkElement.target // target="_blank" etc.
+        || linkElement.hasAttribute('download')
+        || linkElement.href.indexOf(domain + '/') != 0 // Another domain, or no href attribute
+        || (linkElement.href.indexOf('#') > -1
+            && removeHash(linkElement.href) == $currentLocationWithoutHash) // Anchor
+        || isBlacklisted(linkElement)
        ) {
       return false
     }
     return true
   }
 
-  function triggerPageEvent(eventType, arg1, arg2, arg3) {
-    var returnValue = false
+  function triggerPageEvent(eventType) {
+    var argumentsToApply = Array.prototype.slice.call(arguments, 1)
+      , returnValue = false
     for (var i = 0; i < $eventsCallbacks[eventType].length; i++) {
       if (eventType == 'receive') {
-        var altered = $eventsCallbacks[eventType][i](arg1, arg2, arg3)
+        var altered = $eventsCallbacks[eventType][i].apply(window, argumentsToApply)
         if (altered) {
-          /* Update args for the next iteration of the loop. */
+          /* Update arguments for the next iteration of the loop. */
           if ('body' in altered) {
-            arg2 = altered.body
+            argumentsToApply[1] = altered.body
           }
           if ('title' in altered) {
-            arg3 = altered.title
+            argumentsToApply[2] = altered.title
           }
 
           returnValue = altered
         }
       }
       else {
-        $eventsCallbacks[eventType][i](arg1, arg2, arg3)
+        $eventsCallbacks[eventType][i].apply(window, argumentsToApply)
       }
     }
     return returnValue
   }
 
-  function changePage(title, body, newUrl, scrollY, pop) {
+  function changePage(title, body, urlToPush, scrollPosition) {
+    killTimers()
+    killXhrs()
+
     document.documentElement.replaceChild(body, document.body)
     /* We cannot just use `document.body = doc.body`, it causes Safari (tested
        5.1, 6.0 and Mobile 7.0) to execute script tags directly.
     */
 
-    killTimers()
-    killXhrs()
+    document.title = title
 
-    if (newUrl) {
-      if (newUrl != location.href) {
-        history.pushState(null, null, newUrl)
-      }
+    if (urlToPush) {
+      if (urlToPush != location.href) {
+        history.pushState(null, null, urlToPush)
 
-      var hashIndex = newUrl.indexOf('#')
-        , hashElem = hashIndex > -1
-                     && document.getElementById(newUrl.substr(hashIndex + 1))
-        , offset = 0
-
-      if (hashElem) {
-        while (hashElem.offsetParent) {
-          offset += hashElem.offsetTop
-
-          hashElem = hashElem.offsetParent
+        if ($userAgent.indexOf(' CriOS/') > -1) {
+          /* Chrome for iOS:
+           *
+           * 1. Removes title in tab on pushState, so it needs to be set after.
+           *
+           * 2. Will not set the title if it's identical after trimming, so we
+           *    add a non-breaking space.
+           */
+          if (document.title == title) {
+            document.title = title + String.fromCharCode(160)
+          }
+          else {
+            document.title = title
+          }
         }
       }
-      scrollTo(0, offset)
 
-      $currentLocationWithoutHash = removeHash(newUrl)
+      var hashIndex = urlToPush.indexOf('#')
+        , offsetElement = hashIndex > -1
+                     && document.getElementById(urlToPush.substr(hashIndex + 1))
+        , offset = 0
+
+      if (offsetElement) {
+        while (offsetElement.offsetParent) {
+          offset += offsetElement.offsetTop
+
+          offsetElement = offsetElement.offsetParent
+        }
+      }
+      if ('requestAnimationFrame' in window) {
+        /* Safari on macOS doesn't immediately visually change the page on
+         * `document.documentElement.replaceChild`, so if `scrollTo` is called
+         * without `requestAnimationFrame` it often scrolls before the page
+         * is displayed.
+         */
+        requestAnimationFrame(function() {
+          scrollTo(0, offset)
+        })
+      }
+      else {
+        scrollTo(0, offset)
+        /* Safari on macOS scrolls before the page is visually changed, but
+         * adding `requestAnimationFrame` doesn't fix it in this case. */
+      }
+
+      $currentLocationWithoutHash = removeHash(urlToPush)
+
+      instantanize(false)
+
+      triggerPageEvent('change', false)
     }
     else {
-      scrollTo(0, scrollY)
-    }
-
-    if ($isChromeForIOS && document.title == title) {
-      /* Chrome for iOS:
-       *
-       * 1. Removes title on pushState, so the title needs to be set after.
-       *
-       * 2. Will not set the title if it's identical when trimmed, so
-       *    appending a space won't do; but a non-breaking space works.
+      /* On popstate, browsers scroll by themselves, but at least Firefox
+       * scrolls BEFORE popstate is fired and thus before we can replace the
+       * page. If the page before popstate is too short the user won't be
+       * scrolled at the right position as a result. We need to scroll again.
        */
-      document.title = title + String.fromCharCode(160)
-    }
-    else {
-      document.title = title
-    }
+      scrollTo(0, scrollPosition)
 
-    instantanize()
-    if (pop) {
+      /* iOS's gesture to go back by swiping from the left edge of the screen
+       * will start a preloading if the user touches a link, it needs to be
+       * cancelled otherwise the page behind the touched link will be
+       * displayed.
+       */
       $xhr.abort()
       setPreloadingAsHalted()
 
       triggerPageEvent('restore')
-    }
-    else {
-      triggerPageEvent('change', false)
     }
   }
 
@@ -198,92 +227,130 @@ var instantClick
     $currentPageXhrs = []
   }
 
+  function handleTouchendWithoutClick() {
+    $xhr.abort()
+    setPreloadingAsHalted()
+  }
+
 
   ////////// EVENT LISTENERS //////////
 
 
-  function mousedownListener(e) {
-    if ($lastTouchTimestamp > (+new Date - 500)) {
-      return // Otherwise, click doesn't fire
-    }
+  function mousedownListener(event) {
+    var linkElement = getParentLinkElement(event.target)
 
-    var a = getLinkTarget(e.target)
-
-    if (!a || !isPreloadable(a)) {
+    if (!linkElement || !isPreloadable(linkElement)) {
       return
     }
 
-    preload(a.href)
+    preload(linkElement.href)
   }
 
-  function mouseoverListener(e) {
+  function mouseoverListener(event) {
     if ($lastTouchTimestamp > (+new Date - 500)) {
-      return // Otherwise, click doesn't fire
-    }
-
-    var a = getLinkTarget(e.target)
-
-    if (!a || !isPreloadable(a)) {
+      /* On a touch device, if the content of the page change on mouseover
+       * click is never fired and the user will need to tap a second time.
+       * https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html#//apple_ref/doc/uid/TP40006511-SW4
+       *
+       * Content change could happen in the `preload` event, so we stop there.
+       */
       return
     }
 
-    a.addEventListener('mouseout', mouseoutListener)
+    if (+new Date - $lastDisplayTimestamp < 100) {
+      /* After a page is displayed, if the user's cursor happens to be above
+         a link a mouseover event will be in most browsers triggered
+         automatically, and in other browsers it will be triggered when the
+         user moves his mouse by 1px.
 
-    if (!$delayBeforePreload) {
-      preload(a.href)
+         Here are the behavior I noticed, all on Windows:
+         - Safari 5.1: auto-triggers after 0 ms
+         - IE 11: auto-triggers after 30-80 ms (depends on page's size?)
+         - Firefox: auto-triggers after 10 ms
+         - Opera 18: auto-triggers after 10 ms
+
+         - Chrome: triggers when cursor moved
+         - Opera 12.16: triggers when cursor moved
+
+         To remedy to this, we do nothing if the last display occurred less
+         than 100 ms ago.
+      */
+
+      return
     }
-    else {
-      $urlToPreload = a.href
+
+    var linkElement = getParentLinkElement(event.target)
+
+    if (!linkElement) {
+      return
+    }
+
+    if (linkElement == getParentLinkElement(event.relatedTarget)) {
+      /* Happens when mouseout-ing and mouseover-ing child elements of the same link element */
+      return
+    }
+
+    if (!isPreloadable(linkElement)) {
+      return
+    }
+
+    linkElement.addEventListener('mouseout', mouseoutListener)
+
+    if (!$isWaitingForCompletion) {
+      $urlToPreload = linkElement.href
       $preloadTimer = setTimeout(preload, $delayBeforePreload)
     }
   }
 
-  function touchstartListener(e) {
+  function touchstartListener(event) {
     $lastTouchTimestamp = +new Date
 
-    var a = getLinkTarget(e.target)
+    var linkElement = getParentLinkElement(event.target)
 
-    if (!a || !isPreloadable(a)) {
+    if (!linkElement || !isPreloadable(linkElement)) {
       return
     }
 
-    if ($preloadOnMousedown) {
-      a.removeEventListener('mousedown', mousedownListener)
-    }
-    else {
-      a.removeEventListener('mouseover', mouseoverListener)
-    }
-    preload(a.href)
+    linkElement.addEventListener('touchend', touchendAndTouchcancelListener)
+    linkElement.addEventListener('touchcancel', touchendAndTouchcancelListener)
+
+    preload(linkElement.href)
   }
 
-  function clickListenerPrelude(e) {
+  function clickListenerPrelude() {
     /* Makes clickListener be fired after everyone else, so that we can respect
      * event.preventDefault.
      */
     document.body.addEventListener('click', clickListener)
   }
 
-  function clickListener(e) {
+  function clickListener(event) {
     document.body.removeEventListener('click', clickListener)
-    if (e.defaultPrevented) {
+
+    if ($touchEndedWithoutClickTimer) {
+      clearTimeout($touchEndedWithoutClickTimer)
+      $touchEndedWithoutClickTimer = false
+    }
+
+    if (event.defaultPrevented) {
       return
     }
 
-    var a = getLinkTarget(e.target)
+    var linkElement = getParentLinkElement(event.target)
 
-    if (!a || !isPreloadable(a)) {
+    if (!linkElement || !isPreloadable(linkElement)) {
       return
     }
 
-    if (e.which > 1 || e.metaKey || e.ctrlKey) { // Opening in new tab
+    if (event.which > 1 || event.metaKey || event.ctrlKey) { // Opening in new tab
       return
     }
-    e.preventDefault()
-    display(a.href)
+    event.preventDefault()
+    display(linkElement.href)
   }
 
-  function mouseoutListener(e) {
-    if (getLinkTarget(e.target) == getLinkTarget(e.relatedTarget)) {
+  function mouseoutListener(event) {
+    if (getParentLinkElement(event.target) == getParentLinkElement(event.relatedTarget)) {
       /* Happens when mouseout-ing and mouseover-ing child elements of the same link element,
          we don't want to stop preloading then. */
       return
@@ -298,72 +365,90 @@ var instantClick
     if (!$isPreloading || $isWaitingForCompletion) {
       return
     }
+
     $xhr.abort()
     setPreloadingAsHalted()
   }
 
+  function touchendAndTouchcancelListener(event) {
+    if (!$isPreloading || $isWaitingForCompletion) {
+      return
+    }
+
+    $touchEndedWithoutClickTimer = setTimeout(handleTouchendWithoutClick, 500)
+  }
+
   function readystatechangeListener() {
+    if ($xhr.readyState == 2) { // headers received
+      var contentType = $xhr.getResponseHeader('Content-Type')
+      if (!contentType || !/^text\/html/i.test(contentType)) {
+        $isContentTypeNotHTML = true
+      }
+    }
+
     if ($xhr.readyState < 4) {
       return
     }
+
     if ($xhr.status == 0) {
-      /* Request timeouted (timeout event), failed (error event) or
-        aborted (abort event)
-      */
+      /* Request error/timeout/abort */
+      $gotANetworkError = true
       if ($isWaitingForCompletion) {
-        triggerPageEvent('exit', $url, 'network problem')
+        triggerPageEvent('exit', $url, 'network error')
         location.href = $url
       }
       return
     }
 
-    $timing.ready = +new Date - $timing.start
-
-    if ($xhr.getResponseHeader('Content-Type').match(/\/(x|ht|xht)ml/)) {
-      var doc = document.implementation.createHTMLDocument('')
-      doc.documentElement.innerHTML = removeNoscriptTags($xhr.responseText)
-      $title = doc.title
-      $body = doc.body
-
-      var alteredOnReceive = triggerPageEvent('receive', $url, $body, $title)
-      if (alteredOnReceive) {
-        if ('body' in alteredOnReceive) {
-          $body = alteredOnReceive.body
-        }
-        if ('title' in alteredOnReceive) {
-          $title = alteredOnReceive.title
-        }
+    if ($isContentTypeNotHTML) {
+      if ($isWaitingForCompletion) {
+        triggerPageEvent('exit', $url, 'non-html content-type')
+        location.href = $url
       }
+      return
+    }
 
-      var urlWithoutHash = removeHash($url)
-      $history[urlWithoutHash] = {
-        body: $body,
-        title: $title,
-        scrollY: urlWithoutHash in $history ? $history[urlWithoutHash].scrollY : 0
+    var doc = document.implementation.createHTMLDocument('')
+    doc.documentElement.innerHTML = removeNoscriptTags($xhr.responseText)
+    $title = doc.title
+    $body = doc.body
+
+    var alteredOnReceive = triggerPageEvent('receive', $url, $body, $title)
+    if (alteredOnReceive) {
+      if ('body' in alteredOnReceive) {
+        $body = alteredOnReceive.body
       }
-
-      var elems = doc.head.children
-        , found = 0
-        , elem
-        , data
-
-      for (var i = 0; i < elems.length; i++) {
-        elem = elems[i]
-        if (elem.hasAttribute('data-instant-track')) {
-          data = elem.getAttribute('href') || elem.getAttribute('src') || elem.innerHTML
-          for (var j = 0; j < $trackedAssets.length; j++) {
-            if ($trackedAssets[j] == data) {
-              found++
-            }
-          }
-        }
-      }
-      if (found != $trackedAssets.length) {
-        $mustRedirect = true // Assets have changed
+      if ('title' in alteredOnReceive) {
+        $title = alteredOnReceive.title
       }
     }
-    else {
-      $mustRedirect = true // Not an HTML document
+
+    var urlWithoutHash = removeHash($url)
+    $history[urlWithoutHash] = {
+      body: $body,
+      title: $title,
+      scrollPosition: urlWithoutHash in $history ? $history[urlWithoutHash].scrollPosition : 0
+    }
+
+    var elements = doc.head.children
+      , found = 0
+      , element
+      , data
+
+    for (var i = 0; i < elements.length; i++) {
+      element = elements[i]
+      if (!element.hasAttribute('data-instant-track')) {
+        continue
+      }
+      data = element.getAttribute('href') || element.getAttribute('src') || element.textContent
+      for (var j = 0; j < $trackedAssets.length; j++) {
+        if ($trackedAssets[j] == data) {
+          found++
+        }
+      }
+    }
+    if (found != $trackedAssets.length) {
+      $areTrackedAssetsDifferent = true
     }
 
     if ($isWaitingForCompletion) {
@@ -376,6 +461,11 @@ var instantClick
     var loc = removeHash(location.href)
     if (loc == $currentLocationWithoutHash) {
       return
+    }
+
+    if ($isWaitingForCompletion) {
+      setPreloadingAsHalted()
+      $xhr.abort()
     }
 
     if (!(loc in $history)) {
@@ -394,9 +484,9 @@ var instantClick
       return
     }
 
-    $history[$currentLocationWithoutHash].scrollY = pageYOffset
+    $history[$currentLocationWithoutHash].scrollPosition = pageYOffset
     $currentLocationWithoutHash = loc
-    changePage($history[loc].title, $history[loc].body, false, $history[loc].scrollY, true)
+    changePage($history[loc].title, $history[loc].body, false, $history[loc].scrollPosition)
   }
 
 
@@ -414,70 +504,46 @@ var instantClick
     document.body.addEventListener('click', clickListenerPrelude, true)
 
     if (!isInitializing) {
-      var scriptsInDOM = document.body.getElementsByTagName('script')
-        , scriptsToCopy = []
-        , script
-        , copy
+      var scriptElementsInDOM = document.body.getElementsByTagName('script')
+        , scriptElementsToCopy = []
+        , originalElement
+        , copyElement
         , parentNode
         , nextSibling
         , i
 
-      /* `scriptsInDOM` will change during the copy of scripts if a script add
-         or delete scripts, so we need to put scripts in an array to loop
-         through them correctly.
+      /* `scriptElementsInDOM` will change during the copy of scripts if
+         a script add or delete script elements, so we need to put script
+         elements in an array to loop through them correctly.
       */
-      for (i = 0; i < scriptsInDOM.length; i++) {
-        scriptsToCopy.push(scriptsInDOM[i])
+      for (i = 0; i < scriptElementsInDOM.length; i++) {
+        scriptElementsToCopy.push(scriptElementsInDOM[i])
       }
 
-      for (i = 0; i < scriptsToCopy.length; i++) {
-        script = scriptsToCopy[i]
-        if (!script) { // Might have disappeared, see previous comment
+      for (i = 0; i < scriptElementsToCopy.length; i++) {
+        originalElement = scriptElementsToCopy[i]
+        if (!originalElement) { // Might have disappeared, see previous comment
           continue
         }
-        if (script.hasAttribute('data-no-instant')) {
+        if (originalElement.hasAttribute('data-no-instant')) {
           continue
         }
-        copy = document.createElement('script')
-        if (script.src) {
-          copy.src = script.src
+
+        copyElement = document.createElement('script')
+        for (var j = 0; j < originalElement.attributes.length; j++) {
+          copyElement.setAttribute(originalElement.attributes[j].name, originalElement.attributes[j].value)
         }
-        if (script.innerHTML) {
-          copy.innerHTML = script.innerHTML
-        }
-        parentNode = script.parentNode
-        nextSibling = script.nextSibling
-        parentNode.removeChild(script)
-        parentNode.insertBefore(copy, nextSibling)
+        copyElement.textContent = originalElement.textContent
+
+        parentNode = originalElement.parentNode
+        nextSibling = originalElement.nextSibling
+        parentNode.removeChild(originalElement)
+        parentNode.insertBefore(copyElement, nextSibling)
       }
     }
   }
 
-  function preload(url, calledOnDisplay) {
-    if (!$preloadOnMousedown
-        && 'display' in $timing
-        && +new Date - ($timing.start + $timing.display) < 100
-        && !calledOnDisplay) {
-      /* After a page is displayed, if the user's cursor happens to be above
-         a link a mouseover event will be in most browsers triggered
-         automatically, and in other browsers it will be triggered when the
-         user moves his mouse by 1px.
-
-         Here are the behavior I noticed, all on Windows:
-         - Safari 5.1: auto-triggers after 0 ms
-         - IE 11: auto-triggers after 30-80 ms (depends on page's size?)
-         - Firefox: auto-triggers after 10 ms
-         - Opera 18: auto-triggers after 10 ms
-
-         - Chrome: triggers when cursor moved
-         - Opera 12.16: triggers when cursor moved
-
-         To remedy to this, we do not start preloading if last display
-         occurred less than 100 ms ago.
-      */
-
-      return
-    }
+  function preload(url) {
     if ($preloadTimer) {
       clearTimeout($preloadTimer)
       $preloadTimer = false
@@ -495,20 +561,17 @@ var instantClick
 
     $url = url
     $body = false
-    $mustRedirect = false
-    $timing = {
-      start: +new Date
-    }
-    triggerPageEvent('fetch')
+    $isContentTypeNotHTML = false
+    $gotANetworkError = false
+    $areTrackedAssetsDifferent = false
+    triggerPageEvent('preload')
     $xhr.open('GET', url)
     $xhr.timeout = 90000 // Must be set after `open()` with IE
     $xhr.send()
   }
 
   function display(url) {
-    if (!('display' in $timing)) {
-      $timing.display = +new Date - $timing.start
-    }
+    $lastDisplayTimestamp = +new Date
     if ($preloadTimer || !$isPreloading) {
       /* $preloadTimer:
          Happens when there's a delay before preloading and that delay
@@ -517,11 +580,10 @@ var instantClick
          !$isPreloading:
          A link has been clicked, and preloading hasn't been initiated.
          It happens with touch devices when a user taps *near* the link,
-         Safari/Chrome will trigger mousedown, mouseover, click (and others),
-         but when that happens we ignore mousedown/mouseover (otherwise click
-         doesn't fire). Maybe there's a way to make the click event fire, but
-         that's not worth it as mousedown/over happen just 1ms before click
-         in this situation.
+         causing `touchstart` not to be fired. Safari/Chrome will trigger
+         `mouseover`, `mousedown`, `click` (and others), but when that happens
+         we do nothing in `mouseover` as it may cause `click` not to fire (see
+         comment in `mouseoverListener`).
 
          It also happens when a user uses his keyboard to navigate (with Tab
          and Return), and possibly in other non-mainstream ways to navigate
@@ -533,12 +595,12 @@ var instantClick
            kicks in while another link is already preloading.
         */
 
-        triggerPageEvent('exit', url, '???')
+        triggerPageEvent('exit', url, 'click occured while preloading planned')
         location.href = url
         return
       }
 
-      preload(url, true)
+      preload(url)
       triggerPageEvent('wait')
       $isWaitingForCompletion = true // Must be set *after* calling `preload`
       return
@@ -555,8 +617,18 @@ var instantClick
       location.href = url
       return
     }
-    if ($mustRedirect) {
-      triggerPageEvent('exit', $url, 'not html or changed assets')
+    if ($isContentTypeNotHTML) {
+      triggerPageEvent('exit', $url, 'non-html content-type')
+      location.href = $url
+      return
+    }
+    if ($gotANetworkError) {
+      triggerPageEvent('exit', $url, 'network error')
+      location.href = $url
+      return
+    }
+    if ($areTrackedAssetsDifferent) {
+      triggerPageEvent('exit', $url, 'different assets')
       location.href = $url
       return
     }
@@ -565,7 +637,7 @@ var instantClick
       $isWaitingForCompletion = true
       return
     }
-    $history[$currentLocationWithoutHash].scrollY = pageYOffset
+    $history[$currentLocationWithoutHash].scrollPosition = pageYOffset
     setPreloadingAsHalted()
     changePage($title, $body, $url)
   }
@@ -573,47 +645,55 @@ var instantClick
 
   ////////// PUBLIC VARIABLE AND FUNCTIONS //////////
 
-  var supported = 'pushState' in history
-                  && (!$userAgent.match('Android') || $userAgent.match('Chrome/'))
-                  && location.protocol != "file:"
+  var supported = false
+  if ('pushState' in history
+      && location.protocol != "file:") {
+    supported = true
 
-  /* The (sad) state of Android's AOSP browsers:
+    var indexOfAndroid = $userAgent.indexOf('Android ')
+    if (indexOfAndroid > -1) {
+      /* The stock browser in Android 4.0.3 through 4.3.1 supports pushState,
+         though it doesn't update the address bar.
 
-     2.3.7: pushState appears to work correctly, but
-            `doc.documentElement.innerHTML = body` is buggy.
-            Update: InstantClick doesn't use that anymore, but it may
-            fail where 3.0 do, this needs testing again.
+         More problematic is that it has a bug on `popstate` when coming back
+         from a page not displayed through InstantClick: `location.href` is
+         undefined and `location.reload()` doesn't work.
 
-     3.0:   pushState appears to work correctly (though the address bar is
-            only updated on focus), but
-            `document.documentElement.replaceChild(doc.body, document.body)`
-            throws DOMException: WRONG_DOCUMENT_ERR.
+         Android < 4.4 is therefore blacklisted, unless it's a browser known
+         not to have that latter bug.
+      */
 
-     4.0.2: Doesn't support pushState.
-
-     4.0.4,
-     4.1.1,
-     4.2,
-     4.3:   Claims support for pushState, but doesn't update the address bar.
-
-     4.4:   Works correctly. Claims to be 'Chrome/30.0.0.0'.
-
-     All androids tested with Android SDK's Emulator.
-     Version numbers are from the browser's user agent.
-
-     Because of this mess, the only whitelisted browser on Android is Chrome.
-  */
+      var androidVersion = parseFloat($userAgent.substr(indexOfAndroid + 'Android '.length))
+      if (androidVersion < 4.4) {
+        supported = false
+        if (androidVersion >= 4) {
+          var whitelistedBrowsersUserAgentsOnAndroid4 = [
+            / Chrome\//, // Chrome, Opera, Puffin, QQ, Yandex
+            / UCBrowser\//,
+            / Firefox\//,
+            / Windows Phone /, // WP 8.1+ pretends to be Android
+          ]
+          for (var i = 0; i < whitelistedBrowsersUserAgentsOnAndroid4.length; i++) {
+            if (whitelistedBrowsersUserAgentsOnAndroid4[i].test($userAgent)) {
+              supported = true
+              break
+            }
+          }
+        }
+      }
+    }
+  }
 
   function init(preloadingMode) {
-    if ($hasBeenInitialized) {
-      return
-    }
-    $hasBeenInitialized = true
-
     if (!supported) {
       triggerPageEvent('change', true)
       return
     }
+
+    if ($hasBeenInitialized) {
+      return
+    }
+    $hasBeenInitialized = true
 
     if (preloadingMode == 'mousedown') {
       $preloadOnMousedown = true
@@ -626,17 +706,17 @@ var instantClick
     $history[$currentLocationWithoutHash] = {
       body: document.body,
       title: document.title,
-      scrollY: pageYOffset
+      scrollPosition: pageYOffset
     }
 
-    var elems = document.head.children
-      , elem
+    var elements = document.head.children
+      , element
       , data
-    for (var i = 0; i < elems.length; i++) {
-      elem = elems[i]
-      if (elem.hasAttribute('data-instant-track')) {
-        data = elem.getAttribute('href') || elem.getAttribute('src') || elem.innerHTML
-        /* We can't use just `elem.href` and `elem.src` because we can't
+    for (var i = 0; i < elements.length; i++) {
+      element = elements[i]
+      if (element.hasAttribute('data-instant-track')) {
+        data = element.getAttribute('href') || element.getAttribute('src') || element.textContent
+        /* We can't use just `element.href` and `element.src` because we can't
            retrieve `href`s and `src`s from the Ajax response.
         */
         $trackedAssets.push(data)
@@ -657,7 +737,7 @@ var instantClick
     $eventsCallbacks[eventType].push(callback)
 
     if ($hasBeenInitialized && eventType == 'change') {
-      callback(true)
+      callback(!$lastDisplayTimestamp)
     }
   }
 
@@ -674,7 +754,11 @@ var instantClick
   }
 
   function xhr(xhr) {
+    if (!xhr) {
+      xhr = new XMLHttpRequest()
+    }
     $currentPageXhrs.push(xhr)
+    return xhr
   }
 
 
