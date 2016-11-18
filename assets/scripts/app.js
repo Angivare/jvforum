@@ -8,8 +8,12 @@ let isFormReadyToPost = false
   , isSliderSliding = false
   , sliderTopOffset = 0
 
-function qs(selectors) {
-  return document.querySelector(selectors)
+function qs(selectors, callback) {
+  let element = document.querySelector(selectors)
+  if (element && callback) {
+    return callback(element)
+  }
+  return element
 }
 
 function qsa(selectors, callback) {
@@ -343,7 +347,9 @@ if (googleAnalyticsId) {
 
 instantClick.on('change', function() {
   $('.js-form-post').submit(postMessage)
-  qs('.js-form-post .form__textarea').addEventListener('input', readyFormToPost)
+  qs('.js-form-post .form__textarea', (element) => {
+    element.addEventListener('input', readyFormToPost)
+  })
   isFormReadyToPost = false
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
