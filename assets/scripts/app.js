@@ -137,15 +137,15 @@ function postMessage(event) {
 
 function readyFormToPost() {
   if (isFormReadyToPost) {
-    if (!$('.form__textarea').val().trim()) {
+    if (!qs('.form__textarea').value.trim()) {
       isFormReadyToPost = false
-      $('.button-mobile-post__visible').removeClass('button-mobile-post__visible--ready-to-post')
+      qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--ready-to-post')
       return
     }
   }
 
-  if ($('.form__textarea').val().trim()) {
-    $('.button-mobile-post__visible').addClass('button-mobile-post__visible--ready-to-post')
+  if (qs('.form__textarea').value.trim()) {
+    qs('.button-mobile-post__visible').classList.add('button-mobile-post__visible--ready-to-post')
     isFormReadyToPost = true
   }
 }
@@ -328,7 +328,7 @@ if (googleAnalyticsId) {
 
 instantClick.on('change', function() {
   $('.js-form-post').submit(postMessage)
-  $('.js-form-post .form__textarea').on('input', readyFormToPost)
+  qs('.js-form-post .form__textarea').addEventListener('input', readyFormToPost)
   isFormReadyToPost = false
 
   $('.js-favorite-toggle, .js-quote').click(alertPlaceholder)
