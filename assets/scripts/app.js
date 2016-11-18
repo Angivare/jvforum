@@ -113,7 +113,7 @@ function readyFormToPost() {
   }
 }
 
-function startRefresh() {
+function startRefreshCycle() {
   let lastMessageAge = $('.message').last().data('age')
   if (lastMessageAge == undefined) { // No messages on the page due to a bug with JVC
     lastMessageAge = 0
