@@ -16,6 +16,24 @@ function qsa(selectors, callback) {
   ;[].forEach.call(document.querySelectorAll(selectors), callback)
 }
 
+function ajax(url, objectData, timeout) {
+  let data = [
+        `_csrf=${_csrf}`,
+      ]
+  for (let key in objectData) {
+    if (objectData.hasOwnProperty(key)) {
+      data.push(encodeURIComponent(key) + '=' + encodeURIComponent(objectData[key]))
+    }
+  }
+  data = data.join('&')
+
+  let xhr = instantClick.xhr()
+  xhr.open('POST', url)
+  xhr.timeout = timeout
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  xhr.send(data)
+}
+
 function setAsHavingTouch() {
   qs('html').classList.add('has-touch')
   hasTouch = true
@@ -219,13 +237,7 @@ function refresh() {
 }
 
 function syncFavorites() {
-  instantClick.xhr($.post({
-    url: '/ajax/syncFavorites',
-    data: {
-      _csrf: _csrf,
-    },
-    timeout: timeouts.syncFavorites,
-  }))
+  ajax('/ajax/syncFavorites', {}, timeouts.syncFavorites)
 }
 
 function setSliderTopOffset() {
