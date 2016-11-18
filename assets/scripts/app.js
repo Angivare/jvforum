@@ -271,53 +271,53 @@ function syncFavorites() {
   ajax('/ajax/syncFavorites', timeouts.syncFavorites)
 }
 
-function setSliderTopOffset() {
-  sliderTopOffset = $('.js-slider').offset().top - 15
-}
-
 function makeFavoritesSlideable() {
   if (screen.width < 1025) {
     return
   }
 
-  if (!$('.js-slider').length) {
+  if (!qs('.js-slider')) {
     return
   }
 
   setSliderTopOffset()
-  $(window).resize(setSliderTopOffset)
+  addEventListener('resize', setSliderTopOffset)
 
   adjustSliderWidth()
-  $(window).resize(adjustSliderWidth)
+  addEventListener('resize', adjustSliderWidth)
 
   makeFavoritesSlide()
-  $(window).scroll(makeFavoritesSlide)
-  $(window).resize(makeFavoritesSlide)
+  addEventListener('scroll', makeFavoritesSlide)
+  addEventListener('resize', makeFavoritesSlide)
+}
+
+function setSliderTopOffset() {
+  sliderTopOffset = qs('.js-slider').getBoundingClientRect().top + scrollY - 15
+}
+
+function adjustSliderWidth() {
+  // Because it doesn't inherit its width parent in fixed position
+  qs('.js-slider').style.width = qs('.menu.js-favorites-forums').offsetWidth + 'px'
 }
 
 function makeFavoritesSlide() {
   if (sliderTopOffset > 0 && scrollY > sliderTopOffset) {
     if (!isSliderSliding) {
-      $('.js-slider').addClass('sliding')
+      qs('.js-slider').classList.add('sliding')
       isSliderSliding = true
     }
   }
   else {
     if (isSliderSliding) {
-      $('.js-slider').removeClass('sliding')
+      qs('.js-slider').classList.remove('sliding')
       isSliderSliding = false
     }
   }
 }
 
-function adjustSliderWidth() {
-  // Parce que la taille ne dépend plus du parent en position fixed
-  $('.js-slider').css('width', $('.menu.js-favorites-forums').width())
-}
-
 function goToForm() {
   qs('.js-form-post .form__textarea').focus()
-  scrollTo(0, qs('.js-form-post').getBoundingClientRect().top + pageYOffset)
+  scrollTo(0, qs('.js-form-post').getBoundingClientRect().top + scrollY)
 }
 
 function toggleMobileMenu() {
