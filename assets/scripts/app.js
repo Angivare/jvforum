@@ -161,7 +161,15 @@ function refresh() {
   })
   .done(function(data, textStatus, jqXHR) {
     if (data.error) {
+      if (data.error == 'deleted' && numberOfPages) { // non-zero numberOfPages means we're not already on an error page
+        location.href = location.pathname
+      }
       return
+    }
+
+    if (numberOfPages == 0 && data.numberOfPages) {
+      // We're on an error page and there's no more error (such as a topic that's no longer deleted)
+      location.href = location.pathname
     }
 
     if ('newMessagesHTML' in data) {

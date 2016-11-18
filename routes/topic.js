@@ -152,6 +152,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
         if (error) {
           viewLocals.error = error
+          viewLocals.numberOfPages = 0
           res.send(renderView('topic', viewLocals))
           return
         }

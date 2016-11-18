@@ -403,6 +403,9 @@ router.post('/refresh', (req, res, next) => {
     let renderings = 0
     function sendJSONAfterRenderings() {
       renderings++
+      if (numberOfPages == 0) {
+        res.json(data)
+      }
       if (numberOfPages != content.numberOfPages && newMessages.length) {
         if (renderings == 2) {
           res.json(data)
