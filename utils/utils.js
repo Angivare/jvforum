@@ -1,5 +1,4 @@
 let entities = require('html-entities').Html5Entities
-  , stickersList = require('./stickersList')
   , stickers = require('./stickers')
   , db = require('./db')
 
@@ -94,8 +93,6 @@ function adaptMessageContent(content, id) {
 
   // Stickers
   content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, feeligoId) => {
-    let id = feeligoId // temp
-
     if (!(feeligoId in stickers.feeligoToJvf)) {
       return ''
     }
@@ -151,10 +148,16 @@ function adaptPostedMessage(message, hostname) {
     return `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${topicIdlegacyOrModern}-${page}-0-${indexForum}-0-${slug}.htm`
   })
 
-  for (let category in stickersList) {
-    for (let id in stickersList[category]) {
-      let {code} = stickersList[category][id]
-      message = message.replace(new RegExp(`:${code}:`, 'gi'), `[[sticker:p/${id}]]`)
+  if (message.match(/:[0-9]+:/)) {
+    message = message.replace(/:([0-9]+):/g, (all, jvfId) => `[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]`)
+  }
+
+  if (message.match(/:[a-z]/)) {
+    for (let legacyShortcut in stickers.legacyShortcuts) {
+      if (message.indexOf(`:${legacyShortcut}:`) > -1) {
+        let jvfId = stickers.legacyShortcuts[legacyShortcut]
+        message = message.replace(new RegExp(`:${legacyShortcut}:`, 'gi'), `[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]`)
+      }
     }
   }
 

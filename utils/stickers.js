@@ -25,7 +25,7 @@ db.query(`SELECT jvfId, feeligoId, packId FROM stickers ORDER BY jvfId`, null, (
   })
 })
 
-let oldShortcuts = {
+let legacyShortcuts = {
   'pose': 9,
   'prof': 10,
   'ananas': 12,
@@ -155,5 +155,5 @@ module.exports = {
   packFromId,
   feeligoToJvf,
   jvfToFeeligo,
-  oldShortcuts,
+  legacyShortcuts,
 }
