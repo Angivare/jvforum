@@ -1,5 +1,6 @@
 let entities = require('html-entities').Html5Entities
   , stickersList = require('./stickersList')
+  , stickers = require('./stickers')
   , db = require('./db')
 
 function adaptMessageContent(content, id) {
@@ -92,27 +93,15 @@ function adaptMessageContent(content, id) {
   content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.gif" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="//image.jeuxvideo.com/smileys_img/$1.gif" data-code="$2" title="$2" alt="$2">')
 
   // Stickers
-  content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, id) => {
-    let category = 'unknown'
-      , code = ''
-      , shortcut = `[[sticker:p/${id}]]`
-      , checksum = ''
+  content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, feeligoId) => {
+    let id = feeligoId // temp
 
-    loop:
-    for (let category_ in stickersList) {
-      for (let id_ in stickersList[category_]) {
-        let code_ = stickersList[category_][id_].code
-        if (id_ == id) {
-          category = category_
-          code = code_
-          shortcut = `:${code}:`
-          checksum = stickersList[category_][id_].checksum
-          break loop
-        }
-      }
+    if (!(feeligoId in stickers.feeligoToJvf)) {
+      return ''
     }
-
-    return `<img class="sticker sticker--${category}" src="/assets/images/stickers/140/${code}--${checksum}.png" data-sticker-id="${id}" data-code="${shortcut}" title="${shortcut}" alt="${shortcut}">`
+    let jvfId = stickers.feeligoToJvf[feeligoId]
+      , packId = stickers.packFromId[jvfId]
+    return `<img class="sticker sticker--pack-${packId}" src="/assets/stickers/v1/${jvfId}" data-sticker-id="${jvfId}" title=":${jvfId}:" alt=":${jvfId}:">`
   })
 
   // Show thumbnails for YouTube links

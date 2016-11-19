@@ -1889,10 +1889,15 @@ color: hsl(240, 8%, 27%);
   }
 }
 
-.sticker--duracell,
-.sticker--bud {
--webkit-filter: saturate(1.2);
-        filter: saturate(1.2);
+.sticker--pack-10 { /* Brice */
+  -webkit-filter: saturate(1);
+          filter: saturate(1);
+}
+
+.sticker--pack-12, /* Bud */
+.sticker--pack-13 { /* Duracell */
+  -webkit-filter: saturate(1.2);
+          filter: saturate(1.2);
 }
 
 .sticker--enlarged, .message__content-text > .sticker--enlarged {

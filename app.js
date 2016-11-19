@@ -7,6 +7,7 @@ let express = require('express')
   , http = require('http')
   , consolidate = require('consolidate')
   , csrf = require('csurf')
+  , stickers = require('./utils/stickers') // Loaded before the CPU intensive stuff to be ready as soon as the app is available
   , routesStaticFiles = require('./routes/staticFiles')
   , routesHomeLogin = require('./routes/home-login')
   , routesForum = require('./routes/forum')
