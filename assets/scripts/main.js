@@ -50,10 +50,18 @@ function ajax(url, timeout, objectData = {}, callback = () => {}) {
   xhr.send(data)
 }
 
-function stringToElement(string) {
+function stringToElements(string) {
   let template = document.createElement('template')
   template.innerHTML = string
-  return template.content.firstElementChild
+  let elements = template.content.children
+    , array = []
+  /* Putting it in an array allows loops. Otherwise if an element is appended
+   * it disappears and the loop index is broken.
+   */
+  for (let i = 0; i < elements.length; i++) {
+    array.push(elements[i])
+  }
+  return array
 }
 
 function setAsHavingTouch() {
@@ -218,7 +226,9 @@ function refresh() {
       }
 
       if ('newMessagesHTML' in response) {
-        qs('.messages-list').appendChild(stringToElement(response.newMessagesHTML))
+        for (let element of stringToElements(response.newMessagesHTML)) {
+          qs('.messages-list').appendChild(element)
+        }
       }
 
       for (let id in response.messages) {
