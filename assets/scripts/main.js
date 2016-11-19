@@ -302,7 +302,7 @@ function makeFavoritesSlideable() {
 }
 
 function setSliderTopOffset() {
-  sliderTopOffset = qs('.js-slider').getBoundingClientRect().top + scrollY - 15
+  sliderTopOffset = qs('.js-favorites-forums').getBoundingClientRect().bottom + scrollY
 }
 
 function adjustSliderWidth() {
