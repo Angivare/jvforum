@@ -2011,7 +2011,7 @@ body {
 }
 
 @media (MAX-width: 399px) {
-  .header__home-link--accompanied,
+  .header__home-link,
   .header__forum-link {
     padding: 10px 13px;
   }
