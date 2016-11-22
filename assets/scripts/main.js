@@ -375,6 +375,7 @@ function noteStickerAndGoBack(event) {
 }
 
 function setUpStickers() {
+  stickerPackWidth = undefined
   instantClick.addEventListener('resize', alignAllStickerPacks)
   alignAllStickerPacks()
 
