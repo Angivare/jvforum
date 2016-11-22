@@ -294,14 +294,14 @@ function makeFavoritesSlideable() {
   }
 
   setSliderTopOffset()
-  addEventListener('resize', setSliderTopOffset)
+  instantClick.addEventListener('resize', setSliderTopOffset)
 
   adjustSliderWidth()
-  addEventListener('resize', adjustSliderWidth)
+  instantClick.addEventListener('resize', adjustSliderWidth)
 
   makeFavoritesSlide()
-  addEventListener('scroll', makeFavoritesSlide)
-  addEventListener('resize', makeFavoritesSlide)
+  instantClick.addEventListener('scroll', makeFavoritesSlide)
+  instantClick.addEventListener('resize', makeFavoritesSlide)
 }
 
 function setSliderTopOffset() {
@@ -375,7 +375,7 @@ function noteStickerAndGoBack(event) {
 }
 
 function setUpStickers() {
-  addEventListener('resize', alignAllStickerPacks)
+  instantClick.addEventListener('resize', alignAllStickerPacks)
   alignAllStickerPacks()
 
   qsa('.stickers-pack__sticker', (element) => {
