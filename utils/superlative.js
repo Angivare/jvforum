@@ -1,5 +1,6 @@
 let superlatives = [
   'brillant',
+  'doux',
   'épique',
   'exceptionnel',
   'extraordinaire',
