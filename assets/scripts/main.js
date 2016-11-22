@@ -7,6 +7,8 @@ let isFormReadyToPost = false
   , messagesEvents = []
   , isSliderSliding = false
   , sliderTopOffset = 0
+  , stickerPackWidth
+  , stickerDemoWidth
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -335,6 +337,40 @@ function toggleMobileMenu() {
   qs('.menu-mobile__opener').classList.toggle('menu-mobile__opener--hidden')
   qs('.overlay').classList.toggle('overlay--shown')
   qs('.overlay').addEventListener('click', toggleMobileMenu)
+}
+
+function alignStickerPack(packElement) {
+  let stickersCount = packElement.children.length
+
+  let stickersPerLine = Math.trunc(stickerPackWidth / stickerDemoWidth)
+    , stickersCountOnLastLine = stickersCount % stickersPerLine
+
+  packElement.dataset.stickersCountOnLastLine = stickersCountOnLastLine
+  if (stickersCountOnLastLine == 0) {
+    packElement.lastElementChild.style.marginRight = `0`
+    return
+  }
+
+  let marginUsedOnFullLines = stickerPackWidth % stickerDemoWidth
+    , marginUsedOnLastLine = stickersCountOnLastLine * (marginUsedOnFullLines / stickersPerLine)
+
+  let marginRight = stickerPackWidth - (stickersCountOnLastLine * stickerDemoWidth) - marginUsedOnLastLine
+  packElement.lastElementChild.style.marginRight = `${marginRight}px`
+}
+
+function alignAllStickerPacks() {
+  let newStickerPackWidth = qs('.stickers-pack').getBoundingClientRect().width
+  if (newStickerPackWidth == stickerPackWidth) {
+    return
+  }
+  stickerPackWidth = newStickerPackWidth
+  stickerDemoWidth = qs('.stickers-pack__sticker').getBoundingClientRect().width
+  qsa('.stickers-pack', alignStickerPack)
+}
+
+function launchStickerAlignment() {
+  addEventListener('resize', alignAllStickerPacks)
+  alignAllStickerPacks()
 }
 
 instantClick.init()

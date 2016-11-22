@@ -1877,6 +1877,7 @@ color: hsl(240, 8%, 27%);
   --form-input-focused-inner-shadow-opacity: .3;
   --form-input-focused-inner-shadow-blur-radius: 5px;
   --form-input-border-color: hsl(0, 0%, 0%);
+  --stickers-pack-delimiter-color: hsla(0, 0%, 100%, .03);
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
@@ -2056,4 +2057,46 @@ a {
 
 .quote > p {
   margin: .6em 0;
+}
+
+.stickers-list {
+  --stickers-list-side-padding: 8px;
+  --stickers-per-line: 4;
+  --sticker-demo-size: calc((100vw - (var(--stickers-list-side-padding) * 2)) / var(--stickers-per-line));
+  padding: 0 var(--stickers-list-side-padding);
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.stickers-pack {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: space-around;
+  padding: 8px 0;
+  border-top: 1px solid var(--stickers-pack-delimiter-color);
+}
+
+.stickers-pack__sticker {
+  width: var(--sticker-demo-size);
+  height: var(--sticker-demo-size);
+  padding: 2px;
+  vertical-align: middle;
+}
+
+@media (min-width: 360px) {
+  .stickers-list {
+    --stickers-per-line: 5;
+  }
+}
+
+@media (min-width: 400px) {
+  .stickers-list {
+    --sticker-demo-size: 72px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .stickers-list {
+    --stickers-list-side-padding: 0;
+  }
 }
