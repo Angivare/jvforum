@@ -429,6 +429,7 @@ instantClick.on('change', function() {
     element.addEventListener('input', readyFormToPost)
   })
   isFormReadyToPost = false
+  qs('.form__textarea', readyFormToPost) // The form can be filled on page change if it's after a refresh
 
   qsa('.js-favorite-toggle, .js-quote', (element) => {
     element.addEventListener('click', alertPlaceholder)
