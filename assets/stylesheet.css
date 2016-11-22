@@ -1,10 +1,5 @@
 /* =BASE */
 
-a {
-  color: hsl(190, 80%, 70%);
-  text-decoration: none;
-}
-
 h1, h2, h3 {
   margin: 0;
 }
@@ -167,17 +162,10 @@ h1, h2, h3 {
 
 .menu {
   margin: 15px 10px;
-  background: hsl(240, 8%, 27%);
+  background: var(--card-background);
   padding: 2px 0;
   border-radius: 3px;
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .1),
-              0 2px 5px hsla(0, 0%, 0%, .35);
-}
-
-.aside .menu {
-  background: hsl(240, 8%, 23%);
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .125),
-              0 2px 5px hsla(0, 0%, 0%, .25);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
 }
 
 @media (min-width: 1025px) {
@@ -192,12 +180,7 @@ h1, h2, h3 {
   text-shadow: 0 1px 1px hsl(240, 8%, 0%);
   font-weight: bold;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   padding: 13px 10px;
-}
-
-.aside .menu__item {
-  color: hsl(240, 8%, 80%);
 }
 
 @media (min-width: 1025px) {
@@ -207,17 +190,7 @@ h1, h2, h3 {
 }
 
 .menu__item + .menu__item {
-  border-top: 1px solid hsl(240, 8%, 22%);
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .06);
-}
-
-.aside .menu__item + .menu__item {
-  border-top: 1px solid hsl(240, 8%, 17%);
-}
-
-.menu__item:hover {
-  background: hsl(240, 8%, 40%);
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .12);
+  border-top: 1px solid hsla(0, 100%, 100%, var(--card-delimiter-opacity));
 }
 
 .menu__item--blank-state {
@@ -226,10 +199,6 @@ h1, h2, h3 {
   font-size: 12px;
   color: hsl(214, 27%, 7%);
   cursor: default;
-}
-
-.menu__item--blank-state:hover {
-  background: transparent;
 }
 
 /* =BUTTONS */
@@ -248,7 +217,7 @@ h1, h2, h3 {
   background: transparent; /* text input */
   outline: none;
   white-space: nowrap;
-  color: hsl(190, 80%, 70%);
+  color: var(--link-color);
 }
 
 
@@ -324,7 +293,7 @@ h1, h2, h3 {
 
 
 .button-link {
-  color: hsl(190, 80%, 70%);
+  color: var(--link-color);
   font-weight: bold;
   cursor: pointer;
   padding: 5px;
@@ -382,41 +351,17 @@ h1, h2, h3 {
 
 .form {
   width: 100%;
-  background: hsl(240, 8%, 20%);
+  background: var(--card-background);
   padding: 8px;
   position: relative;
   z-index: 1; /* For FAB */
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-              0 2px 10px hsla(0, 0%, 0%, .2);
-}
-
-.form--focused {
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-              0 2px 15px hsla(0, 0%, 0%, .3);
-}
-
-.form--touches-bottom {
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-              0 -2px 10px hsla(0, 0%, 0%, .2);
-}
-
-.form--touches-bottom.form--focused {
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-              0 -2px 15px hsla(0, 0%, 0%, .3);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
 }
 
 @media (min-width: 1025px) {
   .form {
     border-radius: 5px;
     padding: 11px 13px;
-    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-                0 2px 10px hsla(0, 0%, 0%, .2);
-  }
-
-  .form--focused,
-  .form--touches-bottom.form--focused {
-    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
-                0 2px 15px hsla(0, 0%, 0%, .3);
   }
 }
 
@@ -486,21 +431,20 @@ h1, h2, h3 {
   -webkit-appearance: none;
   font: 14px/1.4 -apple-system, sans-serif;
   width: 100%;
-  border: 1px solid hsl(240, 8%, 15%);
-  border-top-color: hsl(240, 8%, 13%);
+  background: var(--form-input-background);
+  border: 1px solid var(--form-input-border-color);
   padding: 6px 7px;
   outline: none;
   border-radius: 3px;
-  background: hsl(240, 8%, 33%);
   color: hsl(240, 8%, 87%);
-  box-shadow: 0 1px 0 hsla(0, 0%, 100%, .1),
-              inset 0 2px 8px hsla(0, 0%, 0%, .5);
+  box-shadow: 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity)),
+              inset 0 2px var(--form-input-inner-shadow-blur-radius) hsla(0, 0%, 0%, var(--form-input-inner-shadow-opacity));
 }
 
 .form__topic:focus,
 .form__textarea:focus {
-  box-shadow: 0 1px 0 hsla(0, 0%, 100%, .075),
-              inset 0 2px 5px hsla(0, 0%, 0%, .3);
+  box-shadow: 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity)),
+              inset 0 2px var(--form-input-focused-inner-shadow-blur-radius) hsla(0, 0%, 0%, var(--form-input-focused-inner-shadow-opacity));
 }
 
 .is-ios .form__topic,
@@ -781,7 +725,7 @@ h1, h2, h3 {
 /* Topic list */
 
 .liste-topics {
-  background: hsl(240, 8%, 19%);
+  background: var(--topic-background);
   display: table;
   width: 100%;
   margin: 10px 0;
@@ -795,10 +739,11 @@ h1, h2, h3 {
 
 .topic {
   display: table-row;
+  color: var(--link-color);
 }
 
 .topic:nth-child(odd) {
-  background: hsl(240, 8%, 21%);
+  background: var(--topic-background-odd);
 }
 
 .topic__new-messages-indicator {
@@ -820,7 +765,7 @@ h1, h2, h3 {
 }
 
 .topic--visited, .topic:visited {
-  color: hsl(240, 5%, 57%);
+  color: var(--topic--visited-color);
 }
 
 .topic__label {
@@ -1043,20 +988,11 @@ h1, h2, h3 {
   position: relative;
 }
 
-.pagination-topic__page-link:hover {
-  background: hsla(166, 100%, 40%, .1);
-}
-
 .pagination-topic__page-link--active {
-  background: hsla(166, 100%, 40%, .2);
-  color: hsla(0, 0%, 100%, .73);
+  background: var(--pagination-topic__page-link--active-background);
   font-weight: bold;
   margin: 0;
   padding: 0 2px;
-}
-
-.pagination-topic__page-link--active:hover {
-  background: hsla(166, 100%, 40%, .2);
 }
 
 .pagination-topic__page-link--visited {
@@ -1196,11 +1132,9 @@ h1, h2, h3 {
 
 .message__visible {
   border-radius: 3px;
-  background: hsl(240, 8%, 20%);
-  background-image: linear-gradient(hsl(240, 8%, 25%), hsl(240, 8%, 20%) 60px);
+  background: var(--card-background);
   color: hsl(240, 8%, 87%);
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .15),
-              0 2px 6px hsla(0, 0%, 0%, .3);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
 }
 
 @media (min-width: 1025px) {
@@ -1402,9 +1336,7 @@ h1, h2, h3 {
 .message__byline-date-inline {
   cursor: pointer;
   padding: 10px;
-  padding-right: 20px;
-  background: url(/images/icons/messageOptions.svg) no-repeat right 3px center;
-  color: hsl(190, 80%, 70%);
+  color: var(--message__byline-date-inline-color);
   font-size: 13px;
   vertical-align: top;
 }
@@ -1419,8 +1351,8 @@ h1, h2, h3 {
   .message__byline-date-inline {
     font-size: 12px;
     cursor: default;
-    background: hsl(240, 8%, 24%);
-    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .05),
+    background: var(--message-date-desktop-background);
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity)),
                 0 1px 4px hsla(0, 0%, 0%, .15);
     padding: 2px 4px;
     color: hsl(240, 8%, 73%);
@@ -1645,6 +1577,7 @@ color: hsl(240, 8%, 27%);
   word-wrap: break-word;
   min-height: 48px; /* A message can be empty when there’s only an unknown sticker in it */
   overflow: hidden;
+  color: var(--message__content-color);
 }
 
 @media (min-width: 400px) {
@@ -1662,11 +1595,9 @@ color: hsl(240, 8%, 27%);
 @media (min-width: 1025px) {
   .message__content {
     margin-left: 200px;
-    background: hsl(240, 8%, 20%);
-    background-image: linear-gradient(hsl(240, 8%, 24%), hsl(240, 8%, 20%) 20px);
+    background: var(--card-background);
     border-radius: 3px;
-    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .14),
-                0 2px 7px hsla(0, 0%, 0%, .3)
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
   }
 }
 
@@ -1678,19 +1609,6 @@ color: hsl(240, 8%, 27%);
   font-size: 12px;
   margin-top: -3px;
   color: hsl(240, 8%, 53%);
-}
-
-.quote {
-  margin: 1em 0;
-  border-left: 3px solid rgba(96, 160, 210, 0.18);
-  padding: 1px 8px;
-  background: rgba(65, 78, 93, 0.4);
-  color: hsl(240, 8%, 87%, .2);
-  font-size: 13px;
-}
-
-.quote > p {
-  margin: .5em 0;
 }
 
 .message__content-text > .pre-jv,
@@ -1926,19 +1844,39 @@ color: hsl(240, 8%, 27%);
 /* 2017 */
 
 :root {
-  --background: hsl(240, 8%, 13%);
+  --background: hsl(0, 0%, 0%);
   --color: hsl(240, 8%, 87%);
+  --link-color: hsl(182, 25%, 50%);
   --container-max-width: 1440px;
-  --header-background: hsl(240, 8%, 18%);
-  --header-box-shadow-color: hsl(240, 8%, 11%);
+  --header-background: hsl(240, 8%, 9%);
+  --header-box-shadow-color: hsl(240, 8%, 6%);
   --header__home-link-color: hsl(240, 8%, 67%);
-  --header__home-link--accompanied-box-shadow-color: hsla(240, 8%, 7%, .3);
-  --header__forum-cell-background: hsl(240, 8%, 21%);
+  --header__home-link--accompanied-box-shadow-color: hsla(240, 8%, 3%, .5);
+  --header__forum-cell-background: hsl(240, 8%, 12%);
+  --header__forum-cell-box-shadow-color: hsl(240, 8%, 8%);
   --header__forum-link-color: hsl(240, 8%, 70%);
   --menu-background: hsl(240, 8%, 23%);
   --overlay-background: hsla(0, 0%, 0%, .55);
   --menu-mobile__items-box-shadow-color: hsla(0, 0%, 0%, .5);
   --menu-mobile__item-border-color: hsla(0, 0%, 0%, .25);
+  --card-background: hsl(240, 8%, 9%);
+  --card-box-shadow-opacity: .04;
+  --card-delimiter-opacity: .04;
+  --message__content-color: hsl(240, 8%, 80%);
+  --topic-background: hsl(240, 8%, 8%);
+  --topic-background-odd: hsl(240, 8%, 10%);
+  --topic--visited-color: hsl(0, 0%, 57%);
+  --pagination-topic__page-link--active-background: hsl(182, 25%, 40%);
+  --message__byline-date-inline-color: hsl(182, 25%, 40%);
+  --quote-border-color: hsla(0, 0%, 100%, .125);
+  --quote-background: hsla(0, 0%, 100%, .05);
+  --message-date-desktop-background: hsl(240, 8%, 11%);
+  --form-input-background: hsl(240, 8%, 8%);
+  --form-input-inner-shadow-opacity: .5;
+  --form-input-inner-shadow-blur-radius: 8px;
+  --form-input-focused-inner-shadow-opacity: .3;
+  --form-input-focused-inner-shadow-blur-radius: 5px;
+  --form-input-border-color: hsl(0, 0%, 0%);
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
@@ -1960,6 +1898,11 @@ body {
   background: var(--background);
   font: 14px/1.4 -apple-system, sans-serif;
   color: var(--color);
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
 }
 
 .header {
@@ -2000,7 +1943,7 @@ body {
 .header__forum-cell {
   display: table-cell;
   background: var(--header__forum-cell-background);
-  box-shadow: inset -3px -2px 2px hsl(240,8%,11%); /* 3px to the left to hide the shadow so it doesn't clash with .header__home-link--accompanied's shadow */
+  box-shadow: inset -3px -2px 2px var(--header__forum-cell-box-shadow-color); /* 3px to the left to hide the shadow so it doesn't clash with .header__home-link--accompanied's shadow */
   white-space: nowrap;
 }
 
@@ -2101,4 +2044,16 @@ body {
 
 .menu-mobile__item + .menu-mobile__item {
   border-top: 1px solid var(--menu-mobile__item-border-color);
+}
+
+.quote {
+  margin: 1em 0;
+  border-left: 3px solid var(--quote-border-color);
+  padding: 1px 8px;
+  background: var(--quote-background);
+  font-size: 13px;
+}
+
+.quote > p {
+  margin: .6em 0;
 }
