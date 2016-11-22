@@ -172,6 +172,10 @@ function readyFormToPost() {
 }
 
 function startRefreshCycle() {
+  if (document.body.className.indexOf(' topic-') == -1) {
+    return
+  }
+
   let lastMessageElement = qs('.message:last-child')
     , lastMessageAge = 0
   if (lastMessageElement) {
@@ -452,6 +456,7 @@ instantClick.on('change', function() {
 
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
+  startRefreshCycle()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
@@ -460,4 +465,5 @@ document.body.addEventListener('touchstart', setAsHavingTouch)
 
 instantClick.on('restore', function () {
   insertStickerIntoMessage()
+  startRefreshCycle()
 })
