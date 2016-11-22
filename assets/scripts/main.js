@@ -9,6 +9,7 @@ let isFormReadyToPost = false
   , sliderTopOffset = 0
   , stickerPackWidth
   , stickerDemoWidth
+  , isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -391,7 +392,13 @@ function insertStickerIntoMessage() {
     return
   }
   let insertionPoint = textarea.selectionEnd
-    , stringBeforeInsertionPoint = textarea.value.substr(0, insertionPoint)
+  if (isIOS) {
+    /* iOS doesn't want to focus the form, so selectionEnd isn't updated.
+     * We get around this by simply adding the sticker at the end.
+     */
+    insertionPoint = textarea.value.length
+  }
+  let stringBeforeInsertionPoint = textarea.value.substr(0, insertionPoint)
     , stringAfterInsertionPoint = textarea.value.substr(insertionPoint)
   textarea.value = `${stringBeforeInsertionPoint} :${localStorage.stickerToInsert}: ${stringAfterInsertionPoint}`
   textarea.focus()
