@@ -1,0 +1,20 @@
+{{#def.layoutHead}}
+<div class="sheet">
+  <div class="stickers-list">
+    {{ for (let packId in it.packs) { }}
+      <div class="stickers-pack">
+        {{~it.packs[packId] :stickerId}}
+          <img class="stickers-pack__sticker sticker sticker--pack-{{=packId}}" src="/assets/stickers/v1/{{=stickerId}}" data-sticker-id="{{=stickerId}}" title=":{{=stickerId}}:" alt=":{{=stickerId}}:">
+        {{~}}
+      </div>
+    {{ } }}
+  </div>
+</div>
+<script>
+  var _csrf = "{{=it.csrf}}";
+</script>
+<script type="queued">
+  launchStickerAlignment();
+  scrollTo(0, 99999);
+</script>
+{{#def.layoutFoot}}
