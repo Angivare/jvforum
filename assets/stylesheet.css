@@ -2117,6 +2117,7 @@ a {
   height: var(--sticker-demo-size);
   padding: 2px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 @media (min-width: 360px) {

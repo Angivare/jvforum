@@ -368,9 +368,35 @@ function alignAllStickerPacks() {
   qsa('.stickers-pack', alignStickerPack)
 }
 
-function launchStickerAlignment() {
+function noteStickerAndGoBack(event) {
+  localStorage.stickerToInsert = event.target.dataset.stickerId
+  history.back()
+}
+
+function setUpStickers() {
   addEventListener('resize', alignAllStickerPacks)
   alignAllStickerPacks()
+
+  qsa('.stickers-pack__sticker', (element) => {
+    element.addEventListener('click', noteStickerAndGoBack)
+  })
+}
+
+function insertStickerIntoMessage() {
+  if (!localStorage.stickerToInsert) {
+    return
+  }
+  let textarea = qs('.form__textarea')
+  if (!textarea) {
+    return
+  }
+  let insertionPoint = textarea.selectionEnd
+    , stringBeforeInsertionPoint = textarea.value.substr(0, insertionPoint)
+    , stringAfterInsertionPoint = textarea.value.substr(insertionPoint)
+  textarea.value = `${stringBeforeInsertionPoint} :${localStorage.stickerToInsert}: ${stringAfterInsertionPoint}`
+  textarea.focus()
+  readyFormToPost()
+  localStorage.removeItem('stickerToInsert')
 }
 
 instantClick.init()
@@ -414,8 +440,15 @@ instantClick.on('change', function() {
   qsa('script[type=queued]', (element) => {
     eval(element.textContent)
   })
+
+  /* Below: same as in 'restore' */
+  insertStickerIntoMessage()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
+
+instantClick.on('restore', function () {
+  insertStickerIntoMessage()
+})
