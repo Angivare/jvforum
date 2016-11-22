@@ -501,6 +501,42 @@ h1, h2, h3 {
   position: relative;
 }
 
+.form__action--right {
+  text-align: right;
+  vertical-align: middle;
+}
+
+.form__stickers-button-desktop {
+  display: inline-block;
+  background: url(/images/icons/stickers.svg) center no-repeat;
+  background-size: 24px;
+  width: 32px;
+  height: 32px;
+}
+
+.form__stickers-button-desktop {
+  display: inline-block;
+  background: url(/images/icons/stickers.svg) center no-repeat;
+  background-size: 20px;
+  width: 32px;
+  height: 32px;
+  opacity: .25;
+  position: relative;
+  top: 4px;
+}
+
+.form__stickers-button-mobile {
+  display: inline-block;
+  background: url(/images/icons/stickers.svg) center no-repeat;
+  background-size: 20px;
+  width: 56px;
+  height: 56px;
+  opacity: .25;
+  position: relative;
+  top: 64px;
+  margin: -8px;
+}
+
 /*** Mobile action ***/
 
 @media (MAX-width: 1024px) {
