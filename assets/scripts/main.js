@@ -466,5 +466,4 @@ document.body.addEventListener('touchstart', setAsHavingTouch)
 instantClick.on('restore', function () {
   insertStickerIntoMessage()
   startRefreshCycle()
-  makeFavoritesSlideable()
 })
