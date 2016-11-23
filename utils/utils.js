@@ -89,7 +89,7 @@ function adaptMessageContent(content, id) {
   content = content.replace(/<a href="([^/][^"]+)"( title|>)/g, '<a href="$1" target="_blank"$2')
 
   // Smileys
-  content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.gif" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="//image.jeuxvideo.com/smileys_img/$1.gif" data-code="$2" title="$2" alt="$2">')
+  content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.(?:gif|png)" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="/assets/smileys/v1/$1" data-code="$2" title="$2" alt="$2">')
 
   // Stickers
   content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, feeligoId) => {

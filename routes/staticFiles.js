@@ -20,9 +20,9 @@ router.get('/assets/:dir(images|scripts)/:filename(*)--:checksum(*).:extension(*
   res.sendFile(`${req.params.filename}.${req.params.extension}`, {root: `${__dirname}/../assets/${req.params.dir}/`})
 })
 
-router.get('/assets/stickers/v1/:id([0-9]+)', (req, res, next) => {
+router.get('/assets/:dir(stickers|smileys)/v1/:id([a-z0-9]+)', (req, res, next) => {
   res.sendFile(`${req.params.id}`, {
-    root: `${__dirname}/../assets/stickers/v1/`,
+    root: `${__dirname}/../assets/${req.params.dir}/v1/`,
     headers: {
       'Content-Type': 'image/png',
     },
