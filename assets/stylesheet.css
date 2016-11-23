@@ -1865,6 +1865,8 @@ color: hsl(240, 8%, 27%);
   --form-input-focused-inner-shadow-blur-radius: 5px;
   --form-input-border-color: hsl(0, 0%, 0%);
   --stickers-pack-delimiter-color: hsla(0, 0%, 100%, .1);
+  --imbricated-quote-shadow-opacity: .5;
+  --imbricated-quote-color: hsl(240, 8%, 67%);
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
@@ -2035,11 +2037,42 @@ a {
 }
 
 .quote {
+  ---padding-top-or-bottom: 1px;
   margin: 1em 0;
   border-left: 3px solid var(--quote-border-color);
-  padding: 1px 8px;
+  padding: var(---padding-top-or-bottom) 8px;
   background: var(--quote-background);
   font-size: 13px;
+}
+
+.message__content-text > .quote > .quote > .quote:not(.quote--imbricated-shown) {
+  ---height: 30px;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-top: calc(var(---height) - var(---padding-top-or-bottom));
+  box-shadow: 0 1px 2px hsla(0, 0%, 0%, var(--imbricated-quote-shadow-opacity));
+  border-radius: 0 2px 2px 0;
+  width: 62px;
+  cursor: pointer;
+}
+
+.message__content-text > .quote > .quote > .quote:not(.quote--imbricated-shown)::after {
+  ---inner-height: 20px;
+  ---character-line-offset: 2px;
+  position: absolute;
+  content: '•••';
+  top: calc((var(---height) - var(---inner-height)) / 2);
+  height: var(---inner-height);
+  line-height: calc(var(---inner-height) + var(---character-line-offset));
+  margin-left: 8px;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--imbricated-quote-color);
+}
+
+.is-ios .message__content-text > .quote > .quote > .quote:not(.quote--imbricated-shown)::after {
+---character-line-offset: -1px;
 }
 
 .quote > p {

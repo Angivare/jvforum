@@ -411,6 +411,12 @@ function insertStickerIntoMessage() {
   localStorage.removeItem('stickerToInsert')
 }
 
+function showImbricatedQuote(event) {
+  let element = event.target
+  element.removeEventListener('click', showImbricatedQuote)
+  element.classList.add('quote--imbricated-shown')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -460,6 +466,7 @@ instantClick.on('change', function() {
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
+addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
