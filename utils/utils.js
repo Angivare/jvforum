@@ -80,7 +80,7 @@ function adaptMessageContent(content, id) {
       path += '/' + page
     }
     if (messageId) {
-      path += '#' + messageId
+      path += '#m' + messageId
     }
     return `<a href="${path}" title="${url}" data-link-jvc="${url}">jvforum.fr${path}</a>`
   })
