@@ -2090,8 +2090,8 @@ a {
 }
 
 .smiley {
-  min-width: 16px;
-  min-height: 16px;
+  min-width: 15px;
+  min-height: 15px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2) {
@@ -2102,38 +2102,44 @@ a {
   }
 }
 
-.smiley--2 { width: 26px; height: 24px; } /* :question: */
-.smiley--17 { min-height: 12px; } /* :gba: */
-.smiley--27 { width: 23px; height: 26px; } /* :sleep: */
-.smiley--29 { width: 45px; height: 41px; } /* :hello: */
-.smiley--32 { width: 37px; height: 44px; } /* :lol: */
-.smiley--36 { width: 24px; } /* :ok: */
-.smiley--38 { width: 50px; height: 34px; } /* :rechercher: */
-.smiley--42 { width: 46px; height: 41px; } /* :salut: */
-.smiley--44 { width: 37px; height: 42px; } /* :up: */
-.smiley--48 { width: 44px; height: 42px; } /* :bye: */
-.smiley--49 { width: 64px; height: 44px; } /* :dpdr: */
-.smiley--51 { width: 65px; height: 46px; } /* :gne: */
-.smiley--52 { width: 58px; height: 57px; } /* :dehors: */
-.smiley--54 { width: 21px; height: 20px; } /* :coeur: */
-.smiley--56 { width: 50px; height: 34px; } /* :sors: */
-.smiley--58 { width: 44px; height: 40px; } /* :merci: */
-.smiley--59 { width: 50px; height: 39px; } /* :svp: */
-.smiley--60 { width: 31px; height: 24px; } /* :ange: */
-.smiley--61 { width: 35px; height: 20px; } /* :diable: */
-.smiley--62 { height: 27px; } /* :gni: */
-.smiley--63 { width: 50px; height: 34px; } /* :spoiler: */
-.smiley--64 { width: 51px; height: 32px; } /* :hs: */
-.smiley--65 { width: 47px; height: 39px; } /* :desole: */
-.smiley--66 { width: 26px; height: 21px; } /* :fete: */
-.smiley--69 { height: 17px; } /* :bravo: */
-.smiley--70 { width: 49px; height: 42px; } /* :banzai: */
-.smiley--cimer { width: 57px; height: 36px; } /* :cimer: */
-.smiley--ddb { width: 49px; height: 40px; } /* :ddb: */
-.smiley--hapoelparty { width: 45px; height: 27px; } /* :hapoelparty: */
-.smiley--objection { width: 54px; height: 34px; } /* :objection: */
-.smiley--loveyou { width: 64px; height: 30px; } /* :loveyou: */
-.smiley--nyu { height: 17px; } /* :cute: */
-.smiley--pave { width: 51px; height: 43px; } /* :pave: */
-.smiley--play { width: 19px; height: 28px; } /* :play: */
-.smiley--siffle { width: 22px; } /* :siffle: */
+.smiley--2 { width: 25px; height: 23px; }
+.smiley--16 { min-width: 14px; }
+.smiley--17 { width: 16px; min-height: 11px; }
+.smiley--22 { height: 16px; }
+.smiley--27 { width: 22px; height: 25px; }
+.smiley--29 { width: 45px; height: 40px; }
+.smiley--30 { width: 16px; }
+.smiley--32 { width: 36px; height: 44px; }
+.smiley--36 { width: 23px; }
+.smiley--38 { width: 50px; height: 33px; }
+.smiley--41 { height: 16px; }
+.smiley--42 { width: 46px; height: 40px; }
+.smiley--44 { width: 37px; height: 41px; }
+.smiley--48 { width: 44px; height: 41px; }
+.smiley--49 { width: 64px; height: 43px; }
+.smiley--51 { width: 65px; height: 45px; }
+.smiley--52 { width: 58px; height: 57px; }
+.smiley--54 { width: 20px; height: 19px; }
+.smiley--56 { width: 50px; height: 33px; }
+.smiley--57 { height: 16px; }
+.smiley--58 { width: 44px; height: 39px; }
+.smiley--59 { width: 50px; height: 38px; }
+.smiley--60 { width: 29px; height: 21px; }
+.smiley--61 { width: 35px; height: 20px; }
+.smiley--62 { height: 26px; }
+.smiley--63 { width: 50px; height: 33px; }
+.smiley--64 { width: 51px; height: 31px; }
+.smiley--65 { width: 47px; height: 38px; }
+.smiley--66 { width: 26px; height: 20px; }
+.smiley--69 { width: 16px; height: 17px; }
+.smiley--70 { width: 48px; height: 42px; }
+.smiley--cimer { width: 57px; height: 36px; }
+.smiley--ddb { width: 49px; height: 39px; }
+.smiley--fish { width: 16px; height: 16px; }
+.smiley--hapoelparty { width: 44px; height: 26px; }
+.smiley--loveyou { width: 63px; height: 29px; }
+.smiley--nyu { height: 16px; }
+.smiley--objection { width: 54px; height: 33px; }
+.smiley--pave { width: 51px; height: 42px; }
+.smiley--play { width: 18px; height: 27px; }
+.smiley--siffle { width: 21px; }
