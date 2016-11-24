@@ -2082,8 +2082,8 @@ a {
 .stickers-list {
   ---stickers-list-side-padding: 8px;
   ---stickers-per-line: 4;
-  ---sticker-demo-size: calc((100vw - (var(--stickers-list-side-padding) * 2)) / var(--stickers-per-line));
-  padding: 0 var(--stickers-list-side-padding);
+  ---sticker-demo-size: calc((100vw - (var(---stickers-list-side-padding) * 2)) / var(---stickers-per-line));
+  padding: 0 var(---stickers-list-side-padding);
   display: flex;
   flex-direction: column-reverse;
 }
@@ -2097,8 +2097,8 @@ a {
 }
 
 .stickers-pack__sticker {
-  width: var(--sticker-demo-size);
-  height: var(--sticker-demo-size);
+  width: var(---sticker-demo-size);
+  height: var(---sticker-demo-size);
   padding: 2px;
   vertical-align: middle;
   cursor: pointer;
