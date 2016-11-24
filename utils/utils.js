@@ -1,5 +1,6 @@
 let entities = require('html-entities').Html5Entities
   , stickers = require('./stickers')
+  , date = require('./date')
   , db = require('./db')
 
 function adaptMessageContent(content, id) {
@@ -159,6 +160,10 @@ function adaptPostedMessage(message, hostname) {
         message = message.replace(new RegExp(`:${legacyShortcut}:`, 'gi'), `[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]`)
       }
     }
+  }
+
+  if (message.includes('[[date:')) {
+    message = message.replace(/\[\[date:(1?[0-9]{1,9})\]\]/g, (all, timestamp) => date.timestamp2relative(timestamp))
   }
 
   // Enable hashtags and asterisks at the start of a line by inserting a soft hyphen

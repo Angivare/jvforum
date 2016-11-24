@@ -103,7 +103,52 @@ function convertMessage(date) {
   }
 }
 
+function timestamp2relative(timestamp) {
+  let now = new Date()
+    , then = new Date()
+  then.setTime(timestamp * 1000)
+  let day = then.getDate()
+    , month = then.getMonth()
+    , year = then.getFullYear()
+
+  let diff = Math.floor((now - then) / 1000)
+
+  if (diff < 60) {
+    date = diff + ' s'
+  }
+  else if (diff < 60 * 60) {
+    date = Math.floor(diff / 60) + ' m ' + (diff % 60) + ' s'
+  }
+  else {
+    date = day + ' ' + months[month - 1]
+    if (year == now.getFullYear()) {
+      let yesterday = new Date(now - (1000 * 60 * 60 * 24))
+        , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
+      if (now.getMonth() == month - 1 && now.getDate() == day) {
+        date = ''
+      }
+      else if (yesterday.getMonth() == month - 1 && yesterday.getDate() == day) {
+        date = 'hier'
+      }
+      else if (dayBeforeYesterday.getMonth() == month - 1 && dayBeforeYesterday.getDate() == day) {
+        date = 'avant-hier'
+      }
+    }
+    else {
+      date += ' ’' + pad(year % 100)
+    }
+
+    if (date) {
+      date += ', '
+    }
+    date += formatHoursAndMinutes(then)
+  }
+
+  return date
+}
+
 module.exports = {
   convertTopicList,
   convertMessage,
+  timestamp2relative,
 }
