@@ -150,14 +150,28 @@ function adaptPostedMessage(message, hostname) {
   })
 
   message = ` ${message} `
-  let stickerRegex = /([^0-9]):([0-9]+):([^0-9])/g
-  if (message.match(stickerRegex)) {
-    message = message.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => {
+   let stickerRegex = /([^0-9]):([0-9]+):([^0-9])/
+    , i = 0
+    , messageSubstring
+    , increment
+  /* We can't use a global regex here because captures would need to overlap.
+   * Example: with the string “ :1: :1: ”, “( :1:( ):1: )” would need to be captured.
+   * So we loop manually.
+   */
+  while (messageSubstring = message.substr(i), messageSubstring.match(stickerRegex)) {
+    messageSubstring = messageSubstring.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => {
+      let returnValue
       if (!(jvfId in stickers.jvfToFeeligo)) {
-        return all
+        returnValue = all
       }
-      return `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`
+      else {
+        returnValue = `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`
+      }
+      increment = returnValue.length - 2
+      return returnValue
     })
+    message = message.substr(0, i) + messageSubstring
+    i += increment
   }
   message = message.trim()
 
