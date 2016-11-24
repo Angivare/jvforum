@@ -338,10 +338,12 @@ function goToForm() {
 }
 
 function toggleMobileMenu() {
-  qs('.menu-mobile__items').classList.toggle('menu-mobile__items--shown')
   qs('.menu-mobile__opener').classList.toggle('menu-mobile__opener--hidden')
-  qs('.overlay').classList.toggle('overlay--shown')
-  qs('.overlay').addEventListener('click', toggleMobileMenu)
+  qs('.canvas').classList.toggle('canvas--under-stage-with-menu-mobile-items')
+  qs('.stage').addEventListener('click', toggleMobileMenu)
+  qs('.stage').classList.toggle('stage--shown')
+  qs('.stage').innerHTML = ''
+  qs('.stage').appendChild(document.importNode(qs('#menu-mobile-items').content.firstElementChild, true))
 }
 
 function alignStickerPack(packElement) {

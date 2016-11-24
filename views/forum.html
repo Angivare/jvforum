@@ -10,14 +10,16 @@
       </h1>
       <div class="menu-mobile">
         <div class="menu-mobile__opener"></div>
-        <div class="menu-mobile__items">
-          {{? !it.isFavorite }}
-            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="add">Mettre en favoris</span>
-          {{??}}
-            <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile__item" data-action="delete">Retirer des favoris</span>
-          {{?}}
-          <a class="menu-mobile__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
-        </div>
+        <template id="menu-mobile-items">
+          <div class="menu-mobile-items">
+            {{? !it.isFavorite }}
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="add">Mettre en favoris</span>
+            {{??}}
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="delete">Retirer des favoris</span>
+            {{?}}
+            <a class="menu-mobile-items__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
+          </div>
+        </template>
       </div>
       <div class="liste-topics">
         {{~it.topics :t:index}}
