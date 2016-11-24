@@ -389,6 +389,7 @@ router.post('/refresh', (req, res, next) => {
       else {
         content.messages[i].date = dateConversion.text
         content.messages[i].age = dateConversion.diff
+        content.messages[i].timestamp = dateConversion.timestamp
 
         let nickname = content.messages[i].nickname.toLowerCase()
         if (!avatarsNicknames.includes(nickname)) {
