@@ -445,6 +445,14 @@ function quoteMessage(event) {
   textarea.value += quote
 }
 
+function toggleMenu(event) {
+  let element = event.target
+  while (!(id = element.id)) {
+    element = element.parentNode
+  }
+  qs(`#${element.id}`).classList.toggle('message--menu-opened')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -497,6 +505,7 @@ instantClick.on('change', function() {
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
 addMessagesEvent('.js-quote', 'click', quoteMessage)
+addMessagesEvent('.js-menu', 'click', toggleMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
