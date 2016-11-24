@@ -152,7 +152,12 @@ function adaptPostedMessage(message, hostname) {
   message = ` ${message} `
   let stickerRegex = /([^0-9]):([0-9]+):([^0-9])/g
   if (message.match(stickerRegex)) {
-    message = message.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`)
+    message = message.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => {
+      if (!(jvfId in stickers.jvfToFeeligo)) {
+        return all
+      }
+      return `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`
+    })
   }
   message = message.trim()
 
