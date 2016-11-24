@@ -1492,17 +1492,17 @@ h1, h2, h3 {
   padding-top: 30px;
   padding-bottom: 5px;
   border-radius: 4px;
-  background: hsl(240, 8%, 20%);
+  background: var(--message-action-background);
   background-position: center top;
   background-repeat: no-repeat;
+  color: var(--message-action-color);
   cursor: pointer;
   -webkit-transition: -webkit-transform .075s ease-out;
           transition: transform .075s ease-out, -webkit-transform .075s ease-out;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .15),
-              0 2px 5px hsla(0, 0%, 0%, .25);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--message-action-light));
 }
 
 .message__actions-action:active {
@@ -1867,6 +1867,9 @@ color: hsl(240, 8%, 27%);
   --stickers-pack-delimiter-color: hsla(0, 0%, 100%, .1);
   --imbricated-quote-shadow-opacity: .5;
   --imbricated-quote-color: hsl(240, 8%, 67%);
+  --message-action-background: hsl(240, 8%, 13.5%);
+  --message-action-color: hsl(240, 8%, 73%);
+  --message-action-light: .08;
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
