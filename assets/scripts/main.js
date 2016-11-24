@@ -447,10 +447,23 @@ function quoteMessage(event) {
 
 function toggleMenu(event) {
   let element = event.target
+    , id
   while (!(id = element.id)) {
     element = element.parentNode
   }
-  qs(`#${element.id}`).classList.toggle('message--menu-opened')
+  qs(`#${id}`).classList.toggle('message--menu-opened')
+}
+
+function closeMenu(event) {
+  let element = event.target
+    , id
+  if (element.classList.contains('js-menu')) {
+    return
+  }
+  while (!(id = element.id)) {
+    element = element.parentNode
+  }
+  qs(`#${id}`).classList.remove('message--menu-opened')
 }
 
 instantClick.init()
@@ -506,6 +519,7 @@ addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
 addMessagesEvent('.js-quote', 'click', quoteMessage)
 addMessagesEvent('.js-menu', 'click', toggleMenu)
+addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
