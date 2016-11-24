@@ -62,6 +62,7 @@ function convertMessage(date) {
   month = monthsFull.indexOf(month) + 1
   day = parseInt(day)
   let then = new Date(year, month - 1, day, hours, minutes, seconds)
+    , timestamp = then / 1000
     , diff = Math.floor((now - then) / 1000)
 
   if (diff < 60) {
@@ -98,6 +99,7 @@ function convertMessage(date) {
   return {
     diff,
     text: date,
+    timestamp,
   }
 }
 

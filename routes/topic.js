@@ -162,6 +162,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           let dateConversion = date.convertMessage(content.messages[i].dateRaw)
           content.messages[i].date = dateConversion.text
           content.messages[i].age = dateConversion.diff
+          content.messages[i].timestamp = dateConversion.timestamp
 
           let nickname = content.messages[i].nickname.toLowerCase()
           if (!nicknames.includes(nickname)) {

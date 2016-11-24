@@ -417,6 +417,34 @@ function showImbricatedQuote(event) {
   element.classList.add('quote--imbricated-shown')
 }
 
+function html2jvcode(html) {
+  return JVCode.toJVCode(html)
+}
+
+function quoteMessage(event) {
+  let element = event.target
+  while (!element.id) {
+    element = element.parentNode
+  }
+  let {id, nickname, timestamp} = element.dataset
+    , textarea = qs('.form__textarea')
+    , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
+    , text = html2jvcode(html)
+    , quote = ''
+  if (textarea.value) {
+    if (!/\n\n$/.test(textarea.value)) {
+      quote += "\n\n"
+    }
+  }
+  quote += `> '''${nickname}''', [[date:${timestamp}]] :\n`
+  quote += `> \n`
+  quote += `> ${text.split("\n").join("\n> ")}`
+  quote += "\n\n"
+
+  textarea.focus() // Must be before setting value in order to have the cursor at the bottom
+  textarea.value += quote
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -442,9 +470,10 @@ instantClick.on('change', function() {
   isFormReadyToPost = false
   qs('.form__textarea', readyFormToPost) // The form can be filled on page change if it's after a refresh
 
-  qsa('.js-favorite-toggle, .js-quote', (element) => {
+  qsa('.js-favorite-toggle', (element) => {
     element.addEventListener('click', alertPlaceholder)
   })
+
   qsa('.js-go-to-form', (element) => {
     element.addEventListener('click', goToForm)
   })
@@ -467,6 +496,7 @@ instantClick.on('change', function() {
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
+addMessagesEvent('.js-quote', 'click', quoteMessage)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
