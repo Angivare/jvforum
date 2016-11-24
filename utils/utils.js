@@ -149,9 +149,12 @@ function adaptPostedMessage(message, hostname) {
     return `http://www.jeuxvideo.com/forums/${mode}-${forumId}-${topicIdlegacyOrModern}-${page}-0-${indexForum}-0-${slug}.htm`
   })
 
-  if (message.match(/:[0-9]+:/)) {
-    message = message.replace(/:([0-9]+):/g, (all, jvfId) => `[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]`)
+  message = ` ${message} `
+  let stickerRegex = /([^0-9]):([0-9]+):([^0-9])/g
+  if (message.match(stickerRegex)) {
+    message = message.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`)
   }
+  message = message.trim()
 
   if (message.match(/:[a-z]/)) {
     for (let legacyShortcut in stickers.legacyShortcuts) {
