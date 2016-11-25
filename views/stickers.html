@@ -4,7 +4,7 @@
   <div class="stickers-heads-container">
     <div class="stickers-heads">
       {{ for (let packId in it.packs) { }}
-        <div class="stickers-heads__head" data-pack-id="{{=packId}}">
+        <div class="js-stickers-head-{{=packId}} stickers-heads__head" data-pack-id="{{=packId}}">
           <div class="stickers-heads__head-image" style="----bg-url: url(/assets/stickers/heads/{{=packId}}.png)"></div>
         </div>
       {{ } }}
@@ -12,7 +12,7 @@
   </div>
   <div class="stickers-list">
     {{ for (let packId in it.packs) { }}
-      <div class="stickers-pack">
+      <div class="stickers-pack" data-pack-id="{{=packId}}">
         {{~it.packs[packId] :stickerId}}
           <img class="stickers-pack__sticker sticker sticker--pack-{{=packId}}" src="/assets/stickers/v1/{{=stickerId}}" data-sticker-id="{{=stickerId}}" title=":{{=stickerId}}:" alt=":{{=stickerId}}:">
         {{~}}

@@ -10,6 +10,7 @@ let isFormReadyToPost = false
   , stickerPackWidth
   , stickerDemoWidth
   , isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
+  , selectedHeadPackId
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -382,12 +383,34 @@ function noteStickerAndGoBack(event) {
 
 function setUpStickers() {
   stickerPackWidth = undefined
+  selectedHeadPackId = 0
   instantClick.addEventListener('resize', alignAllStickerPacks)
   alignAllStickerPacks()
   qs('.stickers-heads-container').scrollTop = 9999
 
   qsa('.stickers-pack__sticker', (element) => {
     element.addEventListener('click', noteStickerAndGoBack)
+  })
+
+  instantClick.addEventListener('scroll', selectHead)
+  selectHead()
+}
+
+function selectHead() {
+  let packId
+    , heads = []
+  qsa('.stickers-pack', (element) => {
+    if (element.getBoundingClientRect().top >= 0) {
+      packId = parseInt(element.dataset.packId)
+      if (packId == selectedHeadPackId) {
+        return
+      }
+      if (selectedHeadPackId) {
+        qs(`.js-stickers-head-${selectedHeadPackId}`).classList.remove('stickers-heads__head--selected')
+      }
+      qs(`.js-stickers-head-${packId}`).classList.add('stickers-heads__head--selected')
+      selectedHeadPackId = packId
+    }
   })
 }
 

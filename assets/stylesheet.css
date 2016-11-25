@@ -1872,6 +1872,8 @@ color: hsl(240, 8%, 27%);
   --message-action-light: .08;
   --stickers-heads-background: hsl(240, 8%, 10%);
   --stickers-heads-light: .05;
+  --stickers-head-selected-background: hsl(240, 8%, 7%);
+  --stickers-head-selected-shadow: inset 0 0 2px 1px hsl(0, 0%, 0%);
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
@@ -2114,6 +2116,12 @@ a {
   width: var(---stickers-heads-column-size);
   padding: calc((var(---stickers-heads-column-size) - var(---sticker-head-size)) / 2);
   border-top: 1px solid hsla(0, 0%, 100%, var(--stickers-heads-light));
+}
+
+.stickers-heads__head--selected {
+  border-top-color: black;
+  background: var(--stickers-head-selected-background);
+  box-shadow: var(--stickers-head-selected-shadow);
 }
 
 .stickers-heads__head-image {
