@@ -1870,6 +1870,8 @@ color: hsl(240, 8%, 27%);
   --message-action-background: hsl(240, 8%, 13.5%);
   --message-action-color: hsl(240, 8%, 73%);
   --message-action-light: .08;
+  --stickers-heads-background: hsl(240, 8%, 10%);
+  --stickers-heads-light: .05;
 
   --sheet-desktop-padding-x: 30px;
   --header__forum-link-over400-padding-x: 20px;
@@ -1900,7 +1902,6 @@ a {
 
 .canvas--under-stage-with-menu-mobile-items {
   filter: saturate(var(--menu-mobile-items-background-saturation));
-  _filter: blur(1px);
 }
 
 .header {
@@ -2084,11 +2085,49 @@ a {
   margin: .6em 0;
 }
 
+.stickers-heads-container,
+.stickers-list {
+  ---stickers-heads-column-size: 44px;
+}
+
+.stickers-heads-container {
+  ---offset-to-hide-scrollbar: 20px;
+  right: calc(var(---offset-to-hide-scrollbar) * -1);
+  bottom: 0;
+  width: calc(var(---stickers-heads-column-size) + var(---offset-to-hide-scrollbar));
+  position: fixed;
+  height: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stickers-heads {
+  ---sticker-head-size: 40px;
+  width: var(---stickers-heads-column-size);
+  min-height: 100%;
+  background: var(--stickers-heads-background);
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.stickers-heads__head {
+  width: var(---stickers-heads-column-size);
+  padding: calc((var(---stickers-heads-column-size) - var(---sticker-head-size)) / 2);
+  border-top: 1px solid hsla(0, 0%, 100%, var(--stickers-heads-light));
+}
+
+.stickers-heads__head-image {
+  height: var(---sticker-head-size);
+  background: var(----bg-url) center no-repeat;
+  background-size: contain;
+}
+
 .stickers-list {
   ---stickers-list-side-padding: 8px;
   ---stickers-per-line: 4;
-  ---sticker-demo-size: calc((100vw - (var(---stickers-list-side-padding) * 2)) / var(---stickers-per-line));
-  padding: 0 var(---stickers-list-side-padding);
+  ---sticker-demo-size: calc((100vw - (var(---stickers-list-side-padding) * 2) - var(---stickers-heads-column-size)) / var(---stickers-per-line));
+  padding-left: var(---stickers-list-side-padding);
+  padding-right: calc(var(---stickers-list-side-padding) + var(---stickers-heads-column-size));
   display: flex;
   flex-direction: column-reverse;
 }

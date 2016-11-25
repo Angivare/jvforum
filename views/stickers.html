@@ -1,6 +1,15 @@
 {{#def.layoutHead}}
 <div class="canvas">
 <div class="sheet">
+  <div class="stickers-heads-container">
+    <div class="stickers-heads">
+      {{ for (let packId in it.packs) { }}
+        <div class="stickers-heads__head" data-pack-id="{{=packId}}">
+          <div class="stickers-heads__head-image" style="----bg-url: url(/assets/stickers/heads/{{=packId}}.png)"></div>
+        </div>
+      {{ } }}
+    </div>
+  </div>
   <div class="stickers-list">
     {{ for (let packId in it.packs) { }}
       <div class="stickers-pack">

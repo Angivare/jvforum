@@ -384,6 +384,7 @@ function setUpStickers() {
   stickerPackWidth = undefined
   instantClick.addEventListener('resize', alignAllStickerPacks)
   alignAllStickerPacks()
+  qs('.stickers-heads-container').scrollTop = 9999
 
   qsa('.stickers-pack__sticker', (element) => {
     element.addEventListener('click', noteStickerAndGoBack)
