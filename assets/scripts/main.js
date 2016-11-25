@@ -468,6 +468,25 @@ function closeMenu(event) {
   qs(`#${id}`).classList.remove('message--menu-opened')
 }
 
+function enlargeEmoji(event) {
+  if (hasTouch) {
+    return
+  }
+  if (event.target.className != 'emoji') {
+    let emojiContainerElement = qs('.emoji-container')
+    if (emojiContainerElement && emojiContainerElement.classList.contains('emoji-container--shown')) {
+      emojiContainerElement.classList.remove('emoji-container--shown')
+    }
+    return
+  }
+  let emojiContainerElement = qs('.emoji-container')
+  let {left, top} = event.target.getBoundingClientRect()
+  emojiContainerElement.src = event.target.src
+  emojiContainerElement.classList.add('emoji-container--shown')
+  emojiContainerElement.style.left = `${left + ((16 - 48) / 2)}px`
+  emojiContainerElement.style.top = `${top - 48 - 8}px`
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -517,6 +536,8 @@ instantClick.on('change', function() {
   insertStickerIntoMessage()
   startRefreshCycle()
 })
+
+document.documentElement.addEventListener('mouseover', enlargeEmoji)
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)

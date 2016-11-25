@@ -2183,6 +2183,24 @@ a {
 .smiley--siffle { width: 21px; }
 
 .emoji {
+  width: 1em;
+}
+
+.message__content-text .emoji {
   width: 16px;
   height: 16px;
+}
+
+.emoji-container {
+  display: none;
+  width: 48px;
+  height: 48px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  pointer-events: none;
+}
+
+.emoji-container--shown {
+  display: block;
 }
