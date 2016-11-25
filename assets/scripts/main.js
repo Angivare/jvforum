@@ -480,11 +480,11 @@ function enlargeEmoji(event) {
     return
   }
   let emojiContainerElement = qs('.emoji-container')
-  let {left, top} = event.target.getBoundingClientRect()
+  let {left, top, width} = event.target.getBoundingClientRect()
   emojiContainerElement.src = event.target.src
   emojiContainerElement.classList.add('emoji-container--shown')
-  emojiContainerElement.style.left = `${left + ((16 - 48) / 2)}px`
-  emojiContainerElement.style.top = `${top - 48 - 8}px`
+  emojiContainerElement.style.left = `${left + ((width - 48) / 2)}px`
+  emojiContainerElement.style.top = `${top - 48 - 4}px`
 }
 
 instantClick.init()

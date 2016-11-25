@@ -157,6 +157,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           return
         }
 
+        content.title = content.name
+        content.name = utils.encodeHTML(content.name)
+        content.name = utils.emojify(content.name)
+
         let nicknames = []
         for (let i = 0; i < content.messages.length; i++) {
           let dateConversion = date.convertMessage(content.messages[i].dateRaw)
