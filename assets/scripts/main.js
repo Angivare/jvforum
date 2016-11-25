@@ -401,21 +401,21 @@ function setUpStickers() {
 }
 
 function selectHead() {
-  let packId
+  let packId = 1
     , heads = []
   qsa('.stickers-pack', (element) => {
-    if (element.getBoundingClientRect().bottom >= 0) {
+    if (element.getBoundingClientRect().bottom - innerHeight >= -30) {
       packId = parseInt(element.dataset.packId)
-      if (packId == selectedHeadPackId) {
-        return
-      }
-      if (selectedHeadPackId) {
-        qs(`.js-stickers-head-${selectedHeadPackId}`).classList.remove('stickers-heads__head--selected')
-      }
-      qs(`.js-stickers-head-${packId}`).classList.add('stickers-heads__head--selected')
-      selectedHeadPackId = packId
     }
   })
+  if (packId == selectedHeadPackId) {
+    return
+  }
+  if (selectedHeadPackId) {
+    qs(`.js-stickers-head-${selectedHeadPackId}`).classList.remove('stickers-heads__head--selected')
+  }
+  qs(`.js-stickers-head-${packId}`).classList.add('stickers-heads__head--selected')
+  selectedHeadPackId = packId
 }
 
 function stickerHeadOnClick(event) {

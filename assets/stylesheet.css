@@ -2129,7 +2129,8 @@ a {
 
 .stickers-heads__head-image {
   height: var(---sticker-head-size);
-  background: var(----bg-url) center no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: contain;
 }
 
