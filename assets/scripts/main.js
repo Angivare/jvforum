@@ -507,6 +507,8 @@ instantClick.on('change', function() {
 
   syncFavorites()
 
+  makeFavoritesSlideable()
+
   qsa('script[type=queued]', (element) => {
     eval(element.textContent)
   })
@@ -514,7 +516,6 @@ instantClick.on('change', function() {
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
   startRefreshCycle()
-  makeFavoritesSlideable()
 })
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
