@@ -92,7 +92,7 @@ var JVCode = (function() {
 
     preProcess: function(base) {
       base.find('img').each(function() {
-        this.outerHTML = $(this).attr('data-code')
+        this.outerHTML = $(this).attr('alt')
       })
       base.find('a').each(function() {
         var link_jvc = $(this).data('link-jvc')
