@@ -29,4 +29,13 @@ router.get('/assets/:dir(stickers|smileys)/v1/:id([a-z0-9]+)', (req, res, next) 
   })
 })
 
+router.get('/assets/emoji/v1/small/:id([a-f0-9-]+)\.png', (req, res, next) => {
+  res.sendFile(`${req.params.id}.png`, {
+    root: `${__dirname}/../assets/emoji/v1/small/`,
+    headers: {
+      'Content-Type': 'image/png',
+    },
+  })
+})
+
 module.exports = router

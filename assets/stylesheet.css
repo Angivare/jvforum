@@ -2181,3 +2181,8 @@ a {
 .smiley--pave { width: 51px; height: 42px; }
 .smiley--play { width: 18px; height: 27px; }
 .smiley--siffle { width: 21px; }
+
+.emoji {
+  width: 16px;
+  height: 16px;
+}

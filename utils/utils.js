@@ -3,6 +3,10 @@ let entities = require('html-entities').Html5Entities
   , date = require('./date')
   , db = require('./db')
 
+let twemoji = require('twemoji')
+twemoji.base = '/assets/emoji/v1/'
+twemoji.size = 'small'
+
 function adaptMessageContent(content, id) {
   let matches
     , regex
@@ -119,6 +123,9 @@ function adaptMessageContent(content, id) {
   content = content.replace(/<a ([^>]+)>([^<]{90,})<\/a>/g, (all, attributes, text) => {
     return `<a class="long-link" ${attributes}>` + text.substr(0, 85) + '<span class="long-link__hidden-part">' + text.substr(85) + '</span></a>'
   })
+
+  // Emoji images
+  content = twemoji.parse(content)
 
   if (content.length > 40000) {
     content = '<div class="message__content-text"><p><div class="too-big-notice">Message trop gros pour être affiché par JVForum.</div></p></div>'
