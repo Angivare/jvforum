@@ -394,6 +394,10 @@ function setUpStickers() {
 
   instantClick.addEventListener('scroll', selectHead)
   selectHead()
+
+  qsa('.stickers-heads__head', (element) => {
+    element.addEventListener('click', stickerHeadOnClick)
+  })
 }
 
 function selectHead() {
@@ -412,6 +416,13 @@ function selectHead() {
       selectedHeadPackId = packId
     }
   })
+}
+
+function stickerHeadOnClick(event) {
+  let element = event.currentTarget
+    , packId = element.dataset.packId
+    , scrollPosition = qs(`.js-stickers-pack-${packId}`).getBoundingClientRect().top + scrollY
+  scrollTo(0, scrollPosition)
 }
 
 function insertStickerIntoMessage() {
