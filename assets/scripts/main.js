@@ -404,7 +404,7 @@ function selectHead() {
   let packId
     , heads = []
   qsa('.stickers-pack', (element) => {
-    if (element.getBoundingClientRect().top >= 0) {
+    if (element.getBoundingClientRect().bottom >= 0) {
       packId = parseInt(element.dataset.packId)
       if (packId == selectedHeadPackId) {
         return
@@ -421,7 +421,7 @@ function selectHead() {
 function stickerHeadOnClick(event) {
   let element = event.currentTarget
     , packId = element.dataset.packId
-    , scrollPosition = qs(`.js-stickers-pack-${packId}`).getBoundingClientRect().top + scrollY
+    , scrollPosition = qs(`.js-stickers-pack-${packId}`).getBoundingClientRect().bottom + scrollY - innerHeight
   scrollTo(0, scrollPosition)
 }
 
