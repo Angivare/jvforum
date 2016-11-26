@@ -1769,47 +1769,6 @@ color: hsl(240, 8%, 27%);
   opacity: 1;
 }
 
-.sticker {
-  width: 70px;
-  height: 70px;
-  -webkit-filter: saturate(1.4);
-          filter: saturate(1.4);
-}
-
-.message__content-text > .sticker {
-  width: 100px;
-  height: 100px;
-  top: 0;
-}
-
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
-  .sticker {
-    width: 50px;
-    height: 50px;
-  }
-
-  .message__content-text > .sticker {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-.sticker--pack-10 { /* Brice */
-  -webkit-filter: saturate(1);
-          filter: saturate(1);
-}
-
-.sticker--pack-12, /* Bud */
-.sticker--pack-13 { /* Duracell */
-  -webkit-filter: saturate(1.2);
-          filter: saturate(1.2);
-}
-
-.sticker--enlarged, .message__content-text > .sticker--enlarged {
-  width: 280px;
-  height: 280px;
-}
-
 .long-link:after {
   content: '[…]';
 }
@@ -2317,4 +2276,40 @@ a {
   font-size: 32px;
   margin-top: 35px;
   }
+}
+
+
+
+.sticker {
+  width: 70px;
+  height: 70px;
+  filter: saturate(1.4);
+}
+
+.message__content-text > .sticker {
+  width: 100px;
+  height: 100px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
+  .sticker {
+    width: 50px;
+    height: 50px;
+  }
+
+  .message__content-text > .sticker {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.sticker--pack-10 { /* Brice */
+  -webkit-filter: saturate(1);
+          filter: saturate(1);
+}
+
+.sticker--pack-12, /* Bud */
+.sticker--pack-13 { /* Duracell */
+  -webkit-filter: saturate(1.2);
+          filter: saturate(1.2);
 }
