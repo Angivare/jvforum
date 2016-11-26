@@ -199,7 +199,12 @@ function startRefreshCycle() {
   else {
     refreshInterval = refreshIntervals.old
   }
-  instantClick.setTimeout(refresh, refreshInterval - cacheAge)
+  if (refreshInterval - cacheAge < 0) {
+    refresh()
+  }
+  else {
+    instantClick.setTimeout(refresh, refreshInterval - cacheAge)
+  }
 }
 
 function restartRefreshIfNeeded() {
