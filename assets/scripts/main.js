@@ -119,15 +119,6 @@ function postMessage(event) {
   qs('.js-form-post__button-visible').classList.add('form__post-button-visible--sending')
   qs('.form__post-button').blur()
 
-  let data = {
-    message,
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    topicSlug,
-    _csrf,
-  }
-
   ajax('/ajax/postMessage', timeouts.postMessage, {
     message,
     forumId,
@@ -616,17 +607,8 @@ function editMessage(event) {
   }
   let messageId = element.dataset.id
 
-  let data = {
-    messageId,
-    message,
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    topicSlug,
-    _csrf,
-  }
-
   ajax('/ajax/editMessage', timeouts.postMessage, {
+    messageId,
     message,
     forumId,
     topicMode,
