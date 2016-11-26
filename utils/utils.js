@@ -107,7 +107,7 @@ function adaptMessageContent(content, id) {
     }
     let jvfId = stickers.feeligoToJvf[feeligoId]
       , packId = stickers.packFromId[jvfId]
-    return `<img class="sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+    return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
   })
 
   // Show thumbnails for YouTube links

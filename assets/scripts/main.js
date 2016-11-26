@@ -522,6 +522,31 @@ function enlargeEmoji(event) {
   emojiContainerElement.style.top = `${top - 48 - 4}px`
 }
 
+function enlargeSticker(event) {
+  let element = event.target
+  if (!element.classList.contains('js-sticker')) {
+    return
+  }
+  let id = element.dataset.stickerId
+    , packId = element.dataset.packId
+
+    // put sticker image (small for now) and code
+  qs('.stage').innerHTML = `
+    <img class="sticker sticker--on-stage sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
+    <div class="sticker-code">:${id}:</div>
+  `
+
+  qs('.canvas').classList.add('canvas--under-stage-with-sticker')
+  qs('.stage').addEventListener('click', quitEnlargedSticker)
+  qs('.stage').classList.add('stage--shown')
+}
+
+function quitEnlargedSticker() {
+  qs('.canvas').classList.remove('canvas--under-stage-with-sticker')
+  qs('.stage').removeEventListener('click', quitEnlargedSticker)
+  qs('.stage').classList.remove('stage--shown')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -573,6 +598,7 @@ instantClick.on('change', function() {
 })
 
 document.documentElement.addEventListener('mouseover', enlargeEmoji)
+document.documentElement.addEventListener('click', enlargeSticker)
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
