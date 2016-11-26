@@ -2352,6 +2352,7 @@ a {
   background: var(--form-post-button-default-background);
   border-radius: 99px;
   opacity: .1;
+  position: relative; /* So that the --sending shadow is fully visible on iOS */
 }
 
 .form__post-button-visible--ready-to-post {
@@ -2359,6 +2360,19 @@ a {
   box-shadow: 0 2px 5px var(--form-post-button-shadow),
               inset 0 1px 0 hsl(0, 0%, var(--form-post-button-light));
   background-image: var(--form-post-button-background-image);
+}
+
+.form__post-button:focus .form__post-button-visible {
+  ---border-width: 2px;
+  border: var(---border-width) solid var(--form-post-button-focus-outline-color);
+}
+
+.form__post-button:active .form__post-button-visible {
+  box-shadow: var(--form-post-button-visible-active-shadow);
+}
+
+.form__post-button-visible--sending {
+  box-shadow: var(--form-post-button-visible-sending-shadow);
 }
 
 .form__post-button-icon {
@@ -2374,23 +2388,10 @@ a {
   opacity: 1;
 }
 
-.form__post-button:focus .form__post-button-visible {
-  ---border-width: 2px;
-  border: var(---border-width) solid var(--form-post-button-focus-outline-color);
-}
-
 .form__post-button:focus .form__post-button-icon {
   width: calc(var(---button-size) - (var(---border-width) * 2));
   height: calc(var(---button-size) - (var(---border-width) * 2));
   background-position: calc(var(---background-x-position) - var(---border-width)) center;
-}
-
-.form__post-button:active .form__post-button-visible {
-  box-shadow: var(--form-post-button-visible-active-shadow);
-}
-
-.form__post-button-visible--sending {
-  box-shadow: var(--form-post-button-visible-sending-shadow);
 }
 
 .form__stickers-button {
