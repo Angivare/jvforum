@@ -1770,7 +1770,7 @@ a {
 
 .canvas--under-stage-with-sticker {
   ---blur: 8px;
-  filter: blur(var(---blur)) saturate(1.4);
+  filter: blur(var(---blur));
 }
 
 @media (min-width: 768px) {
