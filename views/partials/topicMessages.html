@@ -1,7 +1,11 @@
 {{~it.messages :m:index}}
-  <div class="message" id="m{{=m.id}}" data-id={{=m.id}} data-nickname="{{=m.nickname}}" data-timestamp={{=m.timestamp}} data-age={{=m.age}} data-checksum={{=m.checksum}}>
-    <div class="message__actions message__actions--nb-1">
-      <span class="js-quote message__actions-action message__actions-action--quote">Citer</span>
+  <div class="message message--nb-actions-{{=m.isMine ? 3 : 1}}" id="m{{=m.id}}" data-id={{=m.id}} data-nickname="{{=m.nickname}}" data-timestamp={{=m.timestamp}} data-age={{=m.age}} data-checksum={{=m.checksum}}>
+    <div class="message__actions message__actions--nb-{{=m.isMine ? 3 : 1}}"><!--
+      {{? m.isMine }}
+        --><span class="js-delete message__actions-action message__actions-action--delete">Suppr.</span><!--
+        --><span class="js-edit message__actions-action message__actions-action--edit">Modifier</span><!--
+      {{?}}
+      --><span class="js-quote message__actions-action message__actions-action--quote">Citer</span>
     </div>
     <div class="message__visible">
       <div class="message__byline">
@@ -32,6 +36,10 @@
       </div>
       <div class="js-content message__content">{{=m.content}}</div>
       <div class="message__quick-actions">
+        {{? m.isMine }}
+          <div class="js-delete message__quick-action message__quick-action--delete" title="Supprimer"></div>
+          <div class="js-edit message__quick-action message__quick-action--edit" title="Modifier"></div>
+        {{?}}
         <div class="js-quote message__quick-action message__quick-action--quote" title="Citer"></div>
       </div>
     </div>

@@ -445,6 +445,9 @@ router.post('/refresh', (req, res, next) => {
           }
         }
 
+                        console.log(req.user)
+        newMessages = utils.addIsMineVariable(newMessages, req.user.nickname)
+
         req.app.render('partials/topicMessages', {
           messages: newMessages,
         }, (err, html) => {

@@ -359,6 +359,13 @@ function encodeHTML(code) {
 	return code.toString().replace(matchHTML, function(m) {return encodeHTMLRules[m] || m;});
 }
 
+function addIsMineVariable(messages, nickname) {
+  messages.forEach((message, i) => {
+    message.isMine = message.nickname.toLowerCase() == nickname.toLowerCase()
+  })
+  return messages
+}
+
 module.exports = {
   emojify,
   adaptMessageContent,
@@ -375,4 +382,5 @@ module.exports = {
   getTopic,
   makePaginationPages,
   encodeHTML,
+  addIsMineVariable,
 }
