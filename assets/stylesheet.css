@@ -2131,7 +2131,6 @@ a {
   height: var(---sticker-demo-size);
   padding: 2px;
   vertical-align: middle;
-  cursor: pointer;
 }
 
 @media (min-width: 360px) {
@@ -2278,12 +2277,11 @@ a {
   }
 }
 
-
-
 .sticker {
   width: 70px;
   height: 70px;
   filter: saturate(1.4);
+  cursor: pointer;
 }
 
 .message__content-text > .sticker {
