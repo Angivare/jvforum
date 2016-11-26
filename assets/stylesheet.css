@@ -1598,55 +1598,6 @@ color: hsl(240, 8%, 27%);
   padding: 2px 3px;
 }
 
-.spoil {
-  background: #EF5350;
-  display: inline-block;
-  width: 80px;
-  height: 22px;
-  margin: -4px 0;
-  border-radius: 2px;
-  overflow: hidden;
-  padding: 3px;
-}
-
-.spoil--block {
-  display: block;
-  margin: 1em 0;
-}
-
-.spoil:not(.spoil--revealed) {
-  cursor: pointer;
-}
-
-.spoil--revealed {
-  overflow: visible;
-  background: #EF9A9A;
-  display: inline;
-  color: hsl(240, 8%, 13%);
-}
-
-.spoil--block.spoil--revealed {
-  display: block;
-  width: auto;
-  height: auto;
-}
-
-.spoil__content {
-  display: none;
-}
-
-.spoil--revealed > .spoil__content {
-  display: inline;
-}
-
-.spoil__content :first-child {
-  margin-top: 0;
-}
-
-.spoil__content :last-child {
-  margin-bottom: 0;
-}
-
 .noelshack-link__thumb {
   width: 68px;
   height: 51px;
@@ -1774,6 +1725,10 @@ color: hsl(240, 8%, 27%);
   --form-post-button-visible-active-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 1);
   --form-post-button-visible-sending-shadow: 0 2px 60px 5px hsl(197, 72%, 74%);
   --error-color: hsl(0, 93%, 36%);
+  --spoil-background: hsl(0, 54%, 38%);
+  --spoil-shadow-color: hsla(0, 0%, 0%, 1);
+  --spoil-revealed-background: hsl(0, 54%, 32%);
+  --spoil-revealed-shadow-color: hsla(0, 0%, 0%, .4);
 }
 
 html {
@@ -2104,6 +2059,57 @@ a {
 
 .emoji-container--shown {
   display: block;
+}
+
+.spoil {
+  background: var(--spoil-background);
+  display: inline-block;
+  width: 70px;
+  height: 22px;
+  margin: -4px 0;
+  border-radius: 2px;
+  overflow: hidden;
+  padding: 3px;
+  box-shadow: 0 1px 2px var(--spoil-shadow-color);
+}
+
+.spoil--block {
+  display: block;
+  margin: 1em 0;
+}
+
+.spoil:not(.spoil--revealed) {
+  cursor: pointer;
+}
+
+.spoil--revealed {
+  overflow: visible;
+  background: var(--spoil-revealed-background);
+  display: inline;
+  color: hsla(0, 0%, 100%, .8);
+  box-shadow: inset 0 1px 2px var(--spoil-revealed-shadow-color);
+}
+
+.spoil--block.spoil--revealed {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
+.spoil__content {
+  display: none;
+}
+
+.spoil--revealed > .spoil__content {
+  display: inline;
+}
+
+.spoil__content :first-child {
+  margin-top: 0;
+}
+
+.spoil__content :last-child {
+  margin-bottom: 0;
 }
 
 .stickers-heads-container,
