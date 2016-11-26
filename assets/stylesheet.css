@@ -2063,26 +2063,24 @@ a {
 }
 
 .sticker {
-  width: 70px;
-  height: 70px;
+  ---size: 70px;
+  width: var(---size);
+  height: var(---size);
   filter: saturate(1.4);
   cursor: pointer;
 }
 
 .message__content-text > .sticker {
-  width: 100px;
-  height: 100px;
+  ---size: 100px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
   .sticker {
-    width: 50px;
-    height: 50px;
+    ---size: 50px;
   }
 
   .message__content-text > .sticker {
-    width: 70px;
-    height: 70px;
+    ---size: 70px;
   }
 }
 
