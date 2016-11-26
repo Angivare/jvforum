@@ -548,6 +548,7 @@ function enlargeSticker(event) {
   qs('.canvas').classList.add('canvas--under-stage-with-sticker')
   qs('.stage').addEventListener('click', quitEnlargedSticker)
   qs('.stage').classList.add('stage--shown')
+  qs('.stage').classList.add('stage--sticker')
 
   let bigSticker = qs('.stage-sticker-big')
   if (bigSticker.complete) {
@@ -564,6 +565,7 @@ function quitEnlargedSticker() {
   qs('.canvas').classList.remove('canvas--under-stage-with-sticker')
   qs('.stage').removeEventListener('click', quitEnlargedSticker)
   qs('.stage').classList.remove('stage--shown')
+  qs('.stage').classList.remove('stage--sticker')
 }
 
 instantClick.init()
