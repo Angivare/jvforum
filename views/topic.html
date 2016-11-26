@@ -44,13 +44,13 @@
         </div>
       </div>
       {{? !it.isLocked}}
-        <form class="js-form-post form">
-          <div class="js-form__error form__error"></div>
+        <form class="js-form-post form form--post">
+          <div class="js-form-post__error form__error"></div>
           <div class="form__bottom-container">
-            <textarea class="js-form-post__textarea form__textarea"  placeholder="Écrivez votre {{=it.superlative}} message" tabindex="1"></textarea>
+            <textarea class="js-form-post__textarea form__textarea" placeholder="Écrivez votre {{=it.superlative}} message" tabindex="3"></textarea>
             <div class="form__actions">
-              <button class="form__post-button" type="submit" tabindex="2">
-                <div class="form__post-button-visible">
+              <button class="form__post-button" type="submit" tabindex="4">
+                <div class="js-form-post__button-visible form__post-button-visible">
                   <div class="form__post-button-icon"></div>
                 </div>
               </button>
@@ -156,6 +156,22 @@
 </div>
 </div>
 <img class="emoji-container" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
+<template class="js-form-edit-template">
+  <form class="js-form-edit form form--edit">
+    <div class="js-form-edit__error form__error"></div>
+    <div class="form__bottom-container">
+      <textarea class="js-form-edit__textarea form__textarea" placeholder="Modifiez votre {{=it.superlative}} message" tabindex="1"></textarea>
+      <div class="form__actions">
+        <button class="form__post-button" type="submit" tabindex="2">
+          <div class="js-form-edit__button-visible form__post-button-visible form__post-button-visible--ready-to-post">
+            <div class="form__post-button-icon"></div>
+          </div>
+        </button>
+        <a class="form__stickers-button" href="/stickers#bottom" tabindex="3" draggable="false"></a>
+      </div>
+    </div>
+  </form>
+</template>
 <script>
   var forumId = {{=it.forumId}}
     , topicMode = {{=it.mode}}

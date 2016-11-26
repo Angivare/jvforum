@@ -1322,6 +1322,8 @@ h1, h2, h3 {
     padding: 2px 4px;
     color: hsl(240, 8%, 73%);
     border-radius: 2px;
+    position: relative;
+    z-index: 2; /* be over edit form */
   }
 }
 
@@ -2265,17 +2267,30 @@ a {
   ---padding: 8px;
   ---side-width: 48px;
   background: var(--card-background);
-  padding: var(---padding);
   position: relative;
   z-index: 1; /* For FAB */
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
 }
 
 @media (min-width: 1025px) {
   .form {
     ---padding: 12px;
+  }
+}
+
+.form--post {
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
+  padding: var(---padding);
+}
+
+@media (min-width: 1025px) {
+  .form--post {
     border-radius: 5px;
   }
+}
+
+.form--edit {
+  padding: var(---padding) 0;
+  margin-bottom: 24px;
 }
 
 .form__error {

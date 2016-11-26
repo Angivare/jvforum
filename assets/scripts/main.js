@@ -11,6 +11,7 @@ let isFormReadyToPost = false
   , stickerDemoWidth
   , isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
   , selectedHeadPackId
+  , toastTimer
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -74,9 +75,9 @@ function setAsHavingTouch() {
   document.body.removeEventListener('touchstart', setAsHavingTouch)
 }
 
-function showError(error) {
-  qs('.js-form__error').innerHTML = error
-  qs('.js-form__error').classList.add('form__error--shown')
+function showError(error, form = 'post') {
+  qs(`.js-form-${form}__error`).innerHTML = error
+  qs(`.js-form-${form}__error`).classList.add('form__error--shown')
 }
 
 function alertPlaceholder() {
@@ -115,7 +116,7 @@ function postMessage(event) {
     return
   }
 
-  qs('.form__post-button-visible').classList.add('form__post-button-visible--sending')
+  qs('.js-form-post__button-visible').classList.add('form__post-button-visible--sending')
   qs('.form__post-button').blur()
 
   let data = {
@@ -134,7 +135,7 @@ function postMessage(event) {
     topicIdLegacyOrModern,
     topicSlug,
   }, (status, response, xhr) => {
-    qs('.form__post-button-visible').classList.remove('form__post-button-visible--sending')
+    qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
       showError(`Problème réseau`)
@@ -145,11 +146,11 @@ function postMessage(event) {
       return
     }
 
-    qs('.js-form__error').classList.remove('form__error--shown')
+    qs('.js-form-post__error').classList.remove('form__error--shown')
     qs('.js-form-post__textarea').value = ''
 
     isFormReadyToPost = false
-    qs('.form__post-button-visible').classList.remove('form__post-button-visible--ready-to-post')
+    qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--ready-to-post')
 
     if (!hasTouch) {
       qs('.js-form-post__textarea').focus()
@@ -161,13 +162,13 @@ function readyFormToPost() {
   if (isFormReadyToPost) {
     if (!qs('.js-form-post__textarea').value.trim()) {
       isFormReadyToPost = false
-      qs('.form__post-button-visible').classList.remove('form__post-button-visible--ready-to-post')
+      qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--ready-to-post')
       return
     }
   }
 
   if (qs('.js-form-post__textarea').value.trim()) {
-    qs('.form__post-button-visible').classList.add('form__post-button-visible--ready-to-post')
+    qs('.js-form-post__button-visible').classList.add('form__post-button-visible--ready-to-post')
     isFormReadyToPost = true
   }
 }
@@ -266,7 +267,9 @@ function refresh() {
           qs(`#m${id}`).dataset.checksum = message.checksum
           messagesChecksums[id] = message.checksum
 
-          qs(`#m${id} .js-content`).innerHTML = message.content
+          if (!qs(`#m${id} .js-content`).dataset.isBeingEdited) {
+            qs(`#m${id} .js-content`).innerHTML = message.content
+          }
 
           for (let i = 0; i < messagesEvents.length; i++) {
             qsa(`#m${id} ${messagesEvents[i].element}`, (element) => {
@@ -435,7 +438,7 @@ function insertStickerIntoMessage() {
   if (!localStorage.stickerToInsert) {
     return
   }
-  let textarea = qs('.js-form-post__textarea')
+  let textarea = qs('.js-form-edit__textarea') || qs('.js-form-post__textarea')
   if (!textarea) {
     return
   }
@@ -470,7 +473,10 @@ function quoteMessage(event) {
     element = element.parentNode
   }
   let {id, nickname, timestamp} = element.dataset
-    , textarea = qs('.js-form-post__textarea')
+  if (qs(`#m${id} .js-content`).dataset.isBeingEdited) {
+    return
+  }
+  let textarea = qs('.js-form-edit__textarea') || qs('.js-form-post__textarea')
     , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
     , text = html2jvcode(html)
     , quote = ''
@@ -568,6 +574,102 @@ function quitEnlargedSticker() {
   qs('.stage').classList.remove('stage--sticker')
 }
 
+function showEditForm(event) {
+  let element = event.target
+  if (!element.classList.contains('js-edit')) {
+    return
+  }
+  while (!element.id) {
+    element = element.parentNode
+  }
+  let {id, nickname, timestamp} = element.dataset
+    , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
+    , text = html2jvcode(html)
+
+  qs(`#m${id} .js-content`).innerHTML = qs('.js-form-edit-template').innerHTML
+  qs(`#m${id} .js-content`).dataset.isBeingEdited = true
+
+  let textarea = qs('.js-form-edit__textarea')
+
+  textarea.focus() // Must be before setting value in order to have the cursor at the bottom
+  textarea.value = text
+
+  qs('.js-form-edit').addEventListener('submit', editMessage)
+}
+
+function editMessage(event) {
+  event.preventDefault()
+
+  let message = qs('.js-form-edit__textarea').value
+
+  if (message.length == 0) {
+    qs('.js-form-edit__textarea').focus()
+    return
+  }
+
+  qs('.js-form-edit__button-visible').classList.add('form__post-button-visible--sending')
+  qs('.form__post-button').blur()
+
+  let element = event.target
+  while (!element.id) {
+    element = element.parentNode
+  }
+  let messageId = element.dataset.id
+
+  let data = {
+    messageId,
+    message,
+    forumId,
+    topicMode,
+    topicIdLegacyOrModern,
+    topicSlug,
+    _csrf,
+  }
+
+  ajax('/ajax/editMessage', timeouts.postMessage, {
+    message,
+    forumId,
+    topicMode,
+    topicIdLegacyOrModern,
+    topicSlug,
+  }, (status, response, xhr) => {
+    qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--sending')
+
+    if (status != 200) {
+      showError(`Problème réseau`, 'edit')
+      return
+    }
+    if (response.error) {
+      showError(response.error, 'edit')
+      return
+    }
+
+    qs('.js-form-edit__error').classList.remove('form__error--shown')
+    qs('.js-form-edit__textarea').value = ''
+
+    isFormReadyToPost = false
+    qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--ready-to-post')
+
+    delete qs(`#m${id} .js-content`).dataset.isBeingEdited
+
+    showToast('Message modifié')
+  })
+}
+
+function showToast(message, duration_in_seconds = 1.5) {
+  clearTimeout(toastTimer)
+  $('.toast').addClass('toast--shown')
+  $('.toast__label').text(message)
+  toastTimer = instantClick.timer(hideToast, duration_in_seconds * 1000)
+}
+
+function hideToast() {
+  $('.toast').removeClass('toast--shown')
+  toastTimer = instantClick.timer(function() {
+    $('.toast__label').text(' ')
+  }, 150)
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -620,6 +722,7 @@ instantClick.on('change', function() {
 
 document.documentElement.addEventListener('mouseover', enlargeEmoji)
 document.documentElement.addEventListener('click', enlargeSticker)
+document.documentElement.addEventListener('click', showEditForm)
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
