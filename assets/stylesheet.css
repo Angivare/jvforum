@@ -1831,6 +1831,7 @@ color: hsl(240, 8%, 27%);
   --message-action-light: .08;
   --stickers-heads-background: hsl(240, 8%, 10%);
   --stickers-heads-light: .05;
+  --stickers-heads-selected-border-top-color: hsl(0, 0%, 0%);
   --stickers-head-selected-background: hsl(240, 8%, 7%);
   --stickers-head-selected-shadow: inset 0 0 2px 1px hsl(0, 0%, 0%);
   --sticker-code-color: hsla(240, 8%, 100%, .4);
@@ -2095,7 +2096,7 @@ a {
 
 .stickers-heads__head--selected,
 .stickers-heads__head:active {
-  border-top-color: black;
+  border-top-color: var(--stickers-heads-selected-border-top-color);
   background: var(--stickers-head-selected-background);
   box-shadow: var(--stickers-head-selected-shadow);
   -webkit-tap-highlight-color: transparent;
