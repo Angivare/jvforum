@@ -74,9 +74,9 @@ function setAsHavingTouch() {
   document.body.removeEventListener('touchstart', setAsHavingTouch)
 }
 
-function showErrors(errors) {
-  qs('.form__errors p').innerHTML = errors
-  qs('.form__errors').classList.add('form__errors--shown')
+function showError(error) {
+  qs('.js-form__error').innerHTML = error
+  qs('.js-form__error').classList.add('form__error--shown')
 }
 
 function alertPlaceholder() {
@@ -108,15 +108,15 @@ function toggleSpoil(event) {
 function postMessage(event) {
   event.preventDefault()
 
-  let message = qs('.form__textarea').value
+  let message = qs('.js-form-post__textarea').value
 
   if (message.length == 0) {
-    qs('.form__textarea').focus()
+    qs('.js-form-post__textarea').focus()
     return
   }
 
-  qs('.button-mobile-post__visible').classList.add('button-mobile-post__visible--sending')
-  qs('.button-mobile-post').blur()
+  qs('.form__post-button-visible').classList.add('form__post-button-visible--sending')
+  qs('.form__post-button').blur()
 
   let data = {
     message,
@@ -134,40 +134,40 @@ function postMessage(event) {
     topicIdLegacyOrModern,
     topicSlug,
   }, (status, response, xhr) => {
-    qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--sending')
+    qs('.form__post-button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
-      showErrors(`Problème réseau`)
+      showError(`Problème réseau`)
       return
     }
     if (response.error) {
-      showErrors(response.error)
+      showError(response.error)
       return
     }
 
-    qs('.form__errors').classList.remove('form__errors--shown')
-    qs('.form__textarea').value = ''
+    qs('.js-form__error').classList.remove('form__error--shown')
+    qs('.js-form-post__textarea').value = ''
 
     isFormReadyToPost = false
-    qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--ready-to-post')
+    qs('.form__post-button-visible').classList.remove('form__post-button-visible--ready-to-post')
 
     if (!hasTouch) {
-      qs('.form__textarea').focus()
+      qs('.js-form-post__textarea').focus()
     }
   })
 }
 
 function readyFormToPost() {
   if (isFormReadyToPost) {
-    if (!qs('.form__textarea').value.trim()) {
+    if (!qs('.js-form-post__textarea').value.trim()) {
       isFormReadyToPost = false
-      qs('.button-mobile-post__visible').classList.remove('button-mobile-post__visible--ready-to-post')
+      qs('.form__post-button-visible').classList.remove('form__post-button-visible--ready-to-post')
       return
     }
   }
 
-  if (qs('.form__textarea').value.trim()) {
-    qs('.button-mobile-post__visible').classList.add('button-mobile-post__visible--ready-to-post')
+  if (qs('.js-form-post__textarea').value.trim()) {
+    qs('.form__post-button-visible').classList.add('form__post-button-visible--ready-to-post')
     isFormReadyToPost = true
   }
 }
@@ -339,7 +339,7 @@ function makeFavoritesSlide() {
 }
 
 function goToForm() {
-  qs('.js-form-post .form__textarea').focus()
+  qs('.js-form-post__textarea').focus()
   scrollTo(0, qs('.js-form-post').getBoundingClientRect().top + scrollY)
 }
 
@@ -435,7 +435,7 @@ function insertStickerIntoMessage() {
   if (!localStorage.stickerToInsert) {
     return
   }
-  let textarea = qs('.form__textarea')
+  let textarea = qs('.js-form-post__textarea')
   if (!textarea) {
     return
   }
@@ -470,7 +470,7 @@ function quoteMessage(event) {
     element = element.parentNode
   }
   let {id, nickname, timestamp} = element.dataset
-    , textarea = qs('.form__textarea')
+    , textarea = qs('.js-form-post__textarea')
     , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
     , text = html2jvcode(html)
     , quote = ''
@@ -585,11 +585,11 @@ instantClick.on('change', function() {
   qs('.js-form-post', (element) => {
     element.addEventListener('submit', postMessage)
   })
-  qs('.js-form-post .form__textarea', (element) => {
+  qs('.js-form-post__textarea', (element) => {
     element.addEventListener('input', readyFormToPost)
   })
   isFormReadyToPost = false
-  qs('.form__textarea', readyFormToPost) // The form can be filled on page change if it's after a refresh
+  qs('.js-form-post__textarea', readyFormToPost) // The form can be filled on page change if it's after a refresh
 
   qsa('.js-favorite-toggle', (element) => {
     element.addEventListener('click', alertPlaceholder)
