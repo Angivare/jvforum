@@ -2062,6 +2062,113 @@ a {
   margin: .6em 0;
 }
 
+.sticker {
+  width: 70px;
+  height: 70px;
+  filter: saturate(1.4);
+  cursor: pointer;
+}
+
+.message__content-text > .sticker {
+  width: 100px;
+  height: 100px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
+  .sticker {
+    width: 50px;
+    height: 50px;
+  }
+
+  .message__content-text > .sticker {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.sticker--pack-10 { /* Brice */
+  -webkit-filter: saturate(1);
+          filter: saturate(1);
+}
+
+.smiley {
+  min-width: 15px;
+  min-height: 15px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .smiley {
+    -ms-interpolation-mode: nearest-neighbor;
+    -webkit-image-rendering: crisp-edges;
+    image-rendering: pixelated;
+  }
+}
+
+.smiley--2 { width: 25px; height: 23px; }
+.smiley--16 { min-width: 14px; }
+.smiley--17 { width: 16px; min-height: 11px; }
+.smiley--22 { height: 16px; }
+.smiley--27 { width: 22px; height: 25px; }
+.smiley--29 { width: 45px; height: 40px; }
+.smiley--30 { width: 16px; }
+.smiley--32 { width: 36px; height: 44px; }
+.smiley--36 { width: 23px; }
+.smiley--38 { width: 50px; height: 33px; }
+.smiley--41 { height: 16px; }
+.smiley--42 { width: 46px; height: 40px; }
+.smiley--44 { width: 37px; height: 41px; }
+.smiley--48 { width: 44px; height: 41px; }
+.smiley--49 { width: 64px; height: 43px; }
+.smiley--51 { width: 65px; height: 45px; }
+.smiley--52 { width: 58px; height: 57px; }
+.smiley--54 { width: 20px; height: 19px; }
+.smiley--56 { width: 50px; height: 33px; }
+.smiley--57 { height: 16px; }
+.smiley--58 { width: 44px; height: 39px; }
+.smiley--59 { width: 50px; height: 38px; }
+.smiley--60 { width: 29px; height: 21px; }
+.smiley--61 { width: 35px; height: 20px; }
+.smiley--62 { height: 26px; }
+.smiley--63 { width: 50px; height: 33px; }
+.smiley--64 { width: 51px; height: 31px; }
+.smiley--65 { width: 47px; height: 38px; }
+.smiley--66 { width: 26px; height: 20px; }
+.smiley--69 { width: 16px; height: 17px; }
+.smiley--70 { width: 48px; height: 42px; }
+.smiley--cimer { width: 57px; height: 36px; }
+.smiley--ddb { width: 49px; height: 39px; }
+.smiley--fish { width: 16px; height: 16px; }
+.smiley--hapoelparty { width: 44px; height: 26px; }
+.smiley--loveyou { width: 63px; height: 29px; }
+.smiley--nyu { height: 16px; }
+.smiley--objection { width: 54px; height: 33px; }
+.smiley--pave { width: 51px; height: 42px; }
+.smiley--play { width: 18px; height: 27px; }
+.smiley--siffle { width: 21px; }
+
+.emoji {
+  width: 1em;
+}
+
+.message__content-text .emoji {
+  width: 16px;
+  height: 16px;
+}
+
+.emoji-container {
+  display: none;
+  width: 48px;
+  height: 48px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  pointer-events: none;
+}
+
+.emoji-container--shown {
+  display: block;
+}
+
 .stickers-heads-container,
 .stickers-list {
   ---stickers-heads-column-size: 44px;
@@ -2158,84 +2265,6 @@ a {
   }
 }
 
-.smiley {
-  min-width: 15px;
-  min-height: 15px;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2) {
-  .smiley {
-    -ms-interpolation-mode: nearest-neighbor;
-    -webkit-image-rendering: crisp-edges;
-    image-rendering: pixelated;
-  }
-}
-
-.smiley--2 { width: 25px; height: 23px; }
-.smiley--16 { min-width: 14px; }
-.smiley--17 { width: 16px; min-height: 11px; }
-.smiley--22 { height: 16px; }
-.smiley--27 { width: 22px; height: 25px; }
-.smiley--29 { width: 45px; height: 40px; }
-.smiley--30 { width: 16px; }
-.smiley--32 { width: 36px; height: 44px; }
-.smiley--36 { width: 23px; }
-.smiley--38 { width: 50px; height: 33px; }
-.smiley--41 { height: 16px; }
-.smiley--42 { width: 46px; height: 40px; }
-.smiley--44 { width: 37px; height: 41px; }
-.smiley--48 { width: 44px; height: 41px; }
-.smiley--49 { width: 64px; height: 43px; }
-.smiley--51 { width: 65px; height: 45px; }
-.smiley--52 { width: 58px; height: 57px; }
-.smiley--54 { width: 20px; height: 19px; }
-.smiley--56 { width: 50px; height: 33px; }
-.smiley--57 { height: 16px; }
-.smiley--58 { width: 44px; height: 39px; }
-.smiley--59 { width: 50px; height: 38px; }
-.smiley--60 { width: 29px; height: 21px; }
-.smiley--61 { width: 35px; height: 20px; }
-.smiley--62 { height: 26px; }
-.smiley--63 { width: 50px; height: 33px; }
-.smiley--64 { width: 51px; height: 31px; }
-.smiley--65 { width: 47px; height: 38px; }
-.smiley--66 { width: 26px; height: 20px; }
-.smiley--69 { width: 16px; height: 17px; }
-.smiley--70 { width: 48px; height: 42px; }
-.smiley--cimer { width: 57px; height: 36px; }
-.smiley--ddb { width: 49px; height: 39px; }
-.smiley--fish { width: 16px; height: 16px; }
-.smiley--hapoelparty { width: 44px; height: 26px; }
-.smiley--loveyou { width: 63px; height: 29px; }
-.smiley--nyu { height: 16px; }
-.smiley--objection { width: 54px; height: 33px; }
-.smiley--pave { width: 51px; height: 42px; }
-.smiley--play { width: 18px; height: 27px; }
-.smiley--siffle { width: 21px; }
-
-.emoji {
-  width: 1em;
-}
-
-.message__content-text .emoji {
-  width: 16px;
-  height: 16px;
-}
-
-.emoji-container {
-  display: none;
-  width: 48px;
-  height: 48px;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  pointer-events: none;
-}
-
-.emoji-container--shown {
-  display: block;
-}
-
 .stage-sticker-small-container {
   width: 100%;
   position: absolute;
@@ -2276,35 +2305,6 @@ a {
   font-size: 32px;
   margin-top: 35px;
   }
-}
-
-.sticker {
-  width: 70px;
-  height: 70px;
-  filter: saturate(1.4);
-  cursor: pointer;
-}
-
-.message__content-text > .sticker {
-  width: 100px;
-  height: 100px;
-}
-
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
-  .sticker {
-    width: 50px;
-    height: 50px;
-  }
-
-  .message__content-text > .sticker {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-.sticker--pack-10 { /* Brice */
-  -webkit-filter: saturate(1);
-          filter: saturate(1);
 }
 
 .sticker--pack-12, /* Bud */
