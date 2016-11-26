@@ -1875,9 +1875,6 @@ color: hsl(240, 8%, 27%);
   --stickers-head-selected-background: hsl(240, 8%, 7%);
   --stickers-head-selected-shadow: inset 0 0 2px 1px hsl(0, 0%, 0%);
   --sticker-code-color: hsla(240, 8%, 100%, .4);
-
-  --sheet-desktop-padding-x: 30px;
-  --header__forum-link-over400-padding-x: 20px;
 }
 
 html {
@@ -1901,6 +1898,11 @@ body {
 a {
   color: var(--link-color);
   text-decoration: none;
+}
+
+.canvas {
+  ---sheet-desktop-padding-x: 30px;
+  ---header__forum-link-over400-padding-x: 20px;
 }
 
 .canvas--under-stage-with-menu-mobile-items {
@@ -1929,7 +1931,7 @@ a {
 
 .header__container {
   display: table;
-  padding-left: calc((100% - var(--container-max-width)) / 2 + (var(--sheet-desktop-padding-x) - var(--header__forum-link-over400-padding-x)) );
+  padding-left: calc((100% - var(--container-max-width)) / 2 + (var(---sheet-desktop-padding-x) - var(---header__forum-link-over400-padding-x)) );
   width: 110%; /* hides .header__forum-cell's box-shadow right part */
 }
 
@@ -1962,7 +1964,7 @@ a {
 
 .header__forum-link {
   color: var(--header__forum-link-color);
-  padding: 10px var(--header__forum-link-over400-padding-x);
+  padding: 10px var(---header__forum-link-over400-padding-x);
   display: inline-block;
 }
 
@@ -1987,7 +1989,7 @@ a {
   .sheet {
     margin: auto;
     max-width: var(--container-max-width);
-    padding: 0 var(--sheet-desktop-padding-x) 14px;
+    padding: 0 var(---sheet-desktop-padding-x) 14px;
   }
 }
 
@@ -2275,7 +2277,17 @@ a {
   display: block;
 }
 
-.sticker--on-stage {
+.stage-sticker-small-container {
+  width: 100%;
+  position: absolute;
+}
+
+.stage-sticker-small-container--hidden {
+  display: none;
+}
+
+.stage-sticker-small,
+.stage-sticker-big {
   width: calc(var(---width) / 2);
   height: calc(var(---height) / 2);
   display: block;
@@ -2284,14 +2296,15 @@ a {
 }
 
 @media (min-width: 600px) {
-  .sticker--on-stage {
+  .stage-sticker-small,
+  .stage-sticker-big {
     width: var(---width);
     height: var(---height);
     margin-top: 40px;
   }
 }
 
-.sticker-code {
+.stage-sticker-code {
   margin: auto;
   text-align: center;
   color: var(--sticker-code-color);
