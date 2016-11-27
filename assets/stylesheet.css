@@ -2444,8 +2444,7 @@ a {
 }
 
 .message {
-  ---delete-transition-delay: .2s;
-  transition: transform var(---delete-transition-delay);
+  transition: transform .2s;
 }
 
 .message--being-deleted {

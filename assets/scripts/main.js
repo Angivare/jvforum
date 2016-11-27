@@ -243,9 +243,12 @@ function refresh() {
 
       for (let id in messagesChecksums) {
         if (!(id in response.messages)) {
-          // Deleted
-          qs(`#m${id}`).remove()
+          // Delete
+          qs(`#m${id}`).classList.add('message--being-deleted')
           delete messagesChecksums[id]
+          setTimeout((id) => {
+            qs(`#m${id}`).remove()
+          }, 200, id)
         }
       }
 
@@ -265,6 +268,11 @@ function refresh() {
         }
 
         // Update
+        console.log('update '+id)
+        if (!(id in messagesChecksums)) {
+          // Has been deleted
+          continue
+        }
         qs(`#m${id}`).dataset.age = message.age
         qs(`#m${id} .js-date`).innerHTML = message.date
         if ('content' in message) {
