@@ -12,6 +12,7 @@ let isFormReadyToPost = false
   , isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
   , selectedHeadPackId
   , toastTimer
+  , savedMessageContentBeforeEditing
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -582,9 +583,32 @@ function showEditForm(event) {
     element = element.parentNode
   }
   let {id, nickname, timestamp} = element.dataset
-    , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
+
+  let alreadyEditedForm = qs('.js-form-edit')
+  if (alreadyEditedForm) {
+    delete alreadyEditedForm.parentNode.dataset.isBeingEdited
+
+    let elementEdited = alreadyEditedForm
+    while (!elementEdited.id) {
+      elementEdited = elementEdited.parentNode
+    }
+    let idEdited = elementEdited.dataset.id
+    qs(`#m${idEdited} .js-content`).innerHTML = savedMessageContentBeforeEditing
+    for (let i = 0; i < messagesEvents.length; i++) {
+      qsa(`#m${idEdited} ${messagesEvents[i].element}`, (element) => {
+        element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
+      })
+    }
+
+    if (id == idEdited) {
+      return
+    }
+  }
+
+  let html = qs(`#m${id} .message__content-text`).innerHTML.trim()
     , text = html2jvcode(html)
 
+  savedMessageContentBeforeEditing = qs(`#m${id} .js-content`).innerHTML
   qs(`#m${id} .js-content`).innerHTML = qs('.js-form-edit-template').innerHTML
   qs(`#m${id} .js-content`).dataset.isBeingEdited = true
 
@@ -721,6 +745,7 @@ addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
 addMessagesEvent('.js-quote', 'click', quoteMessage)
 addMessagesEvent('.js-menu', 'click', toggleMenu)
+addMessagesEvent('.js-delete', 'click', alertPlaceholder)
 addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
