@@ -223,6 +223,10 @@ function refresh() {
         if (response.error == 'deleted' && numberOfPages) { // non-zero numberOfPages means we're not already on an error page
           location.href = location.pathname
         }
+        if (response.error.substr(0, 'redirect'.length) == 'redirect') {
+          redirectTo = response.error.split('=')[1]
+          location.href = redirectTo
+        }
         return
       }
 
