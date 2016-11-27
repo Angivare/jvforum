@@ -25,7 +25,7 @@ router.post('/login', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.cf_ip
+    , ipAddress = req.ip
 
   let missingParams = false
   ;['nickname', 'password', 'captcha'].forEach((varName) => {
@@ -127,7 +127,7 @@ router.post('/postMessage', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.cf_ip
+    , ipAddress = req.ip
     , user = req.user
 
   let missingParams = false
@@ -236,7 +236,7 @@ router.post('/editMessage', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.cf_ip
+    , ipAddress = req.ip
     , user = req.user
 
   let missingParams = false
@@ -571,7 +571,7 @@ router.post('/syncFavorites', (req, res, next) => {
       error: false,
       updated: false,
     }
-    , ipAddress = req.cf_ip
+    , ipAddress = req.ip
     , user = req.user
     , now = Math.floor(new Date() / 1000)
 
@@ -642,7 +642,7 @@ router.post('/getAjaxHash', (req, res, next) => {
   let r = {
       error: false,
     }
-    , ipAddress = req.cf_ip
+    , ipAddress = req.ip
     , user = req.user
     , now = Math.floor(new Date() / 1000)
 

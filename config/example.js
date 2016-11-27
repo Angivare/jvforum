@@ -8,7 +8,6 @@ let config = {
   },
   maxSimultaneousRequests: 30,
   googleAnalyticsId: '',
-  useCloudFlare: false,
 
   /* ------------------------ */
 

@@ -31,14 +31,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookiesSecret))
 app.use(csrf({cookie: true}))
 
-app.use((req, res, next) => {
-  req.cf_ip = req.ip
-  if (config.useCloudFlare && 'cf-connecting-ip' in req.headers) {
-    req.cf_ip = req.headers['cf-connecting-ip']
-  }
-  next()
-})
-
 app.use(routesStaticFiles)
 app.use(routesHomeLogin)
 app.use(routesForum)
