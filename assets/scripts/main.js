@@ -3,6 +3,7 @@ let isFormReadyToPost = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
   , messagesChecksums
+  , messagesDeleted = []
   , refreshInterval
   , messagesEvents = []
   , isSliderSliding = false
@@ -237,22 +238,23 @@ function refresh() {
 
       if ('newMessagesHTML' in response) {
         for (let element of stringToElements(response.newMessagesHTML)) {
-          qs('.messages-list').appendChild(element)
+          if (messagesDeleted.indexOf(element.id) > -1) {
+            qs('.messages-list').appendChild(element)
+          }
         }
       }
 
       for (let id in messagesChecksums) {
         if (!(id in response.messages)) {
-          // Delete
-          qs(`#m${id}`).classList.add('message--being-deleted')
-          delete messagesChecksums[id]
-          setTimeout((id) => {
-            qs(`#m${id}`).remove()
-          }, 200, id)
+          deleteMessage(id)
         }
       }
 
       for (let id in response.messages) {
+        if (messagesDeleted.indexOf(id) > -1) {
+          continue
+        }
+
         let message = response.messages[id]
 
         if (!(id in messagesChecksums)) {
@@ -268,11 +270,6 @@ function refresh() {
         }
 
         // Update
-        console.log('update '+id)
-        if (!(id in messagesChecksums)) {
-          // Has been deleted
-          continue
-        }
         qs(`#m${id}`).dataset.age = message.age
         qs(`#m${id} .js-date`).innerHTML = message.date
         if ('content' in message) {
@@ -707,6 +704,27 @@ function hideToast() {
   }, 150)
 }
 
+function deleteMessage(id) {
+  messagesDeleted.push(id)
+  qs(`#m${id}`).classList.add('message--being-deleted')
+  delete messagesChecksums[id]
+  setTimeout((id) => {
+    qs(`#m${id}`).remove()
+  }, 200, id)
+}
+
+function confirmDeleteMessage(event) {
+  if (!confirm('Supprimer ce message ?')) {
+    return
+  }
+  let element = event.target
+  while (!element.id) {
+    element = element.parentNode
+  }
+  let id = element.dataset.id
+  deleteMessage(id)
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -765,7 +783,7 @@ addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
 addMessagesEvent('.js-quote', 'click', quoteMessage)
 addMessagesEvent('.js-menu', 'click', toggleMenu)
-addMessagesEvent('.js-delete', 'click', alertPlaceholder)
+addMessagesEvent('.js-delete', 'click', confirmDeleteMessage)
 addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
