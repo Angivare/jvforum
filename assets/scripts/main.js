@@ -246,7 +246,7 @@ function refresh() {
 
       for (let id in messagesChecksums) {
         if (!(id in response.messages)) {
-          deleteMessage(id)
+          visuallyDeleteMessage(id)
         }
       }
 
@@ -705,7 +705,7 @@ function hideToast() {
   }, 150)
 }
 
-function deleteMessage(id) {
+function visuallyDeleteMessage(id) {
   messagesDeleted.push(id)
   qs(`#m${id}`).classList.add('message--being-deleted')
   delete messagesChecksums[id]
@@ -723,7 +723,20 @@ function confirmDeleteMessage(event) {
     element = element.parentNode
   }
   let id = element.dataset.id
-  deleteMessage(id)
+  visuallyDeleteMessage(id)
+
+  ajax('/ajax/deleteMessage', timeouts.postMessage, {
+    messageId: id,
+  }, (status, response, xhr) => {
+    if (status != 200) {
+      showToast(`Problème réseau lors de la suppression du message`, 3)
+      return
+    }
+    if (response.error) {
+      showToast(`Problème lors de la suppression du message : ${response.error}`, 5)
+      return
+    }
+  })
 }
 
 instantClick.init()

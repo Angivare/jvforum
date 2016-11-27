@@ -340,6 +340,52 @@ router.post('/editMessage', (req, res, next) => {
   })
 })
 
+router.post('/deleteMessage', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.ip
+    , user = req.user
+
+  if (!('messageId' in req.body)) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+  let messageId = req.body.messageId
+    , ajaxHash = req.signedCookies.ajax_hash_moderation_forum
+
+  fetch({
+    path: `/forums/modal_del_message.php?type=delete&tab_message[]=${messageId}&ajax_hash=${ajaxHash}`,
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.postMessageForm,
+  }, (headers, body) => {
+    let response = JSON.parse(body)
+    if (response) {
+      console.log(response)
+      if ('erreur' in response && response.erreur.length) {
+        r.error = response.erreur[0]
+      }
+    }
+    else {
+      if (headers.statusCode == 200) {
+        r.error = 'JVForum n’a pas pu parser la réponse.'
+      }
+      else {
+        r.error = 'JVC n’arrive pas à servir la page.'
+      }
+    }
+    res.json(r)
+  }, (error) => {
+    if (error == 'timeout') {
+      r.error = 'Timeout de JVC.'
+    }
+    else {
+      r.error = `Erreur réseau de JVF. (${error}).`
+    }
+    res.json(r)
+  })
+})
+
 router.post('/refresh', (req, res, next) => {
   let r = {
       error: false,
