@@ -232,6 +232,114 @@ router.post('/postMessage', (req, res, next) => {
   })
 })
 
+router.post('/editMessage', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.cf_ip
+    , user = req.user
+
+  let missingParams = false
+  ;['messageId', 'message'].forEach((varName) => {
+    if (!(varName in req.body)) {
+      missingParams = true
+    }
+  })
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
+  let {messageId, message} = req.body
+
+  message = utils.adaptPostedMessage(message, req.headers.host)
+
+  let ajaxHash = 'redacted'
+
+  fetch({
+    path: `/forums/ajax_edit_message.php?action=get&id_message=${messageId}&ajax_hash=${ajaxHash}`,
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.postMessageForm,
+  }, (headers, body) => {
+    let response = JSON.parse(body)
+    if (response) {
+      if ('erreur' in response && response.erreur.length) {
+        r.error = response.erreur[0]
+        res.json(r)
+        return
+      }
+
+      let form = parse.form(response.html)
+      form.action = 'post'
+      form.id_message = messageId
+      form.message_topic = message
+      form.ajax_hash = ajaxHash
+
+      fetch({
+        path: '/forums/ajax_edit_message.php',
+        cookies: req.formattedJvcCookies,
+        ipAddress,
+        postData: form,
+        timeout: config.timeouts.server.postMessage,
+      }, (headers, body) => {
+        let response = JSON.parse(body)
+        if (response) {
+          if ('erreur' in response && response.erreur.length) {
+            let error = response.erreur[0]
+            if (error == 'Le captcha est invalide.') {
+              r.error = 'JVC demande un captcha. Repostez dans un instant.'
+            }
+            else {
+              r.error = `JVC a renvoyé l’erreur « ${error} » à l’envoi du message.`
+            }
+            res.json(r)
+            return
+          }
+
+          let result = parse.editResponse(response.html)
+          r.content = result.content
+          r.checksum = result.checksum
+          res.json(r)
+        }
+        else {
+          if (headers.statusCode == 200) {
+            r.error = 'JVForum n’a pas pu parser la réponse.'
+          }
+          else {
+            r.error = 'JVC n’arrive pas à servir la page de réponse.'
+          }
+          res.json(r)
+        }
+      }, (error) => {
+        if (error == 'timeout') {
+          r.error = 'Timeout de JVC lors de l’envoi du message. Le message a peut-être été posté.'
+        }
+        else {
+          r.error = `Erreur réseau de JVF lors de l’envoi du message. (${error}).`
+        }
+        res.json(r)
+      })
+    }
+    else {
+      if (headers.statusCode == 200) {
+        r.error = 'JVForum n’a pas pu parser les variables.'
+      }
+      else {
+        r.error = 'JVC n’arrive pas à servir la page de récupération des variables.'
+      }
+      res.json(r)
+    }
+  }, (error) => {
+    if (error == 'timeout') {
+      r.error = 'Timeout de JVC lors de la récupération des variables.'
+    }
+    else {
+      r.error = `Erreur réseau de JVF lors de la récupération des variables. (${error}).`
+    }
+    res.json(r)
+  })
+})
+
 router.post('/refresh', (req, res, next) => {
   let r = {
       error: false,

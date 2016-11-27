@@ -632,9 +632,12 @@ function editMessage(event) {
     isFormReadyToPost = false
     qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--ready-to-post')
 
-    delete qs(`#m${id} .js-content`).dataset.isBeingEdited
+    delete qs(`#m${messageId} .js-content`).dataset.isBeingEdited
 
-    showToast('Message modifié')
+    qs(`#m${messageId} .js-content`).innerHTML = response.content
+
+    qs(`#m${messageId}`).dataset.checksum = response.checksum
+    messagesChecksums[messageId] = response.checksum
   })
 }
 
@@ -642,12 +645,12 @@ function showToast(message, duration_in_seconds = 1.5) {
   clearTimeout(toastTimer)
   $('.toast').addClass('toast--shown')
   $('.toast__label').text(message)
-  toastTimer = instantClick.timer(hideToast, duration_in_seconds * 1000)
+  toastTimer = instantClick.setTimeout(hideToast, duration_in_seconds * 1000)
 }
 
 function hideToast() {
   $('.toast').removeClass('toast--shown')
-  toastTimer = instantClick.timer(function() {
+  toastTimer = instantClick.setTimeout(function() {
     $('.toast__label').text(' ')
   }, 150)
 }
