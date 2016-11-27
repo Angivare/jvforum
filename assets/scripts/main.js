@@ -306,10 +306,11 @@ function syncFavorites() {
   ajax('/ajax/syncFavorites', timeouts.syncFavorites)
 }
 
-function getAjaxHash() {
-  ajax('/ajax/getAjaxHash', timeouts.syncFavorites, {}, (status, response, xhr) => {
+function getAjaxHashes() {
+  ajax('/ajax/getAjaxHashes', timeouts.syncFavorites, {}, (status, response, xhr) => {
     if (status == 200 && !response.error) {
-      localStorage.hasAjaxHash = '1'
+      localStorage.hasAjaxHashes = '1'
+      localStorage.removeItem('hasAjaxHash') // legacy
     }
   })
 }
@@ -788,8 +789,8 @@ addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
-if (!('hasAjaxHash' in localStorage)) {
-  getAjaxHash()
+if (!('hasAjaxHashes' in localStorage)) {
+  getAjaxHashes()
 }
 
 instantClick.on('restore', function () {

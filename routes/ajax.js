@@ -638,7 +638,7 @@ router.post('/syncFavorites', (req, res, next) => {
   })
 })
 
-router.post('/getAjaxHash', (req, res, next) => {
+router.post('/getAjaxHashes', (req, res, next) => {
   let r = {
       error: false,
     }
@@ -651,15 +651,13 @@ router.post('/getAjaxHash', (req, res, next) => {
     cookies: req.formattedJvcCookies,
     ipAddress,
     timeout: config.timeouts.server.syncFavorites,
-  }, `getAjaxHash/${user.id}`, (headers, body) => {
+  }, `getAjaxHashes/${user.id}`, (headers, body) => {
     if (headers.statusCode == 200) {
-      let regex = /<input type="hidden" name="ajax_hash_liste_messages" id="ajax_hash_liste_messages" value="([0-9a-f]{40})"/
-        , matches = body.match(regex)
-      if (!matches) {
-        r.error = 'no matches'
-      }
-      else {
-        res.cookie('ajax_hash_liste_messages', matches[1], {
+      let regex = /<input type="hidden" name="(ajax_hash_[^"]+)" id="ajax_hash_[^"]+" value="([0-9a-f]{40})"/g
+      r.error = 'no matches'
+      while (matches = regex.exec(body)) {
+        r.error = false
+        res.cookie(matches[1], matches[2], {
           maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
           httpOnly: true,
           signed: true,
