@@ -1685,7 +1685,7 @@ color: hsl(240, 8%, 27%);
   --header__forum-link-color: hsl(240, 8%, 70%);
   --menu-background: hsl(240, 8%, 13.5%);
   --stage-background: hsla(0, 0%, 0%, .5);
-  --stage-sticker-background: hsla(0, 0%, 0%, .75);
+  --stage-sticker-background: hsla(0, 0%, 0%, .125);
   --menu-mobile-items-background-saturation: .5;
   --menu-mobile-items-shadow-opacity: .5;
   --card-background: hsl(240, 8%, 9%);
