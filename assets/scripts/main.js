@@ -288,6 +288,14 @@ function syncFavorites() {
   ajax('/ajax/syncFavorites', timeouts.syncFavorites)
 }
 
+function getAjaxHash() {
+  ajax('/ajax/getAjaxHash', timeouts.syncFavorites, {}, (status, response, xhr) => {
+    if (status == 200 && !response.error) {
+      localStorage.hasAjaxHash = '1'
+    }
+  })
+}
+
 function makeFavoritesSlideable() {
   if (screen.width < 1025) {
     return
@@ -716,6 +724,10 @@ addMessagesEvent('.js-menu', 'click', toggleMenu)
 addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
+
+if (!('hasAjaxHash' in localStorage)) {
+  getAjaxHash()
+}
 
 instantClick.on('restore', function () {
   insertStickerIntoMessage()

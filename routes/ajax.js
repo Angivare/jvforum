@@ -253,7 +253,7 @@ router.post('/editMessage', (req, res, next) => {
 
   message = utils.adaptPostedMessage(message, req.headers.host)
 
-  let ajaxHash = 'redacted'
+  let ajaxHash = req.signedCookies.ajax_hash_liste_messages
 
   fetch({
     path: `/forums/ajax_edit_message.php?action=get&id_message=${messageId}&ajax_hash=${ajaxHash}`,
@@ -553,7 +553,6 @@ router.post('/refresh', (req, res, next) => {
           }
         }
 
-                        console.log(req.user)
         newMessages = utils.addIsMineVariable(newMessages, req.user.nickname)
 
         req.app.render('partials/topicMessages', {
@@ -635,6 +634,48 @@ router.post('/syncFavorites', (req, res, next) => {
     }
     else {
       res.json(r)
+    }
+  })
+})
+
+router.post('/getAjaxHash', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.cf_ip
+    , user = req.user
+    , now = Math.floor(new Date() / 1000)
+
+  fetch.unique({
+    path: '/forums/42-1000021-39674315-1-0-1-0-appli-jvforum-topic-officiel.htm',
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.syncFavorites,
+  }, `getAjaxHash/${user.id}`, (headers, body) => {
+    if (headers.statusCode == 200) {
+      let regex = /<input type="hidden" name="ajax_hash_liste_messages" id="ajax_hash_liste_messages" value="([0-9a-f]{40})"/
+        , matches = body.match(regex)
+      if (!matches) {
+        r.error = 'no matches'
+      }
+      else {
+        res.cookie('ajax_hash_liste_messages', matches[1], {
+          maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+          httpOnly: true,
+          signed: true,
+        })
+      }
+    }
+    else {
+      r.error = 'JVC n’arrive pas à servir la page'
+    }
+    res.json(r)
+  }, (e) => {
+    if (e == 'timeout') {
+      res.json({error: 'Timeout'})
+    }
+    else {
+      res.json({error: `Réseau. (${e})`})
     }
   })
 })
