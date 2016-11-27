@@ -237,6 +237,14 @@ function refresh() {
         }
       }
 
+      for (let id in messagesChecksums) {
+        if (!(id in response.messages)) {
+          // Deleted
+          qs(`#m${id}`).remove()
+          delete messagesChecksums[id]
+        }
+      }
+
       for (let id in response.messages) {
         let message = response.messages[id]
 

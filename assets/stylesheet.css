@@ -2442,3 +2442,14 @@ a {
   position: absolute;
   top: 53px;
 }
+
+.message {
+  ---delete-transition-delay: .2s;
+  transition: transform var(---delete-transition-delay);
+}
+
+.message--being-deleted {
+  filter: grayscale(1) blur(1px);
+  transform: scaleY(0);
+  opacity: .75;
+}
