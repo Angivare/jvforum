@@ -203,6 +203,7 @@ function startRefreshCycle() {
 
 function restartRefreshIfNeeded() {
   if (lastRefreshTimestamp < +new Date - refreshIntervals.check) {
+    showToast('Debug: refresh redémarré')
     refresh()
   }
 }
