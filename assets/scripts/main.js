@@ -238,7 +238,7 @@ function refresh() {
 
       if ('newMessagesHTML' in response) {
         for (let element of stringToElements(response.newMessagesHTML)) {
-          if (messagesDeleted.indexOf(element.id) > -1) {
+          if (messagesDeleted.indexOf(element.id) == -1) {
             qs('.messages-list').appendChild(element)
           }
         }
