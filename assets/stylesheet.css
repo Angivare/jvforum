@@ -2375,7 +2375,7 @@ a {
   position: relative; /* So that the --sending shadow is fully visible on iOS */
 }
 
-.form__post-button-visible--ready-to-post {
+.form:valid .form__post-button-visible {
   opacity: 1;
   box-shadow: 0 2px 5px var(--form-post-button-shadow),
               inset 0 1px 0 hsl(0, 0%, var(--form-post-button-light));
@@ -2414,7 +2414,7 @@ a {
   opacity: .5;
 }
 
-.form__post-button-visible--ready-to-post .form__post-button-icon {
+.form:valid .form__post-button-visible .form__post-button-icon {
   opacity: 1;
 }
 

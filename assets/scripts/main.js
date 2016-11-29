@@ -1,5 +1,4 @@
-let isFormReadyToPost = false
-  , hasTouch = false
+let hasTouch = false
   , refreshTimeout
   , lastRefreshTimestamp = 0
   , messagesChecksums
@@ -113,11 +112,6 @@ function postMessage(event) {
 
   let message = qs('.js-form-post__textarea').value
 
-  if (message.length == 0) {
-    qs('.js-form-post__textarea').focus()
-    return
-  }
-
   qs('.js-form-post__button-visible').classList.add('form__post-button-visible--sending')
   qs('.form__post-button').blur()
 
@@ -142,28 +136,10 @@ function postMessage(event) {
     qs('.js-form-post__error').classList.remove('form__error--shown')
     qs('.js-form-post__textarea').value = ''
 
-    isFormReadyToPost = false
-    qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--ready-to-post')
-
     if (!hasTouch) {
       qs('.js-form-post__textarea').focus()
     }
   })
-}
-
-function readyFormToPost() {
-  if (isFormReadyToPost) {
-    if (!qs('.js-form-post__textarea').value.trim()) {
-      isFormReadyToPost = false
-      qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--ready-to-post')
-      return
-    }
-  }
-
-  if (qs('.js-form-post__textarea').value.trim()) {
-    qs('.js-form-post__button-visible').classList.add('form__post-button-visible--ready-to-post')
-    isFormReadyToPost = true
-  }
 }
 
 function startRefreshCycle() {
@@ -472,7 +448,6 @@ function insertStickerIntoMessage() {
     , stringAfterInsertionPoint = textarea.value.substr(insertionPoint)
   textarea.value = `${stringBeforeInsertionPoint} :${localStorage.stickerToInsert}: ${stringAfterInsertionPoint}`
   textarea.focus()
-  readyFormToPost()
   localStorage.removeItem('stickerToInsert')
 }
 
@@ -511,7 +486,6 @@ function quoteMessage(event) {
 
   textarea.focus() // Must be before setting value in order to have the cursor at the bottom
   textarea.value += quote
-  readyFormToPost()
 }
 
 function toggleMenu(event) {
@@ -681,9 +655,6 @@ function editMessage(event) {
     qs('.js-form-edit__error').classList.remove('form__error--shown')
     qs('.js-form-edit__textarea').value = ''
 
-    isFormReadyToPost = false
-    qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--ready-to-post')
-
     delete qs(`#m${messageId} .js-content`).dataset.isBeingEdited
 
     qs(`#m${messageId} .js-content`).innerHTML = response.content
@@ -760,11 +731,6 @@ instantClick.on('change', function() {
   qs('.js-form-post', (element) => {
     element.addEventListener('submit', postMessage)
   })
-  qs('.js-form-post__textarea', (element) => {
-    element.addEventListener('input', readyFormToPost)
-  })
-  isFormReadyToPost = false
-  qs('.js-form-post__textarea', readyFormToPost) // The form can be filled on page change if it's after a refresh
 
   qsa('.js-favorite-toggle', (element) => {
     element.addEventListener('click', alertPlaceholder)
