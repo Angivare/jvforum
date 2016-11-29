@@ -59,9 +59,9 @@ function convertMessage(date) {
   let now = new Date()
     , [day, month, year, , time] = date.split(' ')
     , [hours, minutes, seconds] = time.split(':')
-  month = monthsFull.indexOf(month) + 1
+  month = monthsFull.indexOf(month)
   day = parseInt(day)
-  let then = new Date(year, month - 1, day, hours, minutes, seconds)
+  let then = new Date(year, month, day, hours, minutes, seconds)
     , timestamp = then / 1000
     , diff = Math.floor((now - then) / 1000)
 
@@ -72,17 +72,17 @@ function convertMessage(date) {
     date = Math.floor(diff / 60) + ' m ' + (diff % 60) + ' s'
   }
   else {
-    date = day + ' ' + months[month - 1]
+    date = day + ' ' + months[month]
     if (year == now.getFullYear()) {
       let yesterday = new Date(now - (1000 * 60 * 60 * 24))
         , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
-      if (now.getMonth() == month - 1 && now.getDate() == day) {
+      if (now.getMonth() == month && now.getDate() == day) {
         date = ''
       }
-      else if (yesterday.getMonth() == month - 1 && yesterday.getDate() == day) {
+      else if (yesterday.getMonth() == month && yesterday.getDate() == day) {
         date = 'hier'
       }
-      else if (dayBeforeYesterday.getMonth() == month - 1 && dayBeforeYesterday.getDate() == day) {
+      else if (dayBeforeYesterday.getMonth() == month && dayBeforeYesterday.getDate() == day) {
         date = 'avant-hier'
       }
     }
@@ -120,17 +120,17 @@ function timestamp2relative(timestamp) {
     date = Math.floor(diff / 60) + ' m ' + (diff % 60) + ' s'
   }
   else {
-    date = day + ' ' + months[month - 1]
+    date = day + ' ' + months[month]
     if (year == now.getFullYear()) {
       let yesterday = new Date(now - (1000 * 60 * 60 * 24))
         , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
-      if (now.getMonth() == month - 1 && now.getDate() == day) {
+      if (now.getMonth() == month && now.getDate() == day) {
         date = ''
       }
-      else if (yesterday.getMonth() == month - 1 && yesterday.getDate() == day) {
+      else if (yesterday.getMonth() == month && yesterday.getDate() == day) {
         date = 'hier'
       }
-      else if (dayBeforeYesterday.getMonth() == month - 1 && dayBeforeYesterday.getDate() == day) {
+      else if (dayBeforeYesterday.getMonth() == month && dayBeforeYesterday.getDate() == day) {
         date = 'avant-hier'
       }
     }
