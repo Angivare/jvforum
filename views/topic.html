@@ -172,14 +172,16 @@
     </div>
   </form>
 </template>
+<script class="js-topicInfo">
+    forumId = {{=it.forumId}}
+  , topicMode = {{=it.mode}}
+  , topicIdLegacyOrModern = {{=it.idLegacyOrModern}}
+  , topicSlug = "{{=it.slug}}"
+  , topicPage = {{=it.page}}
+  , numberOfPages = {{=it.numberOfPages}}
+  , cacheAge = {{=it.cacheAge * 1000}};
+</script>
 <script>
-  var forumId = {{=it.forumId}}
-    , topicMode = {{=it.mode}}
-    , topicIdLegacyOrModern = {{=it.idLegacyOrModern}}
-    , topicSlug = "{{=it.slug}}"
-    , topicPage = {{=it.page}}
-    , numberOfPages = {{=it.numberOfPages}}
-    , cacheAge = {{=it.cacheAge * 1000}}
-    , _csrf = "{{=it.csrf}}";
+  var _csrf = "{{=it.csrf}}";
 </script>
 {{#def.layoutFoot}}
