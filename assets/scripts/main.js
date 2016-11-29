@@ -511,6 +511,7 @@ function quoteMessage(event) {
 
   textarea.focus() // Must be before setting value in order to have the cursor at the bottom
   textarea.value += quote
+  readyFormToPost()
 }
 
 function toggleMenu(event) {
