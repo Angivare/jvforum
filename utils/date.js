@@ -32,7 +32,7 @@ function convertTopicList(date) {
       }
     }
     else {
-      date = day + ' ' + months[parseInt(month) - 1] + ' ’' + pad(year % 100)
+      date = day + ' ' + months[parseInt(month) - 1] + ' ' + year
     }
   }
   else {
@@ -87,7 +87,7 @@ function convertMessage(date) {
       }
     }
     else {
-      date += ' ’' + pad(year % 100)
+      date += ' ' + year
     }
 
     if (date) {
@@ -135,7 +135,7 @@ function timestamp2relative(timestamp) {
       }
     }
     else {
-      date += ' ’' + pad(year % 100)
+      date += ' ' + year
     }
 
     if (date) {
