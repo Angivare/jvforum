@@ -2400,7 +2400,7 @@ a {
   }
 }
 
-.form__post-button-visible--sending {
+.form:valid .form__post-button-visible--sending {
   box-shadow: var(--form-post-button-visible-sending-shadow);
   animation: button-sending-pulse alternate .5s .8s infinite linear;
 }
