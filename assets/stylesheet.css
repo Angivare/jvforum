@@ -1306,12 +1306,6 @@ h1, h2, h3 {
   vertical-align: top;
 }
 
-@media (min-width: 400px) {
-  .message__byline-date-inline {
-    padding-right: 22px;
-  }
-}
-
 @media (min-width: 1025px) {
   .message__byline-date-inline {
     font-size: 12px;
