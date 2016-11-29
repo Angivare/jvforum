@@ -139,7 +139,7 @@ function timestamp2relative(timestamp) {
     }
 
     if (date) {
-      date += ', '
+      date += ' à '
     }
     date += formatHoursAndMinutes(then)
   }
