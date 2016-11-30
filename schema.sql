@@ -369,3 +369,18 @@ INSERT INTO stickers VALUES(210, '1mip', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(211, '1miq', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(212, '1mir', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(213, '1mir-en', 16, 140, 140, 560, 560);
+
+CREATE TABLE `debug_encoding` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `messageId` int NOT NULL,
+  `userId` int NOT NULL,
+  `loggedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fromCache` int NOT NULL,
+  `forumId` int NOT NULL,
+  `topicMode` tinyint NOT NULL,
+  `topicIdLegacyOrModern` int NOT NULL,
+  `page` smallint NOT NULL,
+  `beforeContent` TEXT NOT NULL,
+  `afterContent` TEXT NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
