@@ -65,6 +65,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
 
   // NoelShack thumbnails
   content = content.replace(/<a href="(?:https?:)([^"]+)" data-def="NOELSHACK" target="_blank"><img class="img-shack" width="68" height="51" src="([^"]+)" alt="[^"]+"\/><\/a>/g, (all, href, src) => {
+    // Custom stickers
     if (src.indexOf('-jvforum-sticker') > -1) {
       let noelshackId = '/' + src.split('/').splice(4).join('/')
       if (noelshackId in stickers.jvcToJvf) {
@@ -76,6 +77,9 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
 
     return `<a class="noelshack-link" href="${href}" target="_blank" title="${href}"><img class="noelshack-link__thumb" src="${src}" alt="${href}"></a>`
   })
+
+  // Custom stickers on a single line, should be by themselves in order to be enlarged via CSS
+  content = content.replace(/<p>\s*(<img class="js-sticker[^>]+>)\s*<\/p>/, "$1")
 
   // Make NoelShack links go directly to the image file
   content = content.replace(/<a class="noelshack-link" href="(?:\/\/www\.noelshack\.com\/([0-9]+)-([0-9]+)-([^"]+))" target="_blank" title="[^"]+">/g, '<a class="noelshack-link" href="//image.noelshack.com/fichiers/$1/$2/$3" target="_blank" title="//image.noelshack.com/fichiers/$1/$2/$3">')
