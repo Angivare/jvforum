@@ -64,7 +64,14 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   }
 
   // NoelShack thumbnails
-  content = content.replace(/<a href="(?:https?:)([^"]+)" data-def="NOELSHACK" target="_blank"><img class="img-shack" width="68" height="51" src="([^"]+)" alt="[^"]+"\/><\/a>/g, '<a class="noelshack-link" href="$1" target="_blank" title="$1"><img class="noelshack-link__thumb" src="$2" alt="$1"></a>')
+  content = content.replace(/<a href="(?:https?:)([^"]+)" data-def="NOELSHACK" target="_blank"><img class="img-shack" width="68" height="51" src="([^"]+)" alt="[^"]+"\/><\/a>/g, (all, href, src) => {
+    if (src == '//image.noelshack.com/minis/2016/48/1480611128-jvforum-sticker-214.png') {
+      let packId = 0
+        , jvfId = 214
+      return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+    }
+    return `<a class="noelshack-link" href="${href}" target="_blank" title="${href}"><img class="noelshack-link__thumb" src="${src}" alt="${href}"></a>`
+  })
 
   // Make NoelShack links go directly to the image file
   content = content.replace(/<a class="noelshack-link" href="(?:\/\/www\.noelshack\.com\/([0-9]+)-([0-9]+)-([^"]+))" target="_blank" title="[^"]+">/g, '<a class="noelshack-link" href="//image.noelshack.com/fichiers/$1/$2/$3" target="_blank" title="//image.noelshack.com/fichiers/$1/$2/$3">')
