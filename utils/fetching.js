@@ -46,15 +46,16 @@ function fetch(pathOrOptions, successCallback, failCallback) {
 
   let hasTimedOut = false
   let request = http.request(requestOptions, (res) => {
-    let body = ''
+    let bodyBuffer = Buffer.alloc(0)
     res.on('data', (chunk) => {
-      body += chunk
+      bodyBuffer = Buffer.concat([bodyBuffer, chunk])
     })
     res.on('end', () => {
       if (hasTimedOut) {
         return
       }
       let headers = res.headers
+        , body = bodyBuffer.toString()
       headers.statusCode = res.statusCode
       successCallback(headers, body)
     })
