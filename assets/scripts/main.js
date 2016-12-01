@@ -726,6 +726,14 @@ function confirmDeleteMessage(event) {
   })
 }
 
+function logout(event) {
+  if (!confirm('Vous déconnecter ?')) {
+    event.preventDefault()
+    return
+  }
+  localStorage.removeItem('hasAjaxHashes')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -756,6 +764,10 @@ instantClick.on('change', function() {
 
   qs('.menu-mobile', (element) => {
     element.addEventListener('click', toggleMobileMenu)
+  })
+
+  qs('.js-logout-link', (element) => {
+    element.addEventListener('click', logout)
   })
 
   syncFavorites()

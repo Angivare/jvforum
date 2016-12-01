@@ -1693,6 +1693,8 @@ color: hsl(240, 8%, 27%);
   --spoil-revealed-shadow-color: hsla(0, 0%, 0%, .4);
   --admin-color: hsl(0, 60%, 50%);
   --admin-color-edit-mention: hsl(0, 50%, 40%);
+  --home-bottom-links-delimiter-color: hsla(0, 0%, 100%, .1);
+  --home-bottom-links-destructive-color: hsl(0, 100%, 30%);
 }
 
 html {
@@ -2446,4 +2448,22 @@ a {
 
 .card__body {
   padding-top: 10px;
+}
+
+.home-bottom-links {
+  text-align: center;
+}
+
+.home-bottom-links__link {
+  display: inline-block;
+  padding: 13px 20px;
+}
+
+.home-bottom-links__link + .home-bottom-links__link {
+  border-top: 1px solid var(--home-bottom-links-delimiter-color);
+}
+
+.home-bottom-links__link--logout {
+  color: var(--home-bottom-links-destructive-color);
+  font-size: 13px;
 }
