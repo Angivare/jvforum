@@ -2,8 +2,8 @@ let db = require('./db')
 
 let packs = {}
   , packFromId = {}
-  , feeligoToJvf = {}
-  , jvfToFeeligo = {}
+  , jvcToJvf = {}
+  , jvfToJvc = {}
 
 db.query(`SELECT id, name FROM stickerPacks ORDER BY id`, null, (results) => {
   if (!results) {
@@ -14,14 +14,14 @@ db.query(`SELECT id, name FROM stickerPacks ORDER BY id`, null, (results) => {
   })
 })
 
-db.query(`SELECT jvfId, feeligoId, packId FROM stickers ORDER BY jvfId`, null, (results) => {
+db.query(`SELECT jvfId, jvcId, packId FROM stickers ORDER BY jvfId`, null, (results) => {
   if (!results) {
     throw 'stickers table empty'
   }
   results.forEach((result) => {
     packFromId[result.jvfId] = result.packId
-    feeligoToJvf[result.feeligoId] = result.jvfId
-    jvfToFeeligo[result.jvfId] = result.feeligoId
+    jvcToJvf[result.jvcId] = result.jvfId
+    jvfToJvc[result.jvfId] = result.jvcId
   })
 })
 
@@ -153,7 +153,7 @@ let legacyShortcuts = {
 module.exports = {
   packs,
   packFromId,
-  feeligoToJvf,
-  jvfToFeeligo,
+  jvcToJvf,
+  jvfToJvc,
   legacyShortcuts,
 }

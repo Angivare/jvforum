@@ -78,14 +78,14 @@ CREATE TABLE `stickerPacks` (
 
 CREATE TABLE `stickers` (
   `jvfId` smallint NOT NULL,
-  `feeligoId` varchar(100) NOT NULL,
+  `jvcId` varchar(100) NOT NULL,
   `packId` smallint NOT NULL,
   `widthSmall` smallint NOT NULL,
   `heightSmall` smallint NOT NULL,
   `widthBig` smallint NOT NULL,
   `heightBig` smallint NOT NULL,
   KEY (`jvfId`),
-  KEY `feeligoId` (`feeligoId`),
+  KEY `jvcId` (`jvcId`),
   KEY `packId` (`packId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

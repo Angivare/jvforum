@@ -67,8 +67,8 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   content = content.replace(/<a href="(?:https?:)([^"]+)" data-def="NOELSHACK" target="_blank"><img class="img-shack" width="68" height="51" src="([^"]+)" alt="[^"]+"\/><\/a>/g, (all, href, src) => {
     if (src.indexOf('-jvforum-sticker') > -1) {
       let noelshackId = '/' + src.split('/').splice(4).join('/')
-      if (noelshackId in stickers.feeligoToJvf) {
-        let jvfId = stickers.feeligoToJvf[noelshackId]
+      if (noelshackId in stickers.jvcToJvf) {
+        let jvfId = stickers.jvcToJvf[noelshackId]
           , packId = stickers.packFromId[jvfId]
         return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
       }
@@ -119,11 +119,11 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.(?:gif|png)" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="/assets/smileys/v1/$1" data-code="$2" title="$2" alt="$2">')
 
   // Stickers
-  content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, feeligoId) => {
-    if (!(feeligoId in stickers.feeligoToJvf)) {
+  content = content.replace(/<img class="img-stickers" src="http:\/\/jv\.stkr\.fr\/p\/([^"]+)"\/>/g, (all, jvcId) => {
+    if (!(jvcId in stickers.jvcToJvf)) {
       return ''
     }
-    let jvfId = stickers.feeligoToJvf[feeligoId]
+    let jvfId = stickers.jvcToJvf[jvcId]
       , packId = stickers.packFromId[jvfId]
     return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
   })
@@ -189,11 +189,11 @@ function adaptPostedMessage(message, hostname) {
   while (messageSubstring = message.substr(i), messageSubstring.match(stickerRegex)) {
     messageSubstring = messageSubstring.replace(stickerRegex, (all, charBefore, jvfId, charAfter) => {
       let returnValue
-      if (!(jvfId in stickers.jvfToFeeligo)) {
+      if (!(jvfId in stickers.jvfToJvc)) {
         returnValue = all
       }
       else {
-        returnValue = `${charBefore}[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]${charAfter}`
+        returnValue = `${charBefore}[[sticker:p/${stickers.jvfToJvc[jvfId]}]]${charAfter}`
       }
       increment = returnValue.length - 2
       return returnValue
@@ -207,7 +207,7 @@ function adaptPostedMessage(message, hostname) {
     for (let legacyShortcut in stickers.legacyShortcuts) {
       if (message.indexOf(`:${legacyShortcut}:`) > -1) {
         let jvfId = stickers.legacyShortcuts[legacyShortcut]
-        message = message.replace(new RegExp(`:${legacyShortcut}:`, 'gi'), `[[sticker:p/${stickers.jvfToFeeligo[jvfId]}]]`)
+        message = message.replace(new RegExp(`:${legacyShortcut}:`, 'gi'), `[[sticker:p/${stickers.jvfToJvc[jvfId]}]]`)
       }
     }
   }
