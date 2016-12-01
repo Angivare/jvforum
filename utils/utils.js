@@ -193,7 +193,14 @@ function adaptPostedMessage(message, hostname) {
         returnValue = all
       }
       else {
-        returnValue = `${charBefore}[[sticker:p/${stickers.jvfToJvc[jvfId]}]]${charAfter}`
+        returnValue = charBefore
+        if (stickers.jvfToJvc[jvfId][0] == '/') {
+          returnValue += 'https://image.noelshack.com/fichiers/' + stickers.jvfToJvc[jvfId].split('/').splice(1).join('/')
+        }
+        else {
+          returnValue += `[[sticker:p/${stickers.jvfToJvc[jvfId]}]]`
+        }
+        returnValue += charAfter
       }
       increment = returnValue.length - 2
       return returnValue
