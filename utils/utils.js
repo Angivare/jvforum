@@ -65,11 +65,15 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
 
   // NoelShack thumbnails
   content = content.replace(/<a href="(?:https?:)([^"]+)" data-def="NOELSHACK" target="_blank"><img class="img-shack" width="68" height="51" src="([^"]+)" alt="[^"]+"\/><\/a>/g, (all, href, src) => {
-    if (src == '//image.noelshack.com/minis/2016/48/1480611128-jvforum-sticker-214.png') {
-      let packId = 0
-        , jvfId = 214
-      return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+    if (src.indexOf('-jvforum-sticker') > -1) {
+      let noelshackId = '/' + src.split('/').splice(4).join('/')
+      if (noelshackId in stickers.feeligoToJvf) {
+        let jvfId = stickers.feeligoToJvf[noelshackId]
+          , packId = stickers.packFromId[jvfId]
+        return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+      }
     }
+
     return `<a class="noelshack-link" href="${href}" target="_blank" title="${href}"><img class="noelshack-link__thumb" src="${src}" alt="${href}"></a>`
   })
 

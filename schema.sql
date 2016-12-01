@@ -78,7 +78,7 @@ CREATE TABLE `stickerPacks` (
 
 CREATE TABLE `stickers` (
   `jvfId` smallint NOT NULL,
-  `feeligoId` varchar(10) NOT NULL,
+  `feeligoId` varchar(100) NOT NULL,
   `packId` smallint NOT NULL,
   `widthSmall` smallint NOT NULL,
   `heightSmall` smallint NOT NULL,
@@ -369,3 +369,4 @@ INSERT INTO stickers VALUES(210, '1mip', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(211, '1miq', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(212, '1mir', 16, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(213, '1mir-en', 16, 140, 140, 560, 560);
+INSERT INTO stickers VALUES(214, '/2016/48/1480611128-jvforum-sticker-214.png', 6, 140, 140, 560, 560);
