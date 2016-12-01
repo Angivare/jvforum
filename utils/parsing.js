@@ -22,9 +22,9 @@ function topic(body) {
   let avatars = {}
   while (matches = regex.exec(body)) {
     let isNicknameDeleted = matches[4].includes('Pseudo supprimé')
-      , content = utils.adaptMessageContent(matches[6], matches[1])
       , avatar = isNicknameDeleted || matches[2].includes('/default.jpg') ? '' : matches[2]
       , nickname = matches[4]
+      , content = utils.adaptMessageContent(matches[6], matches[1], nickname, matches[5])
     retour.messages.push({
       id: parseInt(matches[1]),
       status: matches[3],
@@ -150,7 +150,7 @@ function editResponse(body) {
   if (!matches) {
     return false
   }
-  let content = utils.adaptMessageContent(matches[6], matches[1])
+  let content = utils.adaptMessageContent(matches[6], matches[1], matches[4], matches[5])
   return {
     content,
     checksum: sha1(content).substr(0, 8),

@@ -11,7 +11,7 @@ function emojify(text) {
   return twemoji.parse(text)
 }
 
-function adaptMessageContent(content, id) {
+function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   let matches
     , regex
 
@@ -24,11 +24,18 @@ function adaptMessageContent(content, id) {
   content = `<div class="message__content-text">${content}</div>`
 
   // Edit mention
-  regex = /<\/div><div class="info-edition-msg">\s*Message édité le (.+?) par\s*<span class="JvCare [0-9A-F]*" target="_blank">[^<]*<\/span>/
+  regex = /<\/div><div class="info-edition-msg">\s*Message édité le (.+?) par\s*<span class="JvCare [0-9A-F]*" target="_blank">([^<]*)<\/span>/
   if (matches = regex.exec(content)) {
-    let date = matches[1]
+    let bylineText = date.editFormat(matches[1], postDateRaw)
+    if (matches[2] && matches[2].toLowerCase() != authorNickname.toLowerCase()) {
+      /* When edited by "Pseudo supprimé", it's empty
+       * Example: http://www.jeuxvideo.com/forums/42-1000021-40281382-1-0-1-0-supprimer-un-pseudo-supprime-les-pseudos-qui-lui-sont-lies.htm#post_733601014
+       * If it's empty, we assume the author and the editor are both "Pseudo supprimé"
+       */
+       bylineText += ` par <span class="message__content-edit-mention-author">${matches[2]}</span>`
+    }
     content = content.replace(matches[0], '')
-    content += `<p class="message__content-edit-mention"><span title="${date}">Modifié le ${date}</span></p>`
+    content += `<p class="message__content-edit-mention"><span title="${matches[1]}">Modifié ${bylineText}</span></p>`
   }
 
   /* All links on JVForum should have this order of attributes: class, href, target, title, data-link-jvc. */

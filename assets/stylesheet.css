@@ -824,7 +824,7 @@ h1, h2, h3 {
 
 .topic__author--admin,
 .topic__author--staff {
-  color: #D50000;
+  color: var(--admin-color);
 }
 
 .topic__date-and-nb-answers-container {
@@ -1263,7 +1263,7 @@ h1, h2, h3 {
 
 .message__byline-author-pseudo--admin,
 .message__byline-author-pseudo--staff {
-  color: #D50000;
+  color: var(--admin-color);
 }
 
 /* Date */
@@ -1727,6 +1727,8 @@ color: hsl(240, 8%, 27%);
   --spoil-shadow-color: hsla(0, 0%, 0%, 1);
   --spoil-revealed-background: hsl(0, 54%, 32%);
   --spoil-revealed-shadow-color: hsla(0, 0%, 0%, .4);
+  --admin-color: hsl(0, 60%, 50%);
+  --admin-color-edit-mention: hsl(0, 50%, 40%);
 }
 
 html {
@@ -2438,4 +2440,8 @@ a {
   filter: grayscale(1) blur(1px);
   transform: scaleY(0);
   opacity: .75;
+}
+
+.message__content-edit-mention-author {
+  color: var(--admin-color-edit-mention);
 }

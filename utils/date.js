@@ -147,8 +147,60 @@ function timestamp2relative(timestamp) {
   return date
 }
 
+function editFormat(editDateRaw, postDateRaw) {
+  let now = new Date()
+    , [day, month, year, , time] = editDateRaw.split(' ')
+    , [hours, minutes, seconds] = time.split(':')
+  month = monthsFull.indexOf(month)
+  day = parseInt(day)
+  let editDate = new Date(year, month, day, hours, minutes, seconds)
+    , postDate
+  ;{
+    let [day, month, year, , time] = postDateRaw.split(' ')
+      , [hours, minutes, seconds] = time.split(':')
+    month = monthsFull.indexOf(month)
+    day = parseInt(day)
+    postDate = new Date(year, month, day, hours, minutes, seconds)
+  }
+  let diff = Math.floor((editDate - postDate) / 1000)
+
+  if (diff < 60) {
+    text = `après ${diff} s`
+  }
+  else if (diff < 60 * 60) {
+    text = `après ${Math.floor(diff / 60)} m ${diff % 60} s`
+  }
+  else {
+    text = ` le ${day} ${months[month]}`
+    if (year == now.getFullYear()) {
+      let yesterday = new Date(now - (1000 * 60 * 60 * 24))
+        , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
+      if (now.getMonth() == month && now.getDate() == day) {
+        text = ''
+      }
+      else if (yesterday.getMonth() == month && yesterday.getDate() == day) {
+        text = 'hier'
+      }
+      else if (dayBeforeYesterday.getMonth() == month && dayBeforeYesterday.getDate() == day) {
+        text = 'avant-hier'
+      }
+    }
+    else {
+      text += ' ' + year
+    }
+
+    if (text) {
+      text += ' à '
+    }
+    text += formatHoursAndMinutes(editDate)
+  }
+
+  return text
+}
+
 module.exports = {
   convertTopicList,
   convertMessage,
   timestamp2relative,
+  editFormat,
 }
