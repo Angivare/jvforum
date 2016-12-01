@@ -415,14 +415,12 @@ router.post('/refresh', (req, res, next) => {
   }
 
   let cacheId = `${forumId}/${idJvf}/${topicPage}`
-  r.fromCache = 0
   utils.getTopic(topicIdModern ? `idModern = ${topicIdModern}` : `idLegacy = ${topicIdLegacy} AND forumId = ${forumId}`, (content) => {
     if (content.slug != topicSlug) {
       topicSlug = content.slug
       pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-${topicPage}-0-1-0-${topicSlug}.htm`
     }
     cache.get(cacheId, config.timeouts.cache.refresh, (messages, age) => {
-      r.fromCache = 1
       if (content.isDeleted) {
         serveTopic(null, 'deleted')
         return
@@ -724,40 +722,6 @@ router.post('/getAjaxHashes', (req, res, next) => {
       res.json({error: `Réseau. (${e})`})
     }
   })
-})
-
-router.post('/debugEncoding', (req, res, next) => {
-  let r = {
-      error: false,
-    }
-    , ipAddress = req.ip
-    , user = req.user
-    , now = Math.floor(new Date() / 1000)
-
-  let missingParams = false
-  ;['messageId', 'fromCache', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicPage', 'beforeContent', 'afterContent'].forEach((varName) => {
-    if (!(varName in req.body)) {
-      missingParams = true
-    }
-  })
-  if (missingParams) {
-    return res.json({error: 'Paramètres manquants'})
-  }
-
-  let {messageId, fromCache, forumId, topicMode, topicIdLegacyOrModern, topicPage, beforeContent, afterContent} = req.body
-
-  db.insert('debug_encoding', {
-    messageId,
-    userId: user.id,
-    fromCache,
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    page: topicPage,
-    beforeContent,
-    afterContent,
-  })
-  res.json({})
 })
 
 module.exports = router

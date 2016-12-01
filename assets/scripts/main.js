@@ -254,7 +254,6 @@ function refresh() {
           messagesChecksums[id] = message.checksum
 
           if (!qs(`#m${id} .js-content`).dataset.isBeingEdited) {
-            debugEncoding(id, qs(`#m${id} .js-content`).innerHTML, message.content, response.fromCache)
             qs(`#m${id} .js-content`).innerHTML = message.content
           }
 
@@ -711,32 +710,6 @@ function confirmDeleteMessage(event) {
       return
     }
   })
-}
-
-function debugEncoding(messageId, beforeContent, afterContent, fromCache) {
-  let beforeStripped = afterStripped = ''
-  for (let i = 0; i < beforeContent.length; i++) {
-    if (beforeContent[i].match(/^[a-z0-9]$/i)) {
-      beforeStripped = beforeContent[i]
-    }
-  }
-  for (let i = 0; i < afterContent.length; i++) {
-    if (afterContent[i].match(/^[a-z0-9]$/i)) {
-      afterStripped = afterContent[i]
-    }
-  }
-  if (beforeStripped == afterStripped) {
-    ajax('/ajax/debugEncoding', 1000, {
-      messageId,
-      fromCache,
-      forumId,
-      topicMode,
-      topicIdLegacyOrModern,
-      topicPage,
-      beforeContent,
-      afterContent,
-    })
-  }
 }
 
 instantClick.init()
