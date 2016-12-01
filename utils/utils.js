@@ -18,7 +18,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   // Signatures sometimes erupt due to a bug from JVC
   let signatureIndex = content.indexOf('</div><div class="signature-msg  text-enrichi-forum ">')
   if (signatureIndex != -1) {
-    adaptMessageContent = adaptMessageContent.substr(0, signatureIndex)
+    content = content.substr(0, signatureIndex)
   }
 
   content = `<div class="message__content-text">${content}</div>`
