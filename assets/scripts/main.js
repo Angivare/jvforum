@@ -474,7 +474,7 @@ function quoteMessage(event) {
     , html = qs(`#m${id} .message__content-text`).innerHTML.trim()
     , text = html2jvcode(html)
     , quote = ''
-  if (textarea.value) {
+  if (textarea && textarea.value) {
     if (!/\n\n$/.test(textarea.value)) {
       quote += "\n\n"
     }
@@ -484,8 +484,17 @@ function quoteMessage(event) {
   quote += `> ${text.split("\n").join("\n> ")}`
   quote += "\n\n"
 
-  textarea.focus() // Must be before setting value in order to have the cursor at the bottom
-  textarea.value += quote
+  if (textarea) {
+    textarea.focus() // Must be before setting value in order to have the cursor at the bottom
+    textarea.value += quote
+  }
+  else {
+    showEditForm(id)
+    textarea = qs('.js-form-edit__textarea')
+    showError('Topic bloqué, copiez-collez le message ci-dessous.', 'edit')
+    textarea.focus() // Must be before setting value in order to have the cursor at the bottom
+    textarea.value = quote
+  }
 }
 
 function toggleMenu(event) {
@@ -568,16 +577,21 @@ function quitEnlargedSticker() {
   qs('.stage').classList.remove('stage--sticker')
 }
 
-function showEditForm(event) {
-  let element = event.target
-  if (!element.classList.contains('js-edit')) {
-    return
+function showEditForm(eventOrMessageId) {
+  let element
+  if (typeof eventOrMessageId != 'object') {
+    element = qs(`#m${eventOrMessageId}`)
   }
-  while (!element.id) {
-    element = element.parentNode
+  else {
+    element = eventOrMessageId.target
+    if (!element.classList.contains('js-edit')) {
+      return
+    }
+    while (!element.id) {
+      element = element.parentNode
+    }
   }
   let {id, nickname, timestamp} = element.dataset
-
   let alreadyEditedForm = qs('.js-form-edit')
   if (alreadyEditedForm) {
     delete alreadyEditedForm.parentNode.dataset.isBeingEdited
