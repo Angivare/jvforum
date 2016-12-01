@@ -803,7 +803,5 @@ if (!('hasAjaxHashes' in localStorage)) {
 
 instantClick.on('restore', function () {
   insertStickerIntoMessage()
-
-  qs('.js-topicInfo', (element) => eval(element.textContent))
   startRefreshCycle()
 })

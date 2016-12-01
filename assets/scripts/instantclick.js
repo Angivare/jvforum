@@ -197,6 +197,7 @@ var instantClick
       $xhr.abort()
       setPreloadingAsHalted()
 
+      restoreScripts()
       triggerPageEvent('restore')
     }
   }
@@ -558,6 +559,45 @@ var instantClick
         parentNode.removeChild(originalElement)
         parentNode.insertBefore(copyElement, nextSibling)
       }
+    }
+  }
+
+  function restoreScripts() {
+    var scriptElementsInDOM = document.body.getElementsByTagName('script')
+      , scriptElementsToCopy = []
+      , originalElement
+      , copyElement
+      , parentNode
+      , nextSibling
+      , i
+
+    /* `scriptElementsInDOM` will change during the copy of scripts if
+       a script add or delete script elements, so we need to put script
+       elements in an array to loop through them correctly.
+    */
+    for (i = 0; i < scriptElementsInDOM.length; i++) {
+      scriptElementsToCopy.push(scriptElementsInDOM[i])
+    }
+
+    for (i = 0; i < scriptElementsToCopy.length; i++) {
+      originalElement = scriptElementsToCopy[i]
+      if (!originalElement) { // Might have disappeared, see previous comment
+        continue
+      }
+      if (!originalElement.hasAttribute('data-instant-restore')) {
+        continue
+      }
+
+      copyElement = document.createElement('script')
+      for (var j = 0; j < originalElement.attributes.length; j++) {
+        copyElement.setAttribute(originalElement.attributes[j].name, originalElement.attributes[j].value)
+      }
+      copyElement.textContent = originalElement.textContent
+
+      parentNode = originalElement.parentNode
+      nextSibling = originalElement.nextSibling
+      parentNode.removeChild(originalElement)
+      parentNode.insertBefore(copyElement, nextSibling)
     }
   }
 
