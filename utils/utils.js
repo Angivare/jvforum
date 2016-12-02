@@ -75,17 +75,17 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
       }
     }
 
-    return `<a class="noelshack-link" href="${href}" target="_blank" title="${href}"><img class="noelshack-link__thumb" src="${src}" alt="${href}"></a>`
+    return `<a class="noelshack-link" href="https:${href}" target="_blank" title="https:${href}"><img class="noelshack-link__thumb" src="https:${src}" alt="https:${href}"></a>`
   })
 
   // Custom stickers on a single line, should be by themselves in order to be enlarged via CSS
   content = content.replace(/<p>\s*(<img class="js-sticker[^>]+>)\s*<\/p>/, "$1")
 
   // Make NoelShack links go directly to the image file
-  content = content.replace(/<a class="noelshack-link" href="(?:\/\/www\.noelshack\.com\/([0-9]+)-([0-9]+)-([^"]+))" target="_blank" title="[^"]+">/g, '<a class="noelshack-link" href="//image.noelshack.com/fichiers/$1/$2/$3" target="_blank" title="//image.noelshack.com/fichiers/$1/$2/$3">')
+  content = content.replace(/<a class="noelshack-link" href="(?:https:\/\/www\.noelshack\.com\/([0-9]+)-([0-9]+)-([^"]+))" target="_blank" title="[^"]+">/g, '<a class="noelshack-link" href="https://image.noelshack.com/fichiers/$1/$2/$3" target="_blank" title="https://image.noelshack.com/fichiers/$1/$2/$3">')
 
   // Correct thumbnails for PSD and SWF on NoelShack
-  content = content.replace(/(<a class="noelshack-link" href="[^"]+\.(swf|psd)"[^<]+>)<img class="noelshack-link__thumb" src="[^"]+"/g, '$1<img class="noelshack-link__thumb" src="//www.noelshack.com/pics/mini_$2.png"')
+  content = content.replace(/(<a class="noelshack-link" href="[^"]+\.(swf|psd)"[^<]+>)<img class="noelshack-link__thumb" src="[^"]+"/g, '$1<img class="noelshack-link__thumb" src="https://www.noelshack.com/pics/mini_$2.png"')
 
   // Spoils
   content = content.replace(/<span class="bloc-spoil-jv en-ligne">.+?<span class="contenu-spoil">/g, '<span class="spoil spoil--inline"><span class="spoil__content">')
