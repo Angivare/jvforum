@@ -675,8 +675,8 @@ h1, h2, h3 {
 }
 
 .topic__new-messages-indicator {
-  background: hsl(190, 80%, 60%);
-  box-shadow: 0 0 3px 1px hsla(0, 100%, 100%, .4);
+  background: var(--topic__new-messages-indicator-background);
+  box-shadow: var(--topic__new-messages-indicator-shadow);
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -692,7 +692,7 @@ h1, h2, h3 {
   }
 }
 
-.topic--visited, .topic:visited {
+.topic--visited {
   color: var(--topic--visited-color);
 }
 
@@ -1695,6 +1695,9 @@ color: hsl(240, 8%, 27%);
   --admin-color-edit-mention: hsl(0, 50%, 40%);
   --home-bottom-links-delimiter-color: hsla(0, 0%, 100%, .1);
   --home-bottom-links-destructive-color: hsl(0, 100%, 30%);
+  --topic__new-messages-indicator-background: hsl(190, 80%, 60%);
+  --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(0, 100%, 100%, .4);
+  --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(190, 80%, 60%, .5);
 }
 
 html {

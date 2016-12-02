@@ -24,10 +24,15 @@
       <div class="liste-topics">
         {{~it.topics :t:index}}
           {{? t.label != 'ghost' }}
-            <a class="topic" href="/{{=it.id}}/{{=t.idJvf}}-{{=t.slug}}">
+            <a class="topic {{? t.hasBeenVisited}} topic--visited {{?}}" href="/{{=it.id}}/{{=t.idJvf}}-{{=t.slug}}{{=t.position}}">
               <div class="topic__label topic__label--{{=t.label}}"></div>
               <div class="topic__text-container">
-                <div class="topic__title">{{!t.title}}</div>
+                <div class="topic__title">
+                  {{? t.hasNewMessages}}
+                    <span class="topic__new-messages-indicator"></span>
+                  {{?}}
+                  {{!t.title}}
+                </div>
                 <div class="topic__infos">
                   <div class="topic__author topic__author--{{=t.status}}">{{=t.nickname}}</div>
                   <div class="topic__date-and-nb-answers-container">
@@ -36,7 +41,12 @@
                   </div>
                 </div>
               </div>
-              <div class="topic__title topic__title--desktop">{{!t.title}}</div>
+              <div class="topic__title topic__title--desktop">
+                {{? t.hasNewMessages}}
+                  <span class="topic__new-messages-indicator"></span>
+                {{?}}
+                {{!t.title}}
+              </div>
               <div class="topic__author topic__author--{{=t.status}} topic__author--desktop">{{=t.nickname}}</div>
               <div class="topic__nb-answers topic__nb-answers--desktop">{{=t.answerCount}}</div>
               <div class="topic__date topic__date--desktop">{{=t.date}}</div>

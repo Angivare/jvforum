@@ -5,6 +5,7 @@ config.databaseConnection.charset = 'utf8mb4_unicode_ci'
 let c = mysql.createConnection(config.databaseConnection)
 
 function query(what, options, successCallback) {
+  // console.log(mysql.format(what, options))
   c.query(what, options, (err, results, fields) => {
     if (err) {
       throw err
