@@ -723,4 +723,40 @@ router.post('/getAjaxHashes', (req, res, next) => {
   })
 })
 
+router.post('/topicPosition', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.ip
+    , user = req.user
+
+  let missingParams = false
+  ;['topicIdModern', 'messageId', 'answersCount'].forEach((varName) => {
+    if (!(varName in req.body)) {
+      missingParams = true
+    }
+  })
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
+  let {topicIdModern, messageId, answersCount} = req.body
+
+  db.query('SELECT messageId FROM topics_positions WHERE userId = ? AND topicIdModern = ?', [
+    user.id,
+    topicIdModern,
+  ], (results) => {
+    if (!results[0] || results[0].messageId < messageId) {
+      res.json(r)
+      db.insertOrUpdate('topics_positions', {
+        messageId,
+        answersCount,
+      }, {
+        userId: user.id,
+        topicIdModern,
+      })
+    }
+  })
+})
+
 module.exports = router

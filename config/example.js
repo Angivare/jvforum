@@ -22,6 +22,7 @@ let config = {
       refresh: 9000,
       postMessage: 9000,
       syncFavorites: 9000,
+      topicPosition: 9000,
     },
     cache: {
       topicDisplay: 60 * 60 * 24 * 7,

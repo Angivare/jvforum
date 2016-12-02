@@ -30,6 +30,14 @@ CREATE TABLE `topics` (
   KEY `forumId` (`forumId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `topics_positions` (
+  `userId` mediumint unsigned NOT NULL,
+  `topicIdModern` int NOT NULL,
+  `messageId` int NOT NULL,
+  `answersCount` mediumint NOT NULL,
+  PRIMARY KEY (`userId`, `topicIdModern`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `avatars` (
   `nickname` varchar(16) NOT NULL,
   `url` varchar(128) NOT NULL,

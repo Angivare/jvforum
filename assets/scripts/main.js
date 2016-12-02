@@ -243,6 +243,7 @@ function refresh() {
               element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
             })
           }
+          updateTopicPosition()
           continue
         }
 
@@ -734,6 +735,18 @@ function logout(event) {
   localStorage.removeItem('hasAjaxHashes')
 }
 
+function updateTopicPosition() {
+  let topicIdModern = document.body.dataset.topicIdModern
+  if (!topicIdModern) {
+    return
+  }
+  ajax('topicPosition', timeouts.topicPosition, {
+    topicIdModern,
+    messageId: qs('.message:last-child').dataset.id,
+    answersCount: (topicPage - 1) * 20 + document.querySelectorAll('.message').length - 1,
+  })
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -777,6 +790,8 @@ instantClick.on('change', function() {
   qsa('script[type=queued]', (element) => {
     eval(element.textContent)
   })
+
+  updateTopicPosition()
 
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
