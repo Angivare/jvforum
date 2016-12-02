@@ -45,6 +45,10 @@
       </div>
       {{? !it.isLocked}}
         <form class="js-form-post form form--post">
+          <div class="js-form-post__draft-mention form__draft-mention">
+            Brouillon sauvegardé.
+            <span class="js-form-post__draft-mention-recover form__draft-mention-recover">Récupérer</span>
+          </div>
           <div class="js-form-post__error form__error"></div>
           <div class="form__bottom-container">
             <textarea class="js-form-post__textarea form__textarea" placeholder="Écrivez votre {{=it.superlative}} message" tabindex="4" required></textarea>
@@ -176,6 +180,7 @@
   var forumId = {{=it.forumId}}
     , topicMode = {{=it.mode}}
     , topicIdLegacyOrModern = {{=it.idLegacyOrModern}}
+    , topicIdModern = {{=it.idModern}}
     , topicSlug = "{{=it.slug}}"
     , topicPage = {{=it.page}}
     , numberOfPages = {{=it.numberOfPages}}

@@ -324,28 +324,6 @@ h1, h2, h3 {
   display: block;
 }
 
-.form__draft {
-  display: none;
-  font-size: 12px;
-  margin-bottom: 8px;
-  text-indent: 2px;
-}
-
-.form__draft--visible {
-  display: block;
-}
-
-.form__draft-recover {
-  color: hsl(190, 80%, 70%);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-transition: color .1s ease-out;
-          transition: color .1s ease-out;
-  display: inline-block;
-  margin: -8px;
-  padding: 8px;
-}
-
 .form__topic {
   -webkit-appearance: none;
   font: 14px/1.4 -apple-system, sans-serif;
@@ -2250,6 +2228,30 @@ a {
 .form--edit {
   padding: var(---padding) 0;
   margin-bottom: 24px;
+}
+
+.form__draft-mention {
+  display: none;
+  font-size: 13px;
+  padding: 0 1px var(---padding); /* 1px to align with textarea's border */
+}
+
+@media (min-width: 1025px) {
+  .form__draft-mention {
+    font-size: 14px;
+  }
+}
+
+.form__draft-mention--visible {
+  display: block;
+}
+
+.form__draft-mention-recover {
+  color: var(--link-color);
+  cursor: pointer;
+  display: inline-block;
+  margin: -12px;
+  padding: 12px;
 }
 
 .form__error {

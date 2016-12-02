@@ -13,6 +13,7 @@ let hasTouch = false
   , selectedHeadPackId
   , toastTimer
   , savedMessageContentBeforeEditing
+  , previousPageDraftId
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -135,6 +136,7 @@ function postMessage(event) {
 
     qs('.js-form-post__error').classList.remove('form__error--shown')
     qs('.js-form-post__textarea').value = ''
+    saveDraft()
 
     if (!hasTouch) {
       qs('.js-form-post__textarea').focus()
@@ -450,6 +452,7 @@ function insertStickerIntoMessage() {
   textarea.value = `${stringBeforeInsertionPoint} :${localStorage.stickerToInsert}: ${stringAfterInsertionPoint}`
   textarea.focus()
   localStorage.removeItem('stickerToInsert')
+  saveDraft()
 }
 
 function showImbricatedQuote(event) {
@@ -488,6 +491,7 @@ function quoteMessage(event) {
   if (textarea) {
     textarea.focus() // Must be before setting value in order to have the cursor at the bottom
     textarea.value += quote
+    saveDraft()
   }
   else {
     showEditForm(id)
@@ -747,6 +751,37 @@ function updateTopicPosition() {
   })
 }
 
+function saveDraft() {
+  let draftId = `draft_${topicIdModern}`
+    , value = qs('.js-form-post__textarea').value
+
+  if (!value) {
+    localStorage.removeItem(draftId)
+    return
+  }
+
+  localStorage[draftId] = value
+  qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
+}
+
+function showDraft() {
+  let draftId = `draft_${topicIdModern}`
+    , value = localStorage[draftId]
+  if (value) {
+    if (draftId == previousPageDraftId) {
+      qs('.js-form-post__textarea').value = value
+    }
+    else {
+      qs('.js-form-post__draft-mention').classList.add('form__draft-mention--visible')
+      qs('.js-form-post__draft-mention-recover').addEventListener('click', () => {
+        qs('.js-form-post__textarea').value = value
+        qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
+      })
+    }
+  }
+  previousPageDraftId = draftId
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -765,7 +800,13 @@ if (googleAnalyticsId) {
 instantClick.on('change', function() {
   qs('.js-form-post', (element) => {
     element.addEventListener('submit', postMessage)
+
+    qs('.js-form-post__textarea').addEventListener('input', saveDraft)
+    showDraft()
   })
+  if (!qs('.js-form-post')) {
+    previousPageDraftId = null
+  }
 
   qsa('.js-favorite-toggle', (element) => {
     element.addEventListener('click', alertPlaceholder)
