@@ -742,6 +742,12 @@ router.post('/topicPosition', (req, res, next) => {
 
   let {topicIdModern, messageId, answersCount} = req.body
 
+  db.query('INSERT INTO topics_visited_pages SET ?', {
+    userId: user.id,
+    topicIdModern,
+    page: 1 + Math.floor(answersCount / 20)
+  })
+
   db.query('SELECT messageId FROM topics_positions WHERE userId = ? AND topicIdModern = ?', [
     user.id,
     topicIdModern,

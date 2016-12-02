@@ -38,6 +38,13 @@ CREATE TABLE `topics_positions` (
   PRIMARY KEY (`userId`, `topicIdModern`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `topics_visited_pages` (
+  `userId` mediumint NOT NULL,
+  `topicIdModern` int NOT NULL,
+  `page` smallint NOT NULL,
+  PRIMARY KEY (`userId`, `topicIdModern`, `page`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `avatars` (
   `nickname` varchar(16) NOT NULL,
   `url` varchar(128) NOT NULL,
