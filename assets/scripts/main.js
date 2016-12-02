@@ -26,7 +26,7 @@ function qsa(selectors, callback) {
   ;[].forEach.call(document.querySelectorAll(selectors), callback)
 }
 
-function ajax(url, timeout, objectData = {}, callback = () => {}) {
+function ajax(shortPath, timeout, objectData = {}, callback = () => {}) {
   let data = [
         `_csrf=${_csrf}`,
       ]
@@ -38,7 +38,7 @@ function ajax(url, timeout, objectData = {}, callback = () => {}) {
   data = data.join('&')
 
   let xhr = instantClick.xhr()
-  xhr.open('POST', url)
+  xhr.open('POST', `/ajax/${shortPath}`)
   xhr.timeout = timeout
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
   xhr.addEventListener('readystatechange', () => {
@@ -115,7 +115,7 @@ function postMessage(event) {
   qs('.js-form-post__button-visible').classList.add('form__post-button-visible--sending')
   qs('.form__post-button').blur()
 
-  ajax('/ajax/postMessage', timeouts.postMessage, {
+  ajax('postMessage', timeouts.postMessage, {
     message,
     forumId,
     topicMode,
@@ -187,7 +187,7 @@ function restartRefreshIfNeeded() {
 function refresh() {
   lastRefreshTimestamp = +new Date
 
-  ajax('/ajax/refresh', timeouts.refresh, {
+  ajax('refresh', timeouts.refresh, {
     forumId: forumId,
     topicMode: topicMode,
     topicIdLegacyOrModern: topicIdLegacyOrModern,
@@ -280,11 +280,11 @@ function refresh() {
 }
 
 function syncFavorites() {
-  ajax('/ajax/syncFavorites', timeouts.syncFavorites)
+  ajax('syncFavorites', timeouts.syncFavorites)
 }
 
 function getAjaxHashes() {
-  ajax('/ajax/getAjaxHashes', timeouts.syncFavorites, {}, (status, response, xhr) => {
+  ajax('getAjaxHashes', timeouts.syncFavorites, {}, (status, response, xhr) => {
     if (status == 200 && !response.error) {
       localStorage.hasAjaxHashes = '1'
       localStorage.removeItem('hasAjaxHash') // legacy
@@ -647,7 +647,7 @@ function editMessage(event) {
   }
   let messageId = element.dataset.id
 
-  ajax('/ajax/editMessage', timeouts.postMessage, {
+  ajax('editMessage', timeouts.postMessage, {
     messageId,
     message,
     forumId,
@@ -712,7 +712,7 @@ function confirmDeleteMessage(event) {
   let id = element.dataset.id
   visuallyDeleteMessage(id)
 
-  ajax('/ajax/deleteMessage', timeouts.postMessage, {
+  ajax('deleteMessage', timeouts.postMessage, {
     messageId: id,
   }, (status, response, xhr) => {
     if (status != 200) {
