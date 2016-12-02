@@ -7,34 +7,215 @@
 <meta name="theme-color" content="hsl(240, 8%, 13%)">
 <style>
 body {
-  font: 15px/1.4 sans-serif;
-  background: #e7e9ec;
+  font: 16px/1.4 sans-serif;
+  background: hsl(270, 90%, 10%);
+  color: hsl(240, 80%, 90%);
+  max-width: 700px;
+  margin: auto;
+  position: relative;
+}
+
+body.stage-shown {
+  background: hsl(265, 90%, 10%);
+}
+
+.canvas {
+  padding: 0 10px;
+}
+
+.stage-shown .canvas {
+  filter: blur(10px);
+}
+
+h2 {
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  h2 br {
+    display: none;
+  }
+}
+
+.stage-shown .cta {
+  opacity: .5;
+}
+
+.cta {
+  font-size: 24px;
+  text-align: center;
+  width: 100%;
+  margin: 35px 0;
+}
+
+.cta a {
+  padding: 15px 20px;
+  background: hsl(270, 90%, 25%);
+  border-radius: 7px;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  background-image: linear-gradient(hsl(270, 90%, 35%), hsl(270, 90%, 15%));
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .33),
+              0 2px 15px hsla(0, 0%, 0%, .5);
+}
+
+.cta a:active {
+  background-image: linear-gradient(hsl(270, 90%, 20%), hsl(270, 90%, 25%));
+  box-shadow: 0 1px 0 hsla(0, 0%, 100%, .15),
+              inset 0 2px 10px hsla(0, 0%, 0%, .9);
+}
+
+.legalese {
+  font-size: 12px;
+  text-align: center;
+  opacity: .67;
+  margin: 2em;
+}
+
+.legalese a {
+  color: inherit;
+}
+
+.stage {
+  display: none;
+  background: hsla(265, 90%, 10%, .25);
+  text-shadow: 0 0 2px hsl(265, 90%, 10%);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  padding: 0 20px;
+}
+
+.stage-shown .stage {
+  display: block;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-bottom: 0em;
+}
+
+h1 + p {
+  margin-top: .5em;
+}
+
+.mandatory-login-proof {
+  color: hsl(240, 80%, 95%);
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  background: hsla(0, 0%, 100%, .1);
+  border: 1px solid hsla(0, 0%, 100%, .2);
+  color: inherit;
+  font-size: 20px;
+  padding: 10px;
+  display: block;
+  margin: 15px 0;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 8px hsla(0, 0%, 0%, .25);
+}
+
+.g-recaptcha {
+  margin: 15px 0;
+  opacity: .9;
+}
+
+.g-recaptcha div {
+  margin: auto;
+}
+
+.submit {
+  margin: 15px auto;
+  display: block;
+  border: none;
+  font-size: 20px;
+  padding: 12px 19px;
+  background: hsl(270, 90%, 25%);
+  border-radius: 7px;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  background-image: linear-gradient(hsl(270, 90%, 35%), hsl(270, 90%, 15%));
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .33),
+              0 2px 15px hsla(0, 0%, 0%, .5);
+}
+
+.submit:active,
+.submit.disabled {
+  background-image: linear-gradient(hsl(270, 90%, 20%), hsl(270, 90%, 25%));
+  box-shadow: 0 1px 0 hsla(0, 0%, 100%, .15),
+              inset 0 2px 10px hsla(0, 0%, 0%, .9);
+}
+
+.stage h3 {
+  font-size: 1.3em;
 }
 </style>
+<div class="canvas">
+  <h2>JVForum rend les forums<br> plus agréables à utiliser.</h2>
 
-<h2>Connexion à JVForum bêta</h2>
+  <p>Profitez de la meilleure combinaison de fonctions et d’ergonomie pour les forums de jeuxvideo.com, sur mobile comme sur PC.</p>
 
-<p>Connectez-vous ci-dessous pour essayer la bêta, et veuillez rapporter tous les bugs que vous croisez sur le topic officiel.</p>
+  <h3>Temps réel</h3>
 
-<form id="js-form" action="/" method="post">
-  <input id="nickname" type="text" name="login_pseudo" placeholder="Pseudo" maxlength="15" autocorrect="off">
-  <br>
-  <input id="password" type="password" placeholder="Mot de passe">
-  <div class="g-recaptcha" data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx"></div>
-  <input id="_csrf" type="hidden" name="_csrf" value="{{=it.csrf}}">
-  <input id="submit" type="submit" value="Me connecter" style="font-weight: bold">
-</form>
+  <p>Plus besoin de marteler le bouton Rafraîchir.</p>
 
-<p><small>Votre identifiant sera transmis au serveur de JVForum, sans y être stocké. JVForum n’est pas affilié à <a href="http://www.jeuxvideo.com/">jeuxvideo.com</a>.</small></p>
+  <h3>Rapidité</h3>
+
+  <p>Tout est incroyablement rapide, même en 2G.</p>
+
+  <div class="cta">
+    <a href="#login">Démarrer l’expérience</a>
+  </div>
+
+  <p class="legalese">JVForum n’est pas affilié à <a href="//www.jeuxvideo.com/">jeuxvideo.com</a>.</p>
+</div>
+
+<div class="stage">
+  <h1>Connectez-vous</h1>
+
+  <p>Utilisez votre pseudo jeuxvideo.com pour profiter de JVForum.</p>
+
+  <form id="js-form" action="/" method="post">
+    <input id="nickname" class="input" type="text" name="login_pseudo" placeholder="Pseudo" maxlength="15" autocorrect="off">
+    <input id="password" class="input" type="password" placeholder="Mot de passe">
+    <div class="g-recaptcha" data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx" data-callback="captchaDone"></div>
+    <input id="_csrf" type="hidden" name="_csrf" value="{{=it.csrf}}">
+    <input class="submit" type="submit" value="Me connecter">
+  </form>
+
+  <p class="legalese">Votre identifiant sera transmis au serveur de JVForum, sans y être stocké.</p>
+
+  <h3>Pourquoi dois-je donner mon identifiant ?</h3>
+
+  <p>À la base, JVForum pouvait être utilisé sans être connecté. Cette fonctionnalité a été <a class="mandatory-login-proof" href="http://www.jeuxvideo.com/nplay/forums/message/714206419" target="_blank">retirée sur demande de JVC</a>.</p>
+
+  <p class="legalese">JVForum n’est pas affilié à <a href="http://www.jeuxvideo.com/">jeuxvideo.com</a>.</p>
+</div>
 
 <script>
-function geid(id) {
-  return document.getElementById(id);
+function qs(selectors) {
+  return document.querySelector(selectors);
 }
 
-geid('js-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  geid('submit').disabled = true;
+function handleHash() {
+  if (location.hash == '#login') {
+    document.body.classList.add('stage-shown');
+  }
+  else {
+    document.body.classList.remove('stage-shown');
+  }
+}
+
+function submitForm() {
+  qs('.submit').disabled = true;
+  qs('.submit').classList.add('disabled');
   var xhr = new XMLHttpRequest();
   xhr.addEventListener('readystatechange', function() {
     if (xhr.readyState < 4) {
@@ -46,12 +227,27 @@ geid('js-form').addEventListener('submit', function (e) {
     }
     else {
       alert(data.error);
-      location.href = location.href;
+      qs('.submit').disabled = false;
+      qs('.submit').classList.remove('disabled');
     }
   });
   xhr.open('POST', '/ajax/login');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send('nickname=' + geid('nickname').value + '&password=' + geid('password').value + '&captcha=' + geid('g-recaptcha-response').value + '&_csrf=' + geid('_csrf').value);
+  xhr.send('nickname=' + qs('#nickname').value + '&password=' + qs('#password').value + '&captcha=' + qs('#g-recaptcha-response').value + '&_csrf=' + qs('#_csrf').value);
+}
+
+function captchaDone() {
+  if (qs('#nickname').value && qs('#password').value) {
+    submitForm()
+  }
+}
+
+addEventListener('hashchange', handleHash);
+handleHash();
+
+qs('#js-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  submitForm();
 });
 
 var googleAnalyticsId = '{{=it.googleAnalyticsId}}';
