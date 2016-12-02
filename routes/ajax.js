@@ -746,8 +746,8 @@ router.post('/topicPosition', (req, res, next) => {
     user.id,
     topicIdModern,
   ], (results) => {
+    res.json(r)
     if (!results[0] || results[0].messageId < messageId) {
-      res.json(r)
       db.insertOrUpdate('topics_positions', {
         messageId,
         answersCount,
