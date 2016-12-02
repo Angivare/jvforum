@@ -12,7 +12,7 @@ let express = require('express')
   , config = require('../config')
   , router = express.Router()
 
-router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
+router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next) => {
   let user = utils.parseUserCookie(req.signedCookies.user)
 
   if (!user) {
@@ -22,7 +22,9 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
   utils.getUserFavorites(user.id, (favorites) => {
     let id = req.params.id
       , slug = req.params.slug ? req.params.slug : '0'
-      , pathJvc = `/forums/0-${id}-0-1-0-1-0-${slug}.htm`
+      , page = req.params.page ? req.params.page : 1
+      , index = (page - 1) * 25 + 1
+      , pathJvc = `/forums/0-${id}-0-1-0-${index}-0-${slug}.htm`
       , viewLocals = {
           userAgent: req.headers['user-agent'],
           googleAnalyticsId: config.googleAnalyticsId,
@@ -41,7 +43,6 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         }
 
     function getTopicsPositionsAndSend() {
-
       res.set('Cache-Control', 'max-age=1, private')
 
       if ('topics' in viewLocals && viewLocals.topics.length) {
@@ -106,7 +107,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
       }
     }
 
-    let cacheId = `${id}/1`
+    let cacheId = `${id}/${page}`
     cache.get(cacheId, config.timeouts.cache.forumDisplay, (topics, age) => {
       for (let i = 0; i < topics.length; i++) {
         topics[i].date = date.convertTopicList(topics[i].dateRaw)

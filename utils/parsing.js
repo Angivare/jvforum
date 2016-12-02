@@ -80,7 +80,7 @@ function forum(body) {
   r.name = ''
   selection = $('.highlight')
   if (selection) {
-    r.name = selection.text().substr("Forum ".length)
+    r.name = selection.text().substr("Forum ".length).replace(/ - Page [0-9]+$/, '')
   }
 
   r.topics = []
@@ -126,6 +126,8 @@ function forum(body) {
   r.subforumsIds = r.subforumsIds.sort((a, b) => {
     return a - b
   })
+
+  r.hasNextPage = $('.pagi-suivant-actif').length > 0
 
   return r
 }
