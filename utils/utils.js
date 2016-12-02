@@ -160,7 +160,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
 }
 
 function adaptPostedMessage(message, hostname) {
-  let regex = new RegExp(`https?://${hostname}/([0-9]+)(?:/([0-9]+))?-([a-z0-9]+(?:-[a-z0-9]+)*)(?:/([0-9]+))?(?:\#([0-9]+))?(?:\#after[0-9]+)?`, 'gi')
+  let regex = new RegExp(`https?://${hostname}/([0-9]+)(?:/([0-9]+))?-([a-z0-9]+(?:-[a-z0-9]+)*)(?:/([0-9]+))?(?:\#m([0-9]+))?(?:\#after[0-9]+)?`, 'gi')
   message = message.replace(regex, (all, forumId, topicIdJvf, slug, page, messageId) => {
     let mode = 0
       , topicIdlegacyOrModern = 0
