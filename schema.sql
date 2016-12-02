@@ -31,7 +31,7 @@ CREATE TABLE `topics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `topics_positions` (
-  `userId` mediumint unsigned NOT NULL,
+  `userId` mediumint NOT NULL,
   `topicIdModern` int NOT NULL,
   `messageId` int NOT NULL,
   `answersCount` mediumint NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `logins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `favorites` (
-  `userId` int unsigned NOT NULL,
+  `userId` mediumint NOT NULL,
   `forums` mediumtext NOT NULL,
   `topics` mediumtext NOT NULL,
   `updatedAt` int NOT NULL,
