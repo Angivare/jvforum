@@ -389,6 +389,7 @@ router.post('/refresh', (req, res, next) => {
   let r = {
       error: false,
     }
+    , user = req.user
 
   let missingParams = false
   ;['forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'topicPage', 'numberOfPages', 'messagesChecksums'].forEach((varName) => {
@@ -523,91 +524,92 @@ router.post('/refresh', (req, res, next) => {
       }
       , newMessages = []
       , avatarsNicknames = []
-      , paginationPages = utils.makePaginationPages(topicPage, content.numberOfPages)
 
-    for (let i = 0; i < content.messages.length; i++) {
-      let id = content.messages[i].id
-      data.messages[id] = {}
-      let dateConversion = date.convertMessage(content.messages[i].dateRaw)
+    utils.makePaginationPages(topicPage, content.numberOfPages, user.id, content.idModern, (paginationPages) => {
+      for (let i = 0; i < content.messages.length; i++) {
+        let id = content.messages[i].id
+        data.messages[id] = {}
+        let dateConversion = date.convertMessage(content.messages[i].dateRaw)
 
-      if (id in messagesChecksums) {
-        data.messages[id].date = dateConversion.text
-        data.messages[id].age = dateConversion.diff
+        if (id in messagesChecksums) {
+          data.messages[id].date = dateConversion.text
+          data.messages[id].age = dateConversion.diff
 
-        if (messagesChecksums[id] != content.messages[i].checksum) {
-          data.messages[id].content = content.messages[i].content
+          if (messagesChecksums[id] != content.messages[i].checksum) {
+            data.messages[id].content = content.messages[i].content
+            data.messages[id].checksum = content.messages[i].checksum
+          }
+        }
+        else {
+          content.messages[i].date = dateConversion.text
+          content.messages[i].age = dateConversion.diff
+          content.messages[i].timestamp = dateConversion.timestamp
+
+          let nickname = content.messages[i].nickname.toLowerCase()
+          if (!avatarsNicknames.includes(nickname)) {
+            avatarsNicknames.push(nickname)
+          }
+
+          newMessages.push(content.messages[i])
           data.messages[id].checksum = content.messages[i].checksum
         }
       }
-      else {
-        content.messages[i].date = dateConversion.text
-        content.messages[i].age = dateConversion.diff
-        content.messages[i].timestamp = dateConversion.timestamp
 
-        let nickname = content.messages[i].nickname.toLowerCase()
-        if (!avatarsNicknames.includes(nickname)) {
-          avatarsNicknames.push(nickname)
+      let renderings = 0
+      function sendJSONAfterRenderings() {
+        renderings++
+        if (numberOfPages == 0) {
+          res.json(data)
         }
-
-        newMessages.push(content.messages[i])
-        data.messages[id].checksum = content.messages[i].checksum
-      }
-    }
-
-    let renderings = 0
-    function sendJSONAfterRenderings() {
-      renderings++
-      if (numberOfPages == 0) {
-        res.json(data)
-      }
-      if (numberOfPages != content.numberOfPages && newMessages.length) {
-        if (renderings == 2) {
+        if (numberOfPages != content.numberOfPages && newMessages.length) {
+          if (renderings == 2) {
+            res.json(data)
+          }
+        }
+        else {
           res.json(data)
         }
       }
-      else {
+
+      if (newMessages.length == 0 && numberOfPages == content.numberOfPages) {
         res.json(data)
       }
-    }
-
-    if (newMessages.length == 0 && numberOfPages == content.numberOfPages) {
-      res.json(data)
-    }
-    else if (numberOfPages != content.numberOfPages) {
-      req.app.render('partials/topicPagination', {
-        paginationPages,
-        numberOfPages: content.numberOfPages,
-        page: topicPage,
-        forumId,
-        idJvf,
-        slug: topicSlug,
-      }, (err, html) => {
-        data.paginationHTML = html
-        data.numberOfPages = content.numberOfPages
-        sendJSONAfterRenderings()
-      })
-    }
-    else if (newMessages.length) {
-      utils.getAvatars(avatarsNicknames, (avatars) => {
-        for (let nickname in avatars) {
-          let url = avatars[nickname]
-          for (let i = 0; i < newMessages.length; i++) {
-            if (newMessages[i].nickname.toLowerCase() == nickname) {
-              newMessages[i].avatar = url
-            }
-          }
-        }
-
-        newMessages = utils.addIsMineVariable(newMessages, req.user.nickname)
-
-        req.app.render('partials/topicMessages', {
-          messages: newMessages,
+      else if (numberOfPages != content.numberOfPages) {
+        req.app.render('partials/topicPagination', {
+          paginationPages,
+          numberOfPages: content.numberOfPages,
+          page: topicPage,
+          forumId,
+          idJvf,
+          slug: topicSlug,
         }, (err, html) => {
-          data.newMessagesHTML = html
+          data.paginationHTML = html
+          data.numberOfPages = content.numberOfPages
           sendJSONAfterRenderings()
         })
-      })
-    }
+      }
+      else if (newMessages.length) {
+        utils.getAvatars(avatarsNicknames, (avatars) => {
+          for (let nickname in avatars) {
+            let url = avatars[nickname]
+            for (let i = 0; i < newMessages.length; i++) {
+              if (newMessages[i].nickname.toLowerCase() == nickname) {
+                newMessages[i].avatar = url
+              }
+            }
+          }
+
+          newMessages = utils.addIsMineVariable(newMessages, user.nickname)
+
+          req.app.render('partials/topicMessages', {
+            messages: newMessages,
+          }, (err, html) => {
+            data.newMessagesHTML = html
+            sendJSONAfterRenderings()
+          })
+        })
+      }
+    })
   }
 })
 

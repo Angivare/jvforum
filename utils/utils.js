@@ -361,7 +361,7 @@ function getTopic(where, successCallback, failCallback) {
   })
 }
 
-function makePaginationPages(page, numberOfPages) {
+function makePaginationPages(page, numberOfPages, userId, topicIdModern, callback) {
   let paginationPages = []
 
   if (page >= 5) {
@@ -378,7 +378,7 @@ function makePaginationPages(page, numberOfPages) {
     paginationPages.push(numberOfPages)
   }
 
-  return paginationPages
+  callback(paginationPages)
 }
 
 // Taken from DoT
