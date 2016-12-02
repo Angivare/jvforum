@@ -693,7 +693,7 @@ h1, h2, h3 {
 }
 
 .topic--visited {
-  color: var(--topic--visited-color);
+  color: var(--link--visited-color);
 }
 
 .topic__label {
@@ -924,7 +924,7 @@ h1, h2, h3 {
 }
 
 .pagination-topic__page-link--visited {
-  color: hsl(240, 8%, 57%);
+  color: var(--link--visited-color);
 }
 
 .pagination-topic--top .pagination-topic__page-link--last,
@@ -1632,6 +1632,7 @@ color: hsl(240, 8%, 27%);
   --background: hsl(0, 0%, 0%);
   --color: hsl(240, 8%, 87%);
   --link-color: hsl(182, 25%, 50%);
+  --link--visited-color: hsl(0, 0%, 57%);
   --container-max-width: 1440px;
   --header-background: hsl(240, 8%, 9%);
   --header-box-shadow-color: hsl(240, 8%, 6%);
@@ -1652,7 +1653,6 @@ color: hsl(240, 8%, 27%);
   --message__content-color: hsl(240, 8%, 80%);
   --topic-background: hsl(240, 8%, 8%);
   --topic-background-odd: hsl(240, 8%, 10%);
-  --topic--visited-color: hsl(0, 0%, 57%);
   --pagination-topic__page-link--active-background: hsl(182, 25%, 40%);
   --message__byline-date-inline-color: hsl(182, 25%, 40%);
   --quote-border-color: hsla(0, 0%, 100%, .125);
