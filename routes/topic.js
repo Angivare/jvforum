@@ -159,6 +159,8 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           return
         }
 
+        res.set('Cache-Control', 'max-age=1, private')
+
         content.title = content.name
         content.name = utils.encodeHTML(content.name)
         content.name = utils.emojify(content.name)

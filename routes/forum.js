@@ -41,6 +41,9 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?', (req, res, next) => {
         }
 
     function getTopicsPositionsAndSend() {
+
+      res.set('Cache-Control', 'max-age=1, private')
+
       if ('topics' in viewLocals && viewLocals.topics.length) {
         let topicsIds = []
           , positions = {}
