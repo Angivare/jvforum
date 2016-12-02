@@ -361,7 +361,6 @@ router.post('/deleteMessage', (req, res, next) => {
   }, (headers, body) => {
     let response = JSON.parse(body)
     if (response) {
-      console.log(response)
       if ('erreur' in response && response.erreur.length) {
         r.error = response.erreur[0]
       }
