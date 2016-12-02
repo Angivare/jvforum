@@ -191,7 +191,7 @@ h1 + p {
   <form id="js-form" action="/" method="post">
     <input id="nickname" class="input" type="text" name="login_pseudo" placeholder="Pseudo" maxlength="15" autocorrect="off">
     <input id="password" class="input" type="password" placeholder="Mot de passe">
-    <div class="g-recaptcha" data-sitekey="6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx" data-callback="captchaDone"></div>
+    <div class="g-recaptcha"></div>
     <input id="_csrf" type="hidden" name="_csrf" value="{{=it.csrf}}">
     <input class="submit" type="submit" value="Me connecter">
   </form>
@@ -234,18 +234,27 @@ function submitForm() {
     }
     else {
       alert(data.error);
+      grecaptcha.reset();
       qs('.submit').disabled = false;
       qs('.submit').classList.remove('disabled');
     }
   });
   xhr.open('POST', '/ajax/login');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send('nickname=' + qs('#nickname').value + '&password=' + qs('#password').value + '&captcha=' + qs('#g-recaptcha-response').value + '&_csrf=' + qs('#_csrf').value);
+  xhr.send('nickname=' + qs('#nickname').value + '&password=' + qs('#password').value + '&captcha=' + grecaptcha.getResponse() + '&_csrf=' + qs('#_csrf').value);
+}
+
+function recaptchaLoadListener() {
+  var element = qs('.g-recaptcha');
+  grecaptcha.render(element, {
+    sitekey: '6Lelbg8TAAAAAMwha8p0BZK5LdpgzISjsD_bSuyx',
+    callback: captchaDone,
+  });
 }
 
 function captchaDone() {
   if (qs('#nickname').value && qs('#password').value) {
-    submitForm()
+    submitForm();
   }
 }
 
@@ -268,4 +277,4 @@ if (googleAnalyticsId) {
   ga('send', 'pageview');
 }
 </script>
-<script src="https://www.google.com/recaptcha/api.js?hl=fr"></script>
+<script src="https://www.google.com/recaptcha/api.js?hl=fr&onload=recaptchaLoadListener&render=explicit" async defer></script>
