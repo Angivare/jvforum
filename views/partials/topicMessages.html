@@ -1,5 +1,5 @@
 {{~it.messages :m:index}}
-  <div class="message message--nb-actions-{{=m.isMine ? 3 : 1}}" id="m{{=m.id}}" data-id={{=m.id}} data-nickname="{{=m.nickname}}" data-timestamp={{=m.timestamp}} data-age={{=m.age}} data-checksum={{=m.checksum}}>
+  <div class="message message--nb-actions-{{=m.isMine ? 3 : 1}}" id="m{{=m.id}}" data-id={{=m.id}} data-nickname="{{=m.nickname}}" data-mine="{{=m.isMine ? 'true' : ''}}" data-timestamp={{=m.timestamp}} data-age={{=m.age}} data-checksum={{=m.checksum}}>
     <div class="message__actions message__actions--nb-{{=m.isMine ? 3 : 1}}"><!--
       {{? m.isMine }}
         --><span class="js-delete message__actions-action message__actions-action--delete">Suppr.</span><!--

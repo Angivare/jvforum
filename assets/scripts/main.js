@@ -14,6 +14,9 @@ let hasTouch = false
   , toastTimer
   , savedMessageContentBeforeEditing
   , previousPageDraftIdShown
+  , pageVisible
+  , unviewedNewMessagesCount = 0
+  , originalTabTitle
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -220,6 +223,9 @@ function refresh() {
           if (messagesDeleted.indexOf(element.dataset.id) == -1) {
             qs('.messages-list').appendChild(element)
           }
+          if (!element.dataset.mine) {
+            triggerTabAlertForNewPosts()
+          }
         }
       }
 
@@ -273,6 +279,7 @@ function refresh() {
           element.innerHTML = response.paginationHTML
         })
         numberOfPages = response.numberOfPages
+        triggerTabAlertForNewPosts(true)
       }
     }
 
@@ -784,6 +791,37 @@ function showDraft() {
   }
 }
 
+function handleVisibilityState() {
+  pageVisible = document.visibilityState == 'visible'
+  if (pageVisible) {
+    removeTabAlertForNewPosts()
+  }
+}
+
+function triggerTabAlertForNewPosts(hasNewPage) {
+  if (pageVisible) {
+    return
+  }
+  if (hasNewPage) {
+    if (unviewedNewMessagesCount < 100000) {
+      unviewedNewMessagesCount += 100000
+    }
+  }
+  else {
+    unviewedNewMessagesCount++
+  }
+  let newMessagesOnPage = unviewedNewMessagesCount % 100000
+    , titleInfo = '(' + (newMessagesOnPage > 0 ? newMessagesOnPage : '') + (unviewedNewMessagesCount >= 100000 ? '+' : '') + ')'
+  document.title = `${titleInfo} ${originalTabTitle}`
+}
+
+function removeTabAlertForNewPosts() {
+  if (unviewedNewMessagesCount) {
+    document.title = originalTabTitle
+    unviewedNewMessagesCount = 0
+  }
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -836,6 +874,8 @@ instantClick.on('change', function() {
 
   updateTopicPosition()
 
+  originalTabTitle = document.title
+
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
   startRefreshCycle()
@@ -853,6 +893,9 @@ addMessagesEvent('.js-delete', 'click', confirmDeleteMessage)
 addMessagesEvent('', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
+
+document.addEventListener('visibilitychange', handleVisibilityState)
+handleVisibilityState()
 
 if (!('hasAjaxHashes' in localStorage)) {
   getAjaxHashes()
