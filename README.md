@@ -8,7 +8,7 @@
 
 ### Installation et lancement
 
-* Importez le contenu de `schema.sql` dans une base de données MySQL
+* Importez le contenu de `schema.sql` et `stickers.sql` dans une base de données MySQL
 * `npm install`
 * `cp config/example.js config/development.js`
 * Configurez `databaseConnection` dans `config/development.js`
