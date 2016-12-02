@@ -2472,3 +2472,20 @@ a {
   color: var(--home-bottom-links-destructive-color);
   font-size: 13px;
 }
+
+.forum-pagination {
+  display: flex;
+}
+
+.forum-pagination__link {
+  flex: 2;
+  padding: 10px;
+}
+
+.forum-pagination__link--first {
+  flex: 1;
+}
+
+.forum-pagination__link--next {
+  text-align: right;
+}

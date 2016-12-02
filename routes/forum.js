@@ -22,7 +22,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
   utils.getUserFavorites(user.id, (favorites) => {
     let id = req.params.id
       , slug = req.params.slug ? req.params.slug : '0'
-      , page = req.params.page ? req.params.page : 1
+      , page = req.params.page ? parseInt(req.params.page) : 1
       , index = (page - 1) * 25 + 1
       , pathJvc = `/forums/0-${id}-0-1-0-${index}-0-${slug}.htm`
       , viewLocals = {
@@ -33,6 +33,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
           refreshIntervals: config.refreshIntervals,
           id,
           slug,
+          page,
           pathJvc,
           urlJvc: `http://www.jeuxvideo.com${pathJvc}`,
           isFavorite: false,
@@ -108,7 +109,8 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
     }
 
     let cacheId = `${id}/${page}`
-    cache.get(cacheId, config.timeouts.cache.forumDisplay, (topics, age) => {
+    cache.get(cacheId, config.timeouts.cache.forumDisplay, (data, age) => {
+      let {topics, hasNextPage} = data
       for (let i = 0; i < topics.length; i++) {
         topics[i].date = date.convertTopicList(topics[i].dateRaw)
       }
@@ -116,6 +118,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
       viewLocals.cacheAge = age
 
       viewLocals.topics = topics
+      viewLocals.hasNextPage = hasNextPage
       utils.getForum(id, (content) => {
         Object.keys(content).forEach((key) => {
           viewLocals[key] = content[key]
@@ -159,7 +162,10 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
         else if (headers.statusCode == 200) {
           let parsed = parse.forum(body)
 
-          cache.save(cacheId, parsed.topics)
+          cache.save(cacheId, {
+            topics: parsed.topics,
+            hasNextPage: parsed.hasNextPage,
+          })
           utils.saveForum(id, parsed.name, slug, parsed.isLocked, parsed.parentId, parsed.subforumsIds)
 
           for (let i = 0; i < parsed.topics.length; i++) {
