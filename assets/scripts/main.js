@@ -492,7 +492,7 @@ function quoteMessage(event) {
   else {
     showEditForm(id)
     textarea = qs('.js-form-edit__textarea')
-    showError('Topic bloqué, copiez-collez le message ci-dessous.', 'edit')
+    showError('Topic bloqué, copiez-collez le message pour le citer ailleurs.', 'edit')
     textarea.focus() // Must be before setting value in order to have the cursor at the bottom
     textarea.value = quote
   }
