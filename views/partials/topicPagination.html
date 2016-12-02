@@ -1,9 +1,9 @@
-{{~it.paginationPages :p:index}}
+{{ for (let p in it.paginationPages) { }}
   <span class="pagination-topic__page">
     {{? p != it.page }}
-      <a class="pagination-topic__page-link {{? p == it.page + 1 }}pagination-topic__page-link--next{{?? p == it.numberOfPages }}pagination-topic__page-link--last{{?}}" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? p > 1 }}/{{=p}}{{?}}">{{=p}}</a>
+      <a class="pagination-topic__page-link {{? it.paginationPages[p] }}pagination-topic__page-link--visited{{?}} {{? p == it.page + 1 }}pagination-topic__page-link--next{{?? p == it.numberOfPages }}pagination-topic__page-link--last{{?}}" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? p > 1 }}/{{=p}}{{?}}">{{=p}}</a>
     {{??}}
       <span class="pagination-topic__page-link pagination-topic__page-link--active">{{=p}}</span>
     {{?}}
 </span>
-{{~}}
+{{ } }}

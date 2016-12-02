@@ -363,22 +363,42 @@ function getTopic(where, successCallback, failCallback) {
 
 function makePaginationPages(page, numberOfPages, userId, topicIdModern, callback) {
   let paginationPages = []
+    , visitedStatus = {}
 
   if (page >= 5) {
     paginationPages.push(1)
+    visitedStatus[1] = false
   }
   for (let i = Math.max(1, page - 3); i < page; i++) { // Previous three pages
     paginationPages.push(i)
+    visitedStatus[i] = false
   }
   paginationPages.push(page)
+  visitedStatus[page] = true
   if (page < numberOfPages) {
     for (let i = page + 1; i < Math.min(page + 4, numberOfPages); i++) {
       paginationPages.push(i)
+      visitedStatus[i] = false
     }
     paginationPages.push(numberOfPages)
+    visitedStatus[numberOfPages] = false
   }
 
-  callback(paginationPages)
+  if (paginationPages.length == 1) {
+    callback(visitedStatus)
+    return
+  }
+
+  db.query('SELECT page FROM topics_visited_pages WHERE userId = ? AND topicIdModern = ? AND page IN (?)', [
+    userId,
+    topicIdModern,
+    paginationPages,
+  ], (results) => {
+    results.forEach((row) => {
+      visitedStatus[row.page] = true
+    })
+    callback(visitedStatus)
+  })
 }
 
 // Taken from DoT
