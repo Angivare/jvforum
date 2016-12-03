@@ -110,4 +110,9 @@ fetch.unique = (pathOrOptions, id, successCallback, failCallback) => {
   })
 }
 
+fetch.reconfigure = (configFile) => {
+  config = require(configFile)
+  http.globalAgent.maxSockets = config.maxSimultaneousRequests
+}
+
 module.exports = fetch
