@@ -10,7 +10,7 @@
     <div class="message__visible">
       <div class="message__byline">
         <div class="message__byline-author">
-          {{? !m.isNicknameDeleted }}
+          {{? m.nickname }}
             <a class="message__byline-author-link" href="http://www.jeuxvideo.com/profil/{{=m.nickname.toLowerCase()}}?mode=infos" target="_blank">
               <span class="message__byline-author-avatar"><!--
                 {{? m.avatar }}
