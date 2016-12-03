@@ -24,9 +24,10 @@ function topic(body) {
     let nickname = matches[4].includes('Pseudo supprimé') ? '' : matches[4]
       , avatar = !nickname || matches[2].includes('/default.jpg') ? '' : matches[2]
       , content = utils.adaptMessageContent(matches[6], matches[1], nickname, matches[5])
+      , status = !matches[3] || matches[3] == 'user' ? '' : matches[3]
     retour.messages.push({
       id: parseInt(matches[1]),
-      status: matches[3],
+      status,
       nickname,
       dateRaw: matches[5],
       content,
