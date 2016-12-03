@@ -8,3 +8,17 @@
 <link rel="stylesheet" href="/assets/stylesheet--{{=it.cacheBusting.css.checksum}}.css" data-instant-track>
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="hsl(240, 8%, 13%)">
+<script>
+var legacyLocation = '/unsupported'
+
+try {
+  eval('let test = 1')
+}
+catch(e) {
+  location.href = legacyLocation
+}
+
+if (!window.CSS || !CSS.supports || !CSS.supports('color', 'var(--test)') || !CSS.supports('filter', 'grayscale(1)')) {
+  location.href = legacyLocation
+}
+</script>

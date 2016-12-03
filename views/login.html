@@ -163,6 +163,21 @@ h1 + p {
   font-size: 1.3em;
 }
 </style>
+<script>
+var legacyLocation = '/unsupported'
+  , unsupported = false;
+
+try {
+  eval('let test = 1');
+}
+catch(e) {
+  unsupported = true;
+}
+
+if (!window.CSS || !CSS.supports || !CSS.supports('color', 'var(--test)') || !CSS.supports('filter', 'grayscale(1)')) {
+  unsupported = true;
+}
+</script>
 <div class="canvas">
   <h2>JVForum rend les forums<br> plus agréables à utiliser.</h2>
 
@@ -228,6 +243,9 @@ function qs(selectors) {
 
 function handleHash() {
   if (location.hash == '#login') {
+    if (unsupported) {
+      location.href = legacyLocation;
+    }
     document.body.classList.add('stage-shown');
   }
   else {
