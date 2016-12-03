@@ -276,6 +276,7 @@ function getUserFavorites(userId, thenCallback) {
 }
 
 function saveAvatar(nickname, url) {
+  url = url.replace(/^(?:https?:)?/, 'https:')
   db.insertOrUpdate('avatars', {url}, {nickname})
 }
 
