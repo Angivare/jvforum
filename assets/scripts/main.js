@@ -357,6 +357,7 @@ function toggleMobileMenu() {
   let addOrRemoveEvent = qs('.canvas').classList.contains('canvas--under-stage-with-menu-mobile-items') ? 'add' : 'remove'
   qs('.stage')[`${addOrRemoveEvent}EventListener`]('click', toggleMobileMenu)
   qs('.stage').classList.toggle('stage--shown')
+  qs('.stage').classList.toggle('stage--menu-mobile-items')
   qs('.stage').innerHTML = ''
   qs('.stage').appendChild(document.importNode(qs('#menu-mobile-items').content.firstElementChild, true))
 }
