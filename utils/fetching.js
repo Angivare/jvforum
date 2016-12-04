@@ -28,6 +28,10 @@ function fetch(pathOrOptions, successCallback, failCallback) {
       requestOptions.headers['X-Forwarded-For'] = pathOrOptions.ipAddress
     }
 
+    if (pathOrOptions.hostname) {
+      requestOptions.hostname = pathOrOptions.hostname
+    }
+
     if (pathOrOptions.postData) {
       postData = querystring.stringify(pathOrOptions.postData)
 
