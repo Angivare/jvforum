@@ -14,18 +14,39 @@ body {
 .legacy-assistance h2 {
   margin: .667em 0;
 }
+
+.info {
+  font-size: 14px;
+  color: #999;
+}
 </style>
 
-<div class="legacy-assistance">
-  <div class="legacy-assistance__container">
-    <h2>Oups</h2>
-    <p>JVForum est codé avec les dernières technologies du web et requiert un navigateur moderne.
-    <p class="legacy-assistance__android">Android : installez <a href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=fr">Google Chrome</a> ou <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=fr">Firefox</a>.
-    <p class="legacy-assistance__ios">iOS : <a href="https://support.apple.com/fr-fr/HT204204">mettez à jour le système</a>.
-    <p class="legacy-assistance__win">Windows : <a href="https://www.google.fr/chrome/browser/desktop/">Google Chrome</a> ou <a href="https://www.mozilla.org/fr/firefox/new/">Firefox</a>.
-    <p class="legacy-assistance__mac">macOS : téléchargez Safari 10 dans le Mac App Store.
-  </div>
+<div class="legacy-assistance__container">
+  <h2>Oups</h2>
+  <p>JVForum est codé avec les dernières technologies du web et requiert un navigateur moderne.
+  <p class="legacy-assistance__android">Android : installez <a href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=fr">Google Chrome</a> ou <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=fr">Firefox</a>.
+  <p class="legacy-assistance__ios">iOS : <a href="https://support.apple.com/fr-fr/HT204204">mettez à jour le système</a>.
+  <p class="legacy-assistance__win">Windows : <a href="https://www.google.fr/chrome/browser/desktop/">Google Chrome</a> ou <a href="https://www.mozilla.org/fr/firefox/new/">Firefox</a>.
+  <p class="legacy-assistance__mac">macOS : téléchargez Safari 10 dans le Mac App Store.
 </div>
+<p class="info">{{=it.userAgent}}
+<script>
+try {
+  eval('let test = 1');
+  document.write('<br>let');
+}
+catch(e) {}
+if (window.CSS && CSS.supports) {
+  document.write('<br>CSS.supports');
+  if (CSS.supports('color', 'var(--test)')) {
+    document.write('<br>CSS variables');
+  }
+  if (CSS.supports('filter', 'grayscale(1)')) {
+    document.write('<br>CSS filters');
+  }
+}
+</script>
+</p>
 <script>
 var googleAnalyticsId = '{{=it.googleAnalyticsId}}';
 if (googleAnalyticsId) {
