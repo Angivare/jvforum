@@ -44,7 +44,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   // Un-shorten
   regex = /<span class="JvCare[^<]+>([^<]+)(?:<i><\/i><span>([^<]+)<\/span>([^<]+))?<\/span>/g
   while (matches = regex.exec(content)) {
-    let url = matches.slice(1).join('')
+    let url = matches.slice(1).join('').replace(/\$/g, '$$$$') // $ characters need to be escaped to $$ in each replace
       , replace = `<a href="${url}" target="_blank" title="${url}">${url}</a>`
     content = content.replace(matches[0], replace)
     regex.lastIndex = regex.lastIndex - matches[0].length + replace.length
