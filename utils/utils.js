@@ -44,7 +44,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   // Un-shorten
   regex = /<span class="JvCare[^<]+>([^<]+)(?:<i><\/i><span>([^<]+)<\/span>([^<]+))?<\/span>/g
   while (matches = regex.exec(content)) {
-    let url = matches.slice(1).join('').replace(/\$/g, '$$$$') // $ characters need to be escaped to $$ in each replace
+    let url = matches.slice(1).join('').replace(/\$/g, '$$$$')
       , replace = `<a href="${url}" target="_blank" title="${url}">${url}</a>`
     content = content.replace(matches[0], replace)
     regex.lastIndex = regex.lastIndex - matches[0].length + replace.length
@@ -59,7 +59,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   //    this causes the message's checksum to change at every refresh, thus making it look as if the message has changed.
   regex = /<a href="((?:&#[x0-9a-f]+;)+)"[^<]+>([^<]+)<\/a>/g
   while (matches = regex.exec(content)) {
-    let email = entities.decode(matches[1])
+    let email = entities.decode(matches[1]).replace(/\$/g, '$$$$')
     content = content.replace(matches[0], `<a href="mailto:${email}" target="_blank" title="${email}">${email}</a>`)
   }
 
