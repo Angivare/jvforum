@@ -33,8 +33,7 @@ if (app.get('env') == 'development') {
 }
 
 app.use(compression())
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(cookieParser(config.cookiesSecret))
 app.use(csrf({cookie: true}))
 

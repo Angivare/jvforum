@@ -413,7 +413,6 @@ router.post('/refresh', (req, res, next) => {
     , topicIdModern = topicMode == 42 ? topicIdLegacyOrModern : 0
 
   topicPage = parseInt(topicPage)
-  messagesChecksums = JSON.parse(messagesChecksums)
 
   if (topicIdLegacyOrModern == 0) {
     return res.json({error: 'topicIdLegacyOrModern == 0'})

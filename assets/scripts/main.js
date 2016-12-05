@@ -30,21 +30,14 @@ function qsa(selectors, callback) {
   ;[].forEach.call(document.querySelectorAll(selectors), callback)
 }
 
-function ajax(shortPath, timeout, objectData = {}, callback = () => {}) {
-  let data = [
-        `_csrf=${_csrf}`,
-      ]
-  for (let key in objectData) {
-    if (objectData.hasOwnProperty(key)) {
-      data.push(encodeURIComponent(key) + '=' + encodeURIComponent(objectData[key]))
-    }
-  }
-  data = data.join('&')
+function ajax(shortPath, timeout, data = {}, callback = () => {}) {
+  data._csrf = _csrf
+  data = JSON.stringify(data)
 
   let xhr = instantClick.xhr()
   xhr.open('POST', `/ajax/${shortPath}`)
   xhr.timeout = timeout
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  xhr.setRequestHeader('Content-Type', 'application/json')
   xhr.addEventListener('readystatechange', () => {
     if (xhr.readyState < 4) {
       return
@@ -203,7 +196,7 @@ function refresh() {
     topicSlug: topicSlug,
     topicPage: topicPage,
     numberOfPages: numberOfPages,
-    messagesChecksums: JSON.stringify(messagesChecksums),
+    messagesChecksums: messagesChecksums,
   }, (status, response, xhr) => {
     if (status == 200) {
       if (response.error) {
