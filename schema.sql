@@ -61,6 +61,11 @@ CREATE TABLE `messages_posted` (
   `topicMode` tinyint NOT NULL,
   `topicIdLegacyOrModern` int NOT NULL,
   `ipAddress` varchar(45) NOT NULL,
+  `userAgent` varchar(256),
+  `screenWidth` smallint,
+  `screenHeight` smallint,
+  `canvasWidth` smallint,
+  `canvasHeight` smallint,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

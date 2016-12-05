@@ -131,7 +131,7 @@ router.post('/postMessage', (req, res, next) => {
     , user = req.user
 
   let missingParams = false
-  ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug'].forEach((varName) => {
+  ;['message', 'forumId', 'topicMode', 'topicIdLegacyOrModern', 'topicSlug', 'userAgent', 'canvasWidth', 'canvasHeight', 'screenWidth', 'screenHeight'].forEach((varName) => {
     if (!(varName in req.body)) {
       missingParams = true
     }
@@ -140,7 +140,7 @@ router.post('/postMessage', (req, res, next) => {
     return res.json({error: 'Paramètres manquants'})
   }
 
-  let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug} = req.body
+  let {message, forumId, topicMode, topicIdLegacyOrModern, topicSlug, userAgent, canvasWidth, canvasHeight, screenWidth, screenHeight} = req.body
     , pathJvc = `/forums/${topicMode}-${forumId}-${topicIdLegacyOrModern}-1-0-1-0-${topicSlug}.htm`
 
   message = utils.adaptPostedMessage(message, req.headers.host)
@@ -163,6 +163,11 @@ router.post('/postMessage', (req, res, next) => {
         topicMode,
         topicIdLegacyOrModern,
         ipAddress,
+        userAgent,
+        canvasWidth,
+        canvasHeight,
+        screenWidth,
+        screenHeight,
       }, (results) => {
         let dbId = results.insertId
         fetch({

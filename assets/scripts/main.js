@@ -125,6 +125,11 @@ function postMessage(event) {
     topicMode,
     topicIdLegacyOrModern,
     topicSlug,
+    userAgent: navigator.userAgent,
+    canvasWidth: innerWidth,
+    canvasHeight: innerHeight,
+    screenWidth: screen.width,
+    screenHeight: screen.height,
   }, (status, response, xhr) => {
     qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--sending')
 
