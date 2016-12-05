@@ -190,13 +190,13 @@ function refresh() {
   lastRefreshTimestamp = +new Date
 
   ajax('refresh', timeouts.refresh, {
-    forumId: forumId,
-    topicMode: topicMode,
-    topicIdLegacyOrModern: topicIdLegacyOrModern,
-    topicSlug: topicSlug,
-    topicPage: topicPage,
-    numberOfPages: numberOfPages,
-    messagesChecksums: messagesChecksums,
+    forumId,
+    topicMode,
+    topicIdLegacyOrModern,
+    topicSlug,
+    topicPage,
+    numberOfPages,
+    messagesChecksums,
   }, (status, response, xhr) => {
     if (status == 200) {
       if (response.error) {
