@@ -575,39 +575,6 @@ h1, h2, h3 {
   text-shadow: 0 1px 10px white;
 }
 
-/* =TOAST */
-
-.toast {
-  position: fixed;
-  top: 4px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  text-align: center;
-  pointer-events: none;
-  -webkit-transform: translateY(-50px);
-          transform: translateY(-50px);
-  -webkit-transition: -webkit-transform .15s ease-out;
-          transition: -webkit-transform .15s ease-out, transform .15s ease-out;
-}
-
-.toast--shown {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-}
-
-.toast__label {
-  display: inline-block;
-  background: #FFECB3;
-  color: hsla(45,110%,20%,1);
-  box-shadow: 0 1px 10px rgba(0,0,0,.3);
-  border-radius: 4px;
-  font-weight: bold;
-  padding: 8px 10px 6px;
-  cursor: default;
-  pointer-events: auto;
-}
-
 /* =FORUM */
 
 .page-title__link--with-refresh-icon {
@@ -1676,6 +1643,9 @@ color: hsl(240, 8%, 27%);
   --topic__new-messages-indicator-background: hsl(190, 80%, 60%);
   --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(0, 100%, 100%, .4);
   --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(190, 80%, 60%, .5);
+  --toast-background: hsl(45, 100%, 85%);
+  --toast-color: hsl(45, 110%, 20%);
+  --toast-box-shadow: 0 1px 10px hsla(0, 0%, 0%, .75);
 }
 
 html {
@@ -2493,4 +2463,33 @@ a {
 
 .forum-pagination__link--next {
   text-align: right;
+}
+
+
+.toast {
+  position: fixed;
+  top: 4px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  pointer-events: none;
+  transform: translateY(-50px);
+  transition: transform .15s ease-out;
+}
+
+.toast--shown {
+  transform: translateY(0);
+}
+
+.toast__label {
+  display: inline-block;
+  background: var(--toast-background);
+  color: var(--toast-color);
+  box-shadow: var(--toast-box-shadow);
+  border-radius: 4px;
+  font-weight: bold;
+  padding: 8px 10px 6px;
+  cursor: default;
+  pointer-events: auto;
 }
