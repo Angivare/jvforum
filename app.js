@@ -1,6 +1,5 @@
 let express = require('express')
   , path = require('path')
-  , logger = require('morgan')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , compression = require('compression')
@@ -26,8 +25,12 @@ app.set('view engine', 'html')
 
 app.set('trust proxy', true)
 
+if (app.get('env') == 'development') {
+  let morgan = require('morgan')
+  app.use(morgan('dev'))
+}
+
 app.use(compression())
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookiesSecret))
