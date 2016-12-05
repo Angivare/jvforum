@@ -152,7 +152,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
 
   content = emojify(content)
 
-  if (content.length > 40000) {
+  if (content.length > 80000) {
     content = '<div class="message__content-text"><p><div class="too-big-notice">Message trop gros pour être affiché par JVForum.</div></p></div>'
   }
 
