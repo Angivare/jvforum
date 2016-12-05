@@ -2467,6 +2467,7 @@ a {
 
 
 .toast {
+  visibility: hidden;
   position: fixed;
   top: 4px;
   left: 0;
@@ -2479,6 +2480,7 @@ a {
 }
 
 .toast--shown {
+  visibility: visible;
   transform: translateY(0);
 }
 
