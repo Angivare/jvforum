@@ -1,5 +1,5 @@
-let sha1 = require('sha1')
-  , fs = require('fs')
+let fs = require('fs')
+  , sha1 = require('./sha1')
 
 let content = fs.readFileSync('./assets/stylesheet.css').toString()
   , checksum = sha1(content).substr(0, 8)
