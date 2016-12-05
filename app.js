@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 let express = require('express')
   , path = require('path')
   , cookieParser = require('cookie-parser')
@@ -16,7 +17,8 @@ let express = require('express')
   , routesUnsupported = require('./routes/unsupported')
   , routesAjax = require('./routes/ajax')
   , config = require('./config')
-  , app = express()
+
+let app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -75,5 +77,12 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+let server = http.createServer(app)
+server.listen(process.env.PORT || 3000)
+
+server.on('error', (error) => {
+  throw error
+})
 
 module.exports = app
