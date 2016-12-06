@@ -278,8 +278,13 @@ function submitForm() {
     }
   });
   xhr.open('POST', '/ajax/login');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send('nickname=' + qs('#nickname').value + '&password=' + qs('#password').value + '&captcha=' + grecaptcha.getResponse() + '&_csrf=' + qs('#_csrf').value);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({
+    nickname: qs('#nickname').value,
+    password: qs('#password').value,
+    captcha: grecaptcha.getResponse(),
+    _csrf: qs('#_csrf').value,
+  }));
 }
 
 function recaptchaLoadListener() {
