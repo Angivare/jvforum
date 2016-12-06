@@ -262,6 +262,10 @@ function submitForm() {
     if (xhr.readyState < 4) {
       return;
     }
+    if (xhr.status != 200) {
+      alert('Erreur HTTP ' + xhr.status);
+      return;
+    }
     var data = JSON.parse(xhr.responseText);
     if (data.successful) {
       location.href = '/1000021/39674315-appli-jvforum-topic-officiel';
