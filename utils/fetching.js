@@ -48,14 +48,13 @@ function fetch(pathOrOptions, successCallback, failCallback) {
     requestOptions.path = pathOrOptions
   }
 
-  let hasTimedOut = false
   let request = http.request(requestOptions, (res) => {
     let bodyBuffer = Buffer.alloc(0)
     res.on('data', (chunk) => {
       bodyBuffer = Buffer.concat([bodyBuffer, chunk])
     })
     res.on('end', () => {
-      if (hasTimedOut) {
+      if (gotAnError) {
         return
       }
       let headers = res.headers
@@ -65,11 +64,19 @@ function fetch(pathOrOptions, successCallback, failCallback) {
     })
   })
 
-  request.on('error', failCallback)
+  let gotAnError = false
 
-  request.setTimeout(timeout, () => {
-    hasTimedOut = true
-    request.removeListener('error', failCallback)
+  function errorListener(e) {
+    gotAnError = true // Not sure if that's needed
+    clearTimeout(timeoutID)
+
+    failCallback(e)
+  }
+  request.on('error', errorListener)
+
+  let timeoutID = request.setTimeout(timeout, () => {
+    gotAnError = true
+    request.removeListener('error', errorListener)
     request.on('error', (e) => {})
     request.abort()
 
