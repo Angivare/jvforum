@@ -66,21 +66,25 @@ function fetch(pathOrOptions, successCallback, failCallback) {
 
   let gotAnError = false
 
-  function errorListener(e) {
-    gotAnError = true // Not sure if that's needed
-    clearTimeout(timeoutID)
-
-    failCallback(e)
-  }
-  request.on('error', errorListener)
-
-  let timeoutID = request.setTimeout(timeout, () => {
+  let timeoutListener = () => {
     gotAnError = true
     request.removeListener('error', errorListener)
     request.on('error', (e) => {})
     request.abort()
 
     failCallback('timeout')
+  }
+
+  function errorListener(e) {
+    gotAnError = true // Not sure if that's needed
+    timeoutListener = () => {}
+
+    failCallback(e)
+  }
+  request.on('error', errorListener)
+
+  request.setTimeout(timeout, () => {
+    timeoutListener()
   })
 
   if (postData) {
