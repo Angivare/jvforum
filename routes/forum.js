@@ -96,7 +96,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
               if (positionPage > 1) {
                 topic.position = `/${positionPage}`
               }
-              topic.position += `#m${position.messageId}`
+              topic.position += `#after${position.messageId}`
             }
           })
 
