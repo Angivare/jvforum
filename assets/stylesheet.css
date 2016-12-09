@@ -1623,7 +1623,7 @@ color: hsl(240, 8%, 27%);
   --stickers-heads-selected-border-top-color: hsl(0, 0%, 0%);
   --stickers-head-selected-background: hsl(240, 8%, 7%);
   --stickers-head-selected-shadow: inset 0 0 2px 1px hsl(0, 0%, 0%);
-  --sticker-code-color: hsla(240, 8%, 100%, .4);
+  --sticker-code-color: hsla(240, 8%, 100%, .5);
   --form-post-button-shadow: hsla(0, 0%, 0%, .5);
   --form-post-button-light: hsl(0, 0%, 100%);
   --form-post-button-background-image: linear-gradient(hsl(0, 0%, 90%), hsl(0, 0%, 80%) 50%, hsl(0, 0%, 70%) 50%, hsl(0, 0%, 60%) 100%);
