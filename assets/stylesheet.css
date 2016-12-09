@@ -189,115 +189,6 @@ h1, h2, h3 {
   cursor: default;
 }
 
-/* =BUTTONS */
-
-.button {
-  font-weight: bold;
-  font-size: 14.4px;
-  padding: 5px 8px;
-  border-radius: 3px;
-  letter-spacing: .5px;
-  cursor: pointer;
-  text-transform: uppercase;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-appearance: none; /* text input */
-  border: none; /* text input */
-  background: transparent; /* text input */
-  outline: none;
-  white-space: nowrap;
-  color: var(--link-color);
-}
-
-
-.button--raised {
-  box-shadow: 0 2px 5px rgba(0,0,0,.1);
-  background: hsl(240, 8%, 20%);
-}
-
-.button--raised:active {
-  box-shadow: inset 0 2px 5px rgba(0,0,0,.5);
-}
-
-
-.button--danger {
-  background: #E53935;
-  color: white;
-}
-
-.button--danger:hover, .button--danger:focus {
-  background: #E57373;
-  color: white;
-}
-
-
-
-.button--lighter {
-  background: hsl(240, 8%, 40%);
-}
-
-
-.button--cta {
-  background: hsl(255, 100%, 60%);
-  color: hsla(0, 100%, 100%, .73);
-}
-
-.button--cta:hover {
-  color: white;
-}
-
-.button--cta:active {
-  background: hsl(255, 100%, 55%);
-  color: white;
-}
-
-
-.button--large {
-  padding: 7px 12px;
-}
-
-.button--padded {
-  margin: -10px;
-  padding: 15px 18px;
-}
-
-
-@media (min-width: 560px) {
-  .button--scale {
-    padding: 7px 12px;
-  }
-
-  .button--scale.button--large {
-    padding: 10px 16px;
-  }
-}
-
-
-.button--submit {
-  background: #673ab7;
-  color: white;
-  color: rgba(255,255,255,.87);
-  padding: 7px 12px;
-}
-
-
-.button-link {
-  color: var(--link-color);
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px;
-  margin: -5px;
-}
-
-
-.centered-button-container {
-  margin: auto;
-  text-align: center;
-  padding: 10px 0;
-}
-
-
-/* =CARDS */
-
 /* =FORMS */
 
 .form__block {
@@ -1634,6 +1525,14 @@ color: hsl(240, 8%, 27%);
   --toast-background: hsl(45, 100%, 85%);
   --toast-color: hsl(45, 110%, 20%);
   --toast-box-shadow: 0 1px 10px hsla(0, 0%, 0%, .75);
+  --button__visible-text-shadow-opacity: .5;
+  --button__visible--primary-color: hsla(0, 0%, 100%, .87);
+  --button__visible--primary-background: linear-gradient(hsl(270, 90%, 50%), hsl(268, 90%, 35%));
+  --button__visible--primary-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .33);
+  --button--active__visible--primary-color: hsla(0, 0%, 100%, .67);
+  --button--active__visible--primary-background: linear-gradient(hsl(268, 90%, 35%), hsl(270, 90%, 40%));
+  --button--active__visible--primary-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .1)
+                                           , inset 0 2px 15px hsla(0, 0%, 0%, .875);
 }
 
 html {
@@ -2504,4 +2403,49 @@ a {
 
 .error__message {
   margin-top: 15px;
+}
+
+.button {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: inline-block;
+  margin: -6px;
+  padding: 6px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  -webkit-user-select: none;
+  -webkit-appearance: none;
+  border: none;
+}
+
+.button__visible {
+  ---text-shadow-y: 1px;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 7px 12px;
+  text-shadow: 0 var(---text-shadow-y) 0px hsla(0, 0%, 0%, var(--button__visible-text-shadow-opacity));
+}
+
+.button:active .button__visible {
+  ---text-shadow-y: -1px;
+}
+
+.button__visible--primary {
+  color: var(--button__visible--primary-color);
+  background: var(--button__visible--primary-background);
+  box-shadow: var(--button__visible--primary-shadow);
+}
+
+.button:active .button__visible--primary {
+  color: var(--button--active__visible--primary-color);
+  background: var(--button--active__visible--primary-background);
+  box-shadow: var(--button--active__visible--primary-shadow);
+}
+
+.button__visible--flat {
+  color: var(--link-color);
 }

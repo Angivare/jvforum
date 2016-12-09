@@ -22,7 +22,9 @@
       <div class="pagination-topic pagination-topic--top">
         {{? !it.isLocked }}
           <div class="pagination-topic__action-button pagination-topic__action-button--post">
-            <span class="js-go-to-form button button--raised button--cta button--scale">Répondre</span>
+            <span class="js-go-to-form button">
+              <span class="button__visible button__visible--primary">Répondre</span>
+            </span>
           </div>
         {{?}}
         <div class="pagination-topic__pages">
@@ -34,9 +36,11 @@
       </div>
       <div class="pagination-topic pagination-topic--bottom">
         <div class="pagination-topic__action-button">
-          <a class="button button--scale" href="/{{=it.forumId}}-{{=it.forumSlug}}">
-            Retour
-            <span class="pagination-topic__action-button-additional-text">forum</span>
+          <a class="button" href="/{{=it.forumId}}-{{=it.forumSlug}}">
+            <span class="button__visible button__visible--flat">
+              Retour
+              <span class="pagination-topic__action-button-additional-text">forum</span>
+            </span>
           </a>
         </div>
         <div class="pagination-topic__pages">
@@ -81,7 +85,9 @@
           <div class="error__message">
             <p>La page sur JVC mettait trop de temps à charger, elle a été arrêtée.</p>
             <p>
-              <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">Réessayer</a>
+              <a class="button" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+                <span class="button__visible button__visible--primary">Réessayer</span>
+              </a>
             </p>
           </div>
         {{?? it.error == 'network' }}
@@ -89,18 +95,24 @@
           <div class="error__message">
             <p>La page n’a pas pu être récupérée depuis JVC. ({{=it.errorDetail}})</p>
             <p>
-              <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}">Réessayer</a>
+              <a class="button" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+                <span class="button__visible button__visible--primary">Réessayer</span>
+              </a>
             </p>
           </div>
         {{?? it.error == 'deleted' }}
           <h1 class="error__title">Topic supprimé</h1>
           <div class="error__message">
-            <a class="button button--cta button--scale" href="/{{=it.forumId}}">Retour forum</a>
+            <a class="button" href="/{{=it.forumId}}-{{=it.forumSlug}}">
+              <span class="button__visible button__visible--primary">Retour forum</span>
+            </a>
           </div>
         {{?? it.error == 'doesNotExist' }}
           <h1 class="error__title">Topic inexistant</h1>
           <div class="error__message">
-            <a class="button button--cta button--scale" href="/{{=it.forumId}}">Retour forum</a>
+            <a class="button" href="/{{=it.forumId}}-{{=it.forumSlug}}">
+              <span class="button__visible button__visible--primary">Retour forum</span>
+            </a>
           </div>
         {{?? it.error == '103' }}
           <h1 class="error__title">Topic privé</h1>
@@ -115,7 +127,9 @@
         {{?? it.error == 'not200'}}
           <h1 class="error__title">JVC n’arrive pas à servir la page</h1>
           <p>
-            <a class="button button--cta button--scale" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}">Réessayer</a>
+            <a class="button" href="/{{=it.forumId}}/{{=it.idJvf}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+              <span class="button__visible button__visible--primary">Réessayer</span>
+            </a>
           </p>
         {{?}}
       </div>

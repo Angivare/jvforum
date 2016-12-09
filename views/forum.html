@@ -90,7 +90,9 @@
           <div class="error__message">
             <p>La page sur JVC mettait trop de temps à charger, elle a été arrêtée.</p>
             <p>
-              <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
+              <a class="button" href="/{{=it.id}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+                <span class="button__visible button__visible--primary">Réessayer</span>
+              </a>
             </p>
           </div>
         {{?? it.error == 'network'}}
@@ -98,7 +100,9 @@
           <div class="error__message">
             <p>La page n’a pas pu être récupérée depuis JVC. ({{=it.errorDetail}})</p>
             <p>
-              <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
+              <a class="button" href="/{{=it.id}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+                <span class="button__visible button__visible--primary">Réessayer</span>
+              </a>
             </p>
           </div>
         {{?? it.error == 'forumDoesNotExist'}}
@@ -116,7 +120,9 @@
         {{?? it.error == 'not200'}}
           <h1 class="error__title">JVC n’arrive pas à servir la page</h1>
           <p>
-            <a class="button button--cta button--scale" href="/{{=it.id}}-{{=it.slug}}">Réessayer</a>
+            <a class="button" href="/{{=it.id}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
+              <span class="button__visible button__visible--primary">Réessayer</span>
+            </a>
           </p>
         {{?}}
       </div>
