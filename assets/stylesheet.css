@@ -2127,17 +2127,17 @@ a {
   }
 }
 
-.stage-sticker-small-container {
+.stage-sticker-sd-container {
   width: 100%;
   position: absolute;
 }
 
-.stage-sticker-small-container--hidden {
+.stage-sticker-sd-container--hidden {
   display: none;
 }
 
-.stage-sticker-small,
-.stage-sticker-big {
+.stage-sticker-sd,
+.stage-sticker-hd {
   width: calc(var(---width) / 2);
   height: calc(var(---height) / 2);
   display: block;
@@ -2146,8 +2146,8 @@ a {
 }
 
 @media (min-width: 600px) {
-  .stage-sticker-small,
-  .stage-sticker-big {
+  .stage-sticker-sd,
+  .stage-sticker-hd {
     width: var(---width);
     height: var(---height);
     margin-top: 40px;

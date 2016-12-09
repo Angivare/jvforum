@@ -557,10 +557,10 @@ function enlargeSticker(event) {
 
     // put sticker image (small for now) and code
   qs('.stage').innerHTML = `
-    <div class="stage-sticker-small-container">
-      <img class="stage-sticker-small sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
+    <div class="stage-sticker-sd-container">
+      <img class="stage-sticker-sd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
     </div>
-    <img class="stage-sticker-big sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
+    <img class="stage-sticker-hd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
     <div class="stage-sticker-code">:${id}:</div>
   `
 
@@ -569,13 +569,13 @@ function enlargeSticker(event) {
   qs('.stage').classList.add('stage--shown')
   qs('.stage').classList.add('stage--sticker')
 
-  let bigSticker = qs('.stage-sticker-big')
+  let bigSticker = qs('.stage-sticker-hd')
   if (bigSticker.complete) {
-    qs('.stage-sticker-small-container').classList.add('stage-sticker-small-container--hidden')
+    qs('.stage-sticker-sd-container').classList.add('stage-sticker-sd-container--hidden')
   }
   else {
     bigSticker.addEventListener('load', () => {
-      qs('.stage-sticker-small-container').classList.add('stage-sticker-small-container--hidden')
+      qs('.stage-sticker-sd-container').classList.add('stage-sticker-sd-container--hidden')
     })
   }
 }
