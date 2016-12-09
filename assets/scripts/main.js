@@ -68,7 +68,8 @@ function stringToElements(string) {
 }
 
 function setAsHavingTouch() {
-  qs('html').classList.add('has-touch')
+  document.documentElement.classList.remove('hasnt-touch')
+  document.documentElement.classList.add('has-touch')
   hasTouch = true
   document.body.removeEventListener('touchstart', setAsHavingTouch)
 }
