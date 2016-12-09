@@ -557,11 +557,18 @@ function enlargeSticker(event) {
 
     // put sticker image (small for now) and code
   qs('.stage').innerHTML = `
-    <div class="stage-sticker-sd-container">
-      <img class="stage-sticker-sd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
+    <div class="stage-sticker-container">
+      <div class="stage-sticker-container__top-padding"></div>
+      <div class="stage-sticker-container__sticker">
+        <div class="stage-sticker-sd-container">
+          <img class="stage-sticker-sd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
+        </div>
+        <img class="stage-sticker-hd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
+      </div>
+      <div class="stage-sticker-container__code">
+        <div class="stage-sticker-code">:${id}:</div>
+      </div>
     </div>
-    <img class="stage-sticker-hd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
-    <div class="stage-sticker-code">:${id}:</div>
   `
 
   qs('.canvas').classList.add('canvas--under-stage-with-sticker')
