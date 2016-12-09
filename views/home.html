@@ -21,8 +21,10 @@
         <span class="menu__item menu__item--blank-state">Aucun topic favori</span>
       {{?}}
     </div>
-    <div class="home-bottom-links">
-      <a class="js-logout-link home-bottom-links__link home-bottom-links__link--logout" href="/logout?_csrf={{=it.csrf}}" data-no-instant>Déconnexion</a>
+    <div class="home-bottom">
+      <a class="js-logout-link button" href="/logout?_csrf={{=it.csrf}}" data-no-instant>
+        <span class="button__visible button__visible--flat button__visible--danger">Déconnexion</span>
+      </a>
     </div>
   </div>
 </div>

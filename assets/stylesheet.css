@@ -1517,8 +1517,6 @@ color: hsl(240, 8%, 27%);
   --spoil-revealed-shadow-color: hsla(0, 0%, 0%, .4);
   --admin-color: hsl(0, 60%, 50%);
   --admin-color-edit-mention: hsl(0, 50%, 40%);
-  --home-bottom-links-delimiter-color: hsla(0, 0%, 100%, .1);
-  --home-bottom-links-destructive-color: hsl(0, 100%, 30%);
   --topic__new-messages-indicator-background: hsl(190, 80%, 60%);
   --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(0, 100%, 100%, .4);
   --topic__new-messages-indicator-shadow: 0 0 3px 1px hsla(190, 80%, 60%, .5);
@@ -1533,6 +1531,7 @@ color: hsl(240, 8%, 27%);
   --button--active__visible--primary-background: linear-gradient(hsl(268, 90%, 35%), hsl(270, 90%, 40%));
   --button--active__visible--primary-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .1)
                                            , inset 0 2px 15px hsla(0, 0%, 0%, .875);
+  --button__visible--danger-color: hsl(0, 100%, 30%);
 }
 
 html {
@@ -2329,7 +2328,7 @@ a {
   padding-top: 10px;
 }
 
-.home-bottom-links {
+.home-bottom {
   text-align: center;
 }
 
@@ -2448,4 +2447,8 @@ a {
 
 .button__visible--flat {
   color: var(--link-color);
+}
+
+.button__visible--flat.button__visible--danger {
+  color: var(--button__visible--danger-color);
 }
