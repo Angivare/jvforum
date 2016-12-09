@@ -1587,7 +1587,7 @@ color: hsl(240, 8%, 27%);
   --header__forum-cell-box-shadow-color: hsl(240, 8%, 8%);
   --header__forum-link-color: hsl(240, 8%, 70%);
   --menu-background: hsl(240, 8%, 13.5%);
-  --stage--sticker-background: hsla(0, 0%, 0%, .125);
+  --stage--sticker-background: hsla(0, 0%, 0%, .5);
   --stage--menu-mobile-items-background: hsla(0, 0%, 0%, .5);
   --menu-mobile-items-background-saturation: .2;
   --menu-mobile-items-shadow-opacity: 1;
