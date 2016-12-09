@@ -96,10 +96,16 @@ var JVCode = (function() {
       })
       base.find('a').each(function() {
         var link_jvc = $(this).data('link-jvc')
-        if (link_jvc)
+        if (link_jvc) {
           this.outerHTML = link_jvc
-        else
-          this.outerHTML = $(this).attr('href')
+        }
+        else {
+          let href = $(this).attr('href')
+          if (href.indexOf('mailto:') == 0) {
+            href = href.substr('mailto:'.length)
+          }
+          this.outerHTML = href
+        }
       })
     },
 
