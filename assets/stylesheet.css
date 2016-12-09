@@ -76,18 +76,6 @@ h1, h2, h3 {
   color: hsl(240, 8%, 67%);
 }
 
-/* ERRORS */
-
-.error {
-  text-align: center;
-  color: #F44336;
-  padding: 10px;
-}
-
-.error__message {
-  margin-top: 15px;
-}
-
 /* ASIDE */
 
 .aside {
@@ -2506,4 +2494,14 @@ a {
   padding: 8px 10px 6px;
   cursor: default;
   pointer-events: auto;
+}
+
+.error {
+  text-align: center;
+  color: var(--error-color);
+  padding: 10px;
+}
+
+.error__message {
+  margin-top: 15px;
 }
