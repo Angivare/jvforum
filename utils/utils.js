@@ -224,7 +224,7 @@ function adaptPostedMessage(message, hostname) {
   }
 
   if (message.includes('[[date:')) {
-    message = message.replace(/\[\[date:(1?[0-9]{1,9})\]\]/g, (all, timestamp) => date.timestamp2relative(timestamp))
+    message = message.replace(/\[\[date:(1?[0-9]{1,9})\]\]/g, (all, timestamp) => date.quoteFormat(timestamp))
   }
 
   // Enable hashtags and asterisks at the start of a line by inserting a soft hyphen

@@ -489,7 +489,7 @@ function quoteMessage(event) {
       quote += "\n\n"
     }
   }
-  quote += `> '''${nickname}''', [[date:${timestamp}]] :\n`
+  quote += `> '''${nickname}''' [[date:${timestamp}]] :\n`
   quote += `> \n`
   quote += `> ${text.split("\n").join("\n> ")}`
   quote += "\n\n"

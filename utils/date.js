@@ -103,8 +103,9 @@ function convertMessage(date) {
   }
 }
 
-function timestamp2relative(timestamp) {
-  let now = new Date()
+function quoteFormat(timestamp) {
+  let date
+    , now = new Date()
     , then = new Date()
   then.setTime(timestamp * 1000)
   let day = then.getDate()
@@ -113,14 +114,11 @@ function timestamp2relative(timestamp) {
 
   let diff = Math.floor((now - then) / 1000)
 
-  if (diff < 60) {
-    date = diff + ' s'
-  }
-  else if (diff < 60 * 60) {
-    date = Math.floor(diff / 60) + ' m ' + (diff % 60) + ' s'
+  if (diff < 60 * 20) {
+    date = ''
   }
   else {
-    date = day + ' ' + months[month]
+    date = `le ${day} ${months[month]}`
     if (year == now.getFullYear()) {
       let yesterday = new Date(now - (1000 * 60 * 60 * 24))
         , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
@@ -138,9 +136,7 @@ function timestamp2relative(timestamp) {
       date += ' ' + year
     }
 
-    if (date) {
-      date += ' à '
-    }
+    date += ' à '
     date += formatHoursAndMinutes(then)
   }
 
@@ -201,6 +197,6 @@ function editFormat(editDateRaw, postDateRaw) {
 module.exports = {
   convertTopicList,
   convertMessage,
-  timestamp2relative,
+  quoteFormat,
   editFormat,
 }
