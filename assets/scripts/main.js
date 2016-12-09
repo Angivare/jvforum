@@ -757,9 +757,13 @@ function updateTopicPosition() {
   if (!topicIdModern) {
     return
   }
+  let lastMessage = qs('.message:last-child')
+  if (!lastMessage) { // Deleted topic
+    return
+  }
   ajax('topicPosition', timeouts.topicPosition, {
     topicIdModern,
-    messageId: qs('.message:last-child').dataset.id,
+    messageId: lastMessage.dataset.id,
     answersCount: (topicPage - 1) * 20 + document.querySelectorAll('.message').length - 1,
   })
 }
