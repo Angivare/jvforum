@@ -211,7 +211,9 @@
   </aside>
 </div>
 </div>
-<script>
-  var _csrf = "{{=it.csrf}}";
+<script data-instant-restore>
+  var forumId = {{=it.id}}
+    , forumSlug = '{{=it.slug}}'
+    , _csrf = "{{=it.csrf}}";
 </script>
 {{#def.layoutFoot}}

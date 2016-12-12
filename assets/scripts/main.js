@@ -768,7 +768,21 @@ function updateTopicPosition() {
   })
 }
 
-function saveDraft() {
+function saveDraftForum() {
+  let draftId = `draft_${forumId}`
+    , value = qs('.js-form-post__title').value + '__jvforum_draft_delimiter__' + qs('.js-form-post__textarea').value
+
+  if (value == '__jvforum_draft_delimiter__') {
+    localStorage.removeItem(draftId)
+    return
+  }
+
+  localStorage[draftId] = value
+  qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
+  previousPageDraftIdMentioned = draftId
+}
+
+function saveDraftTopic() {
   let draftId = `draft_${topicIdModern}`
     , value = qs('.js-form-post__textarea').value
 
@@ -783,18 +797,34 @@ function saveDraft() {
 }
 
 function showDraft() {
-  let draftId = `draft_${topicIdModern}`
+  let hasTitle = qs('.js-form-post__title')
+    , draftId = `draft_${hasTitle ? forumId : topicIdModern}`
     , value = localStorage[draftId]
   if (!value) {
     return
   }
-  qs('.js-form-post__textarea').value = value
+  if (hasTitle) {
+    let [titleValue, messageValue] = value.split('__jvforum_draft_delimiter__')
+    qs('.js-form-post__title').value = titleValue
+    qs('.js-form-post__textarea').value = messageValue
+  }
+  else {
+    qs('.js-form-post__textarea').value = value
+  }
   if (draftId != previousPageDraftIdMentioned) {
     qs('.js-form-post__draft-mention').classList.add('form__draft-mention--visible')
     qs('.js-form-post__draft-mention-action').addEventListener('click', () => {
-      qs('.js-form-post__textarea').focus()
-      qs('.js-form-post__textarea').value = ''
-      saveDraft()
+      if (hasTitle) {
+        qs('.js-form-post__title').focus()
+        qs('.js-form-post__title').value = ''
+        qs('.js-form-post__textarea').value = ''
+        saveDraftForum()
+      }
+      else {
+        qs('.js-form-post__textarea').focus()
+        qs('.js-form-post__textarea').value = ''
+        saveDraftTopic()
+      }
       qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
       previousPageDraftIdMentioned = draftId
     })
@@ -851,7 +881,14 @@ instantClick.on('change', function() {
   qs('.js-form-post', (element) => {
     element.addEventListener('submit', postMessage)
 
-    qs('.js-form-post__textarea').addEventListener('input', saveDraft)
+    let titleElement = qs('.js-form-post__title')
+    if (titleElement) {
+      titleElement.addEventListener('input', saveDraftForum)
+      qs('.js-form-post__textarea').addEventListener('input', saveDraftForum)
+    }
+    else {
+      qs('.js-form-post__textarea').addEventListener('input', saveDraftTopic)
+    }
     showDraft()
   })
   if (!qs('.js-form-post')) {
