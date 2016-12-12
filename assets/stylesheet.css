@@ -2122,12 +2122,12 @@ a {
   display: block;
 }
 
-.form__draft-mention-recover {
+.form__draft-mention-action {
   color: var(--link-color);
   cursor: pointer;
   display: inline-block;
-  margin: -12px;
-  padding: 12px;
+  margin: -5px;
+  padding: 5px;
 }
 
 .form__error {

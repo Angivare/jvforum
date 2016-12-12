@@ -13,7 +13,7 @@ let hasTouch = false
   , selectedHeadPackId
   , toastTimer
   , savedMessageContentBeforeEditing
-  , previousPageDraftIdShown
+  , previousPageDraftIdMentioned
   , pageVisible
   , unviewedNewMessagesCount = 0
   , originalTabTitle
@@ -779,25 +779,25 @@ function saveDraft() {
 
   localStorage[draftId] = value
   qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
-  previousPageDraftIdShown = draftId
+  previousPageDraftIdMentioned = draftId
 }
 
 function showDraft() {
   let draftId = `draft_${topicIdModern}`
     , value = localStorage[draftId]
-  if (value) {
-    if (draftId == previousPageDraftIdShown) {
-      qs('.js-form-post__textarea').value = value
-    }
-    else {
-      qs('.js-form-post__draft-mention').classList.add('form__draft-mention--visible')
-      qs('.js-form-post__draft-mention-recover').addEventListener('click', () => {
-        qs('.js-form-post__textarea').focus()
-        qs('.js-form-post__textarea').value = value
-        qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
-        previousPageDraftIdShown = draftId
-      })
-    }
+  if (!value) {
+    return
+  }
+  qs('.js-form-post__textarea').value = value
+  if (draftId != previousPageDraftIdMentioned) {
+    qs('.js-form-post__draft-mention').classList.add('form__draft-mention--visible')
+    qs('.js-form-post__draft-mention-action').addEventListener('click', () => {
+      qs('.js-form-post__textarea').focus()
+      qs('.js-form-post__textarea').value = ''
+      saveDraft()
+      qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
+      previousPageDraftIdMentioned = draftId
+    })
   }
 }
 
@@ -855,7 +855,7 @@ instantClick.on('change', function() {
     showDraft()
   })
   if (!qs('.js-form-post')) {
-    previousPageDraftIdShown = null
+    previousPageDraftIdMentioned = null
   }
 
   qsa('.js-favorite-toggle', (element) => {
