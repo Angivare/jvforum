@@ -2473,3 +2473,9 @@ a {
 .page-title--topic {
   color: var(--page-title-color);
 }
+
+@media (MAX-width: 1024px) {
+  .page-title--with-menu-mobile {
+    width: calc(100% - var(---side-margin) * 2 - 16px);
+  }
+}
