@@ -67,7 +67,28 @@
           {{?}}
         {{~}}
       </div>
-      {{? it.isLocked }}
+      {{? !it.isLocked }}
+        <form class="js-form-post form form--post">
+          <div class="js-form-post__draft-mention form__draft-mention">
+            <span class="js-form-post__draft-mention-action form__draft-mention-action">Effacer le brouillon</span>
+          </div>
+          <div class="js-form-post__error form__error"></div>
+          <div class="form__bottom-container">
+            <div class="form__inputs-container">
+              <input class="js-form-post__title form__input form__title" placeholder="Titre de votre sujet" tabindex="1" required>
+              <textarea class="js-form-post__textarea form__input form__textarea" placeholder="Saisissez votre {{=it.superlative}} message." tabindex="2" required></textarea>
+            </div>
+            <div class="form__actions">
+              <button class="form__post-button" type="submit" tabindex="3">
+                <div class="js-form-post__button-visible form__post-button-visible">
+                  <div class="form__post-button-icon"></div>
+                </div>
+              </button>
+              <a class="form__stickers-button" href="/stickers#bottom" tabindex="4" draggable="false"></a>
+            </div>
+          </div>
+        </form>
+      {{??}}
         <div class="card">Forum verrouillé</div>
       {{?}}
       {{? it.page > 1 || it.hasNextPage}}

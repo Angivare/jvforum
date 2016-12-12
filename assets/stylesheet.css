@@ -2145,47 +2145,59 @@ a {
   display: flex;
 }
 
-.form__textarea {
+.form__inputs-container {
+  width: calc(100% - var(---side-width));
+}
+
+.form__input {
   ---padding-y: 6px;
   ---padding-x: 7px;
-  width: calc(100% - var(---side-width));
+  width: 100%;
   font: 14px/1.4 -apple-system, sans-serif;
   background: var(--form-input-background);
   border: 1px solid var(--form-input-border-color);
   padding: var(---padding-y) var(---padding-x);
-  height: calc(160px + var(---padding-x) * 2);
   outline: none;
   border-radius: 3px;
   color: var(--form-input-color);
   box-shadow: 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity)),
               inset 0 2px var(--form-input-inner-shadow-blur-radius) hsla(0, 0%, 0%, var(--form-input-inner-shadow-opacity));
-  resize: none;
   -webkit-appearance: none;
+  margin: 0;
 }
 
 @media (min-width: 1025px) {
-  .form__textarea {
+  .form__input {
     font-size: 18px;
   }
 }
 
-.form__textarea:focus {
+.form__input:focus {
   box-shadow: 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity)),
               inset 0 2px var(--form-input-focused-inner-shadow-blur-radius) hsla(0, 0%, 0%, var(--form-input-focused-inner-shadow-opacity));
 }
 
-.is-ios .form__textarea {
+.is-ios .form__input {
   font-size: 16px; /* for iOS not to zoom on focus */
 }
 
-.form__textarea::-webkit-placeholder {
+.form__input::-webkit-placeholder {
   color: var(--form-input-placeholder-color);
 }
-.form__textarea::-moz-placeholder { /* To remove when Firefox 51 or 52 (ESR) ships */
+.form__input::-moz-placeholder { /* To remove when Firefox 51 or 52 (ESR) ships */
   color: var(--form-input-placeholder-color);
 }
-.form__textarea::placeholder {
+.form__input::placeholder {
   color: var(--form-input-placeholder-color);
+}
+
+.form__title {
+  margin-bottom: var(---padding);
+}
+
+.form__textarea {
+  height: calc(160px + var(---padding-x) * 2);
+  resize: none;
 }
 
 .form__actions {
