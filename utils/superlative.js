@@ -11,6 +11,7 @@ let superlatives = [
   'fantastique',
   'formidable',
   'fabuleux',
+  'gargantuesque',
   'glorieux',
   'héroïque',
   'incroyable',
