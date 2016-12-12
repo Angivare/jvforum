@@ -28,54 +28,6 @@ h1, h2, h3 {
   }
 }
 
-/* TITLE */
-
-.page-title {
-  font-size: 21px;
-  margin: 10px 8px 0;
-  position: relative;
-  word-wrap: break-word;
-}
-
-.page-title--larger {
-  font-size: 24px;
-}
-
-@media (min-width: 400px) {
-  .page-title {
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 24px;
-  }
-
-  .page-title--larger {
-    font-size: 27px;
-  }
-}
-
-@media (min-width: 1025px) {
-  .page-title {
-    margin-left: 0;
-    margin-right: 0;
-    font-size: 29px;
-  }
-
-  .page-title--larger {
-    font-size: 32px;
-  }
-}
-
-.page-title__link {
-  display: inline-block;
-  padding: 10px;
-  margin: -10px;
-}
-
-.page-title__link,
-.page-title--topic {
-  color: hsl(240, 8%, 67%);
-}
-
 /* ASIDE */
 
 .aside {
@@ -1535,6 +1487,7 @@ color: hsl(240, 8%, 27%);
   --button--active__visible--primary-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .1)
                                            , inset 0 2px 15px hsla(0, 0%, 0%, .875);
   --button__visible--danger-color: hsl(0, 100%, 30%);
+  --page-title-color: hsl(240, 8%, 67%);
 }
 
 html {
@@ -2474,4 +2427,49 @@ a {
 
 .button__visible--flat.button__visible--danger {
   color: var(--button__visible--danger-color);
+}
+
+.page-title {
+  ---side-margin: 8px;
+  font-size: 21px;
+  margin: 10px var(---side-margin) 0;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.page-title--larger {
+  font-size: 24px;
+}
+
+@media (min-width: 400px) {
+  .page-title {
+    ---side-margin: 10px;
+    font-size: 24px;
+  }
+
+  .page-title--larger {
+    font-size: 27px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .page-title {
+    ---side-margin: 0;
+    font-size: 29px;
+  }
+
+  .page-title--larger {
+    font-size: 32px;
+  }
+}
+
+.page-title__link {
+  display: inline-block;
+  padding: 10px;
+  margin: -10px;
+}
+
+.page-title__link,
+.page-title--topic {
+  color: var(--page-title-color);
 }
