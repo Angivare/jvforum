@@ -113,18 +113,29 @@ function postMessage(event) {
   qs('.js-form-post__button-visible').classList.add('form__post-button-visible--sending')
   qs('.form__post-button').blur()
 
-  ajax('postMessage', timeouts.postMessage, {
-    message,
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    topicSlug,
-    userAgent: navigator.userAgent,
-    canvasWidth: innerWidth,
-    canvasHeight: innerHeight,
-    screenWidth: screen.width,
-    screenHeight: screen.height,
-  }, (status, response, xhr) => {
+  let formData = {
+        message,
+        forumId,
+        userAgent: navigator.userAgent,
+        canvasWidth: innerWidth,
+        canvasHeight: innerHeight,
+        screenWidth: screen.width,
+        screenHeight: screen.height,
+      }
+    , isNewTopic = false
+
+  if (qs('.js-form-post__title')) {
+    isNewTopic = true
+    formData.title = qs('.js-form-post__title').value
+    formData.forumSlug = forumSlug
+  }
+  else {
+    formData.topicMode = topicMode
+    formData.topicIdLegacyOrModern = topicIdLegacyOrModern
+    formData.topicSlug = topicSlug
+  }
+
+  ajax(isNewTopic ? 'postTopic' : 'postMessage', timeouts.postMessage, formData, (status, response, xhr) => {
     qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
@@ -137,10 +148,20 @@ function postMessage(event) {
     }
 
     qs('.js-form-post__error').classList.remove('form__error--shown')
-    qs('.js-form-post__textarea').value = ''
-    saveDraft()
+    if (isNewTopic) {
+      qs('.js-form-post__title').value = ''
+      qs('.js-form-post__textarea').value = ''
+      saveDraftForum()
+    }
+    else {
+      qs('.js-form-post__textarea').value = ''
+      saveDraftTopic()
+    }
 
-    if (!hasTouch) {
+    if (isNewTopic) {
+      location.href = response.location
+    }
+    else if (!hasTouch) {
       qs('.js-form-post__textarea').focus()
     }
   })

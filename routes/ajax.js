@@ -237,6 +237,122 @@ router.post('/postMessage', (req, res, next) => {
   })
 })
 
+router.post('/postTopic', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , ipAddress = req.ip
+    , user = req.user
+
+  let missingParams = false
+  ;['message', 'title', 'forumId', 'forumSlug', 'userAgent', 'canvasWidth', 'canvasHeight', 'screenWidth', 'screenHeight'].forEach((varName) => {
+    if (!(varName in req.body)) {
+      missingParams = true
+    }
+  })
+  if (missingParams) {
+    return res.json({error: 'Paramètres manquants'})
+  }
+
+  let {message, title, forumId, forumSlug, userAgent, canvasWidth, canvasHeight, screenWidth, screenHeight} = req.body
+    , pathJvc = `/forums/0-${forumId}-0-1-0-1-0-${forumSlug}.htm`
+
+  message = utils.adaptPostedMessage(message, req.headers.host)
+
+  fetch({
+    path: pathJvc,
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.postMessageForm,
+  }, (headers, body) => {
+    let form = parse.form(body)
+    if (form) {
+      form['titre_topic'] = title
+      form['message_topic'] = message
+      form['form_alias_rang'] = 1
+
+      db.insert('messages_posted', {
+        authorId: user.id,
+        isTopic: 1,
+        forumId,
+        topicMode: 42,
+        topicIdLegacyOrModern: 0,
+        ipAddress,
+        userAgent,
+        canvasWidth,
+        canvasHeight,
+        screenWidth,
+        screenHeight,
+      }, (results) => {
+        let dbId = results.insertId
+        fetch({
+          path: pathJvc,
+          cookies: req.formattedJvcCookies,
+          ipAddress,
+          postData: form,
+          timeout: config.timeouts.server.postMessage,
+        }, (headers, body) => {
+          let matches
+            , id
+          if ('location' in headers && (matches = headers.location.match(/^\/forums\/42-[0-9]+-([0-9]+)-[0-9]+-0-1-0-[a-z0-9-]+\.htm$/))) {
+            let [, id, slug] = matches
+            r.location = `/${forumId}/${id}-${slug}`
+            db.update('messages_posted', {topicIdLegacyOrModern: id}, {id: dbId})
+          }
+          else {
+            if ('location' in headers) {
+              r.error = `La redirection renvoyée par JVC est invalide (${headers.location}).`
+            }
+            else if (headers.statusCode == 200) {
+              if (matches = body.match(/<div class="alert-row"> (.+?) <\/div>/)) {
+                let error = matches[1]
+                if (error == 'Le captcha est invalide.') {
+                  r.error = 'JVC demande un captcha. Repostez dans un instant.'
+                }
+                else {
+                  r.error = `JVC a renvoyé l’erreur « ${error} » à l’envoi du message.`
+                }
+              }
+              else {
+                r.error = 'Il y a une erreur (pas de redirection de JVC), mais JVC ne précise vraisemblablement pas l’erreur.'
+              }
+            }
+            else {
+              r.error = 'JVC n’arrive pas à servir la page d’envoi.'
+            }
+          }
+          res.json(r)
+        }, (error) => {
+          if (error == 'timeout') {
+            r.error = 'Timeout de JVC lors de l’envoi du message. Le message a cependant peut-être été posté.'
+          }
+          else {
+            r.error = `Erreur réseau de JVF lors de l’envoi du message. (${error}).`
+          }
+          res.json(r)
+        })
+      })
+    }
+    else {
+      if (headers.statusCode == 200) {
+        r.error = 'JVForum n’a pas pu parser le formulaire.'
+      }
+      else {
+        r.error = 'JVC n’arrive pas à servir la page de récupération du formulaire.'
+      }
+      res.json(r)
+    }
+  }, (error) => {
+    if (error == 'timeout') {
+      r.error = 'Timeout de JVC lors de la récupération du formulaire.'
+    }
+    else {
+      r.error = `Erreur réseau de JVF lors de la récupération du formulaire. (${error}).`
+    }
+    res.json(r)
+  })
+})
+
 router.post('/editMessage', (req, res, next) => {
   let r = {
       error: false,
