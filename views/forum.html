@@ -67,6 +67,19 @@
           {{?}}
         {{~}}
       </div>
+      {{? it.page > 1 || it.hasNextPage}}
+        <div class="forum-pagination">
+          {{? it.page > 2}}
+            <a class="forum-pagination__link forum-pagination__link--first" href="/{{=it.id}}-{{=it.slug}}">Première page</a>
+          {{?}}
+          {{? it.page > 1}}
+            <a class="forum-pagination__link forum-pagination__link--previous" href="/{{=it.id}}-{{=it.slug}}{{? it.page - 1 > 1}}/{{=it.page - 1}}{{?}}">Page précédente</a>
+          {{?}}
+          {{? it.hasNextPage}}
+            <a class="forum-pagination__link forum-pagination__link--next" href="/{{=it.id}}-{{=it.slug}}/{{=it.page + 1}}">Page suivante</a>
+          {{?}}
+        </div>
+      {{?}}
       {{? !it.isLocked }}
         <form class="js-form-post form form--post">
           <div class="js-form-post__draft-mention form__draft-mention">
@@ -90,19 +103,6 @@
         </form>
       {{??}}
         <div class="card">Forum verrouillé</div>
-      {{?}}
-      {{? it.page > 1 || it.hasNextPage}}
-        <div class="forum-pagination">
-          {{? it.page > 2}}
-            <a class="forum-pagination__link forum-pagination__link--first" href="/{{=it.id}}-{{=it.slug}}">Première page</a>
-          {{?}}
-          {{? it.page > 1}}
-            <a class="forum-pagination__link forum-pagination__link--previous" href="/{{=it.id}}-{{=it.slug}}{{? it.page - 1 > 1}}/{{=it.page - 1}}{{?}}">Page précédente</a>
-          {{?}}
-          {{? it.hasNextPage}}
-            <a class="forum-pagination__link forum-pagination__link--next" href="/{{=it.id}}-{{=it.slug}}/{{=it.page + 1}}">Page suivante</a>
-          {{?}}
-        </div>
       {{?}}
     {{??}}
       <div class="error">

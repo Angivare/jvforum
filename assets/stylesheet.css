@@ -2363,10 +2363,12 @@ a {
 
 .forum-pagination {
   display: flex;
+  margin: 10px 0;
 }
 
 .forum-pagination__link {
   flex: 2;
+  margin: -10px 0;
   padding: 10px;
 }
 
