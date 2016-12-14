@@ -606,7 +606,7 @@ router.post('/refresh', (req, res, next) => {
         serveTopic(null, 'doesNotExist')
       }
       else if (headers.statusCode != 200) {
-        serveTopic(null, 'not200')
+        serveTopic(null, headers.statusCode)
       }
       else {
         let content = parse.topic(body)

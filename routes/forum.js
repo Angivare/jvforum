@@ -193,7 +193,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
           return
         }
         else {
-          viewLocals.error = 'not200'
+          viewLocals.error = headers.statusCode
         }
 
         getTopicsPositionsAndSend()

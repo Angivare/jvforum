@@ -138,8 +138,8 @@
           <div class="error__message">
             Il redirige vers #{errorLocation}
           </div>
-        {{?? it.error == 'not200'}}
-          <h1 class="error__title">JVC n’arrive pas à servir la page</h1>
+        {{??}}
+          <h1 class="error__title">JVC n’arrive pas à servir la page (erreur {{=it.error}})</h1>
           <p>
             <a class="button" href="/{{=it.id}}-{{=it.slug}}{{? it.page > 1 }}/{{=it.page}}{{?}}">
               <span class="button__visible button__visible--primary">Réessayer</span>
