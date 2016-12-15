@@ -808,6 +808,59 @@ router.post('/syncFavorites', (req, res, next) => {
   })
 })
 
+router.post('/favorite', (req, res, next) => {
+  let r = {
+      error: false,
+    }
+    , user = req.user
+    , ipAddress = req.ip
+    , action = 'add'
+    , hash = req.signedCookies.ajax_hash_preference_user
+
+  if (!('add' in req.body)) {
+    if ('delete' in req.body) {
+      action = 'delete'
+    }
+    else {
+      return res.json({error: 'Paramètre manquant'})
+    }
+  }
+  let id = parseInt(req.body[action])
+
+  fetch.unique({
+    path: `/forums/ajax_forum_prefere.php?id_forum=${id}&id_topic=${id}&action=${action}&type=${id < 4000000 ? 'forum' : 'topic'}&ajax_hash=${hash}`,
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.syncFavorites,
+  }, `favorite/${user.id}/${id}`, (headers, body) => {
+    if (headers.statusCode == 200) {
+      r.error = false
+      let response = JSON.parse(body)
+      if (response) {
+        if ('erreur' in response && response.erreur.length) {
+          r.error = response.erreur[0]
+        }
+      }
+    }
+    else {
+      r.error = `JVC n’arrive pas à servir la page (erreur ${headers.statusCode})`
+    }
+    if (!r.error) {
+      updateFavorites(r, req, res, user.id, 'JVC n’arrive pas à servir la page de synchronisation')
+    }
+    else {
+      res.json(r)
+    }
+  }, (e) => {
+    if (e == 'timeout') {
+      res.json({error: 'Timeout'})
+    }
+    else {
+      res.json({error: `Réseau. (${e})`})
+    }
+  })
+})
+
 router.post('/getAjaxHashes', (req, res, next) => {
   let r = {
       error: false,
@@ -886,59 +939,6 @@ router.post('/topicPosition', (req, res, next) => {
         userId: user.id,
         topicIdModern,
       })
-    }
-  })
-})
-
-router.post('/favorite', (req, res, next) => {
-  let r = {
-      error: false,
-    }
-    , user = req.user
-    , ipAddress = req.ip
-    , action = 'add'
-    , hash = req.signedCookies.ajax_hash_preference_user
-
-  if (!('add' in req.body)) {
-    if ('delete' in req.body) {
-      action = 'delete'
-    }
-    else {
-      return res.json({error: 'Paramètre manquant'})
-    }
-  }
-  let id = parseInt(req.body[action])
-
-  fetch.unique({
-    path: `/forums/ajax_forum_prefere.php?id_forum=${id}&id_topic=${id}&action=${action}&type=${id < 4000000 ? 'forum' : 'topic'}&ajax_hash=${hash}`,
-    cookies: req.formattedJvcCookies,
-    ipAddress,
-    timeout: config.timeouts.server.syncFavorites,
-  }, `favorite/${user.id}/${id}`, (headers, body) => {
-    if (headers.statusCode == 200) {
-      r.error = false
-      let response = JSON.parse(body)
-      if (response) {
-        if ('erreur' in response && response.erreur.length) {
-          r.error = response.erreur[0]
-        }
-      }
-    }
-    else {
-      r.error = `JVC n’arrive pas à servir la page (erreur ${headers.statusCode})`
-    }
-    if (!r.error) {
-      updateFavorites(r, req, res, user.id, 'JVC n’arrive pas à servir la page de synchronisation')
-    }
-    else {
-      res.json(r)
-    }
-  }, (e) => {
-    if (e == 'timeout') {
-      res.json({error: 'Timeout'})
-    }
-    else {
-      res.json({error: `Réseau. (${e})`})
     }
   })
 })
