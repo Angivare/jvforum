@@ -43,7 +43,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           page,
           pathJvc,
           urlJvc: `http://www.jeuxvideo.com${pathJvc}`,
-          isFavorite: false,
+          isFavorite: utils.isInFavorites(`/${forumId}/${idJvf}-`, favorites, 'topics'),
           favorites,
           superlative: superlative(),
           cacheAge: 0,

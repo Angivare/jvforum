@@ -2409,13 +2409,13 @@ a {
   box-shadow: var(--button__visible--primary-shadow);
 }
 
-.hasnt-touch .button:hover .button__visible--primary {
+.button:hover .button__visible--primary {
   color: var(--button--hover__visible--primary-color);
   background: var(--button--hover__visible--primary-background);
   box-shadow: var(--button--hover__visible--primary-shadow);
 }
 
-.html .button:active .button__visible--primary {
+.button:active .button__visible--primary {
   color: var(--button--active__visible--primary-color);
   background: var(--button--active__visible--primary-background);
   box-shadow: var(--button--active__visible--primary-shadow);

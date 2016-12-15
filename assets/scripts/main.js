@@ -79,10 +79,6 @@ function showError(error, form = 'post') {
   qs(`.js-form-${form}__error`).classList.add('form__error--shown')
 }
 
-function alertPlaceholder() {
-  alert('Cette fonction reviendra plus tard')
-}
-
 function addMessagesEvent(element, type, listener) {
   messagesEvents.push({
     element,
@@ -717,11 +713,11 @@ function editMessage(event) {
   })
 }
 
-function showToast(message, duration_in_seconds = 1.5) {
+function showToast(message, durationInSeconds = 2.5) {
   clearTimeout(toastTimer)
   $('.toast').addClass('toast--shown')
   $('.toast__label').text(message)
-  toastTimer = instantClick.setTimeout(hideToast, duration_in_seconds * 1000)
+  toastTimer = instantClick.setTimeout(hideToast, durationInSeconds * 1000)
 }
 
 function hideToast() {
@@ -883,6 +879,34 @@ function removeTabAlertForNewPosts() {
   }
 }
 
+function toggleFavorite(event) {
+  let id = topicIdModern ? topicIdModern : forumId
+    , action = qs('.js-favorite-toggle').dataset.action
+    , formData = {}
+  formData[action] = id
+  ajax('favorite', timeouts.syncFavorites, formData, (status, response, xhr) => {
+    if (status != 200) {
+      showToast('Problème réseau lors ' + (action == 'add' ? 'de l’ajout au' : 'du retrait des') + ' favoris.')
+      return
+    }
+    if (response.error) {
+      showToast('Erreur : ' + response.error)
+      return
+    }
+    localStorage.toggledFavoriteAction = action
+    location.reload()
+  })
+}
+
+function showFavoriteToggleConfirmation() {
+  let action = localStorage.toggledFavoriteAction
+  if (!action) {
+    return
+  }
+  showToast((topicIdModern ? 'Topic' : 'Forum') + ' ' + (action == 'add' ? 'ajouté aux' : 'retiré des') + ' favoris.')
+  localStorage.removeItem('toggledFavoriteAction')
+}
+
 instantClick.init()
 
 if (googleAnalyticsId) {
@@ -917,7 +941,7 @@ instantClick.on('change', function() {
   }
 
   qsa('.js-favorite-toggle', (element) => {
-    element.addEventListener('click', alertPlaceholder)
+    element.addEventListener('click', toggleFavorite)
   })
 
   qsa('.js-go-to-form', (element) => {
@@ -943,6 +967,8 @@ instantClick.on('change', function() {
   updateTopicPosition()
 
   originalTabTitle = document.title
+
+  showFavoriteToggleConfirmation()
 
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()

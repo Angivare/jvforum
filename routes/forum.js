@@ -36,7 +36,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
           page,
           pathJvc,
           urlJvc: `http://www.jeuxvideo.com${pathJvc}`,
-          isFavorite: false,
+          isFavorite: utils.isInFavorites(`/${id}-`, favorites, 'forums'),
           favorites,
           superlative: superlative(),
           csrf: req.csrfToken(),

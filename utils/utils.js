@@ -275,6 +275,16 @@ function getUserFavorites(userId, thenCallback) {
   })
 }
 
+function isInFavorites(pathStart, favorites, topicsOrForums) {
+  for (let array of favorites[topicsOrForums]) {
+    let path = array[0]
+    if (path.substr(0, pathStart.length) == pathStart) {
+      return true
+    }
+  }
+  return false
+}
+
 function saveAvatar(nickname, url) {
   url = url.replace(/^(?:https?:)?\/\//, 'https://')
   db.insertOrUpdate('avatars', {url}, {nickname})
@@ -423,6 +433,7 @@ module.exports = {
   logLogin,
   parseUserCookie,
   getUserFavorites,
+  isInFavorites,
   saveAvatar,
   getAvatars,
   saveForum,
