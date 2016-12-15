@@ -2429,6 +2429,14 @@ a {
   color: var(--button__visible--danger-color);
 }
 
+.button:hover .button__visible--flat {
+  filter: brightness(1.2);
+}
+
+.button:active .button__visible--flat {
+  filter: brightness(.5);
+}
+
 .page-title {
   ---side-margin: 8px;
   font-size: 21px;
