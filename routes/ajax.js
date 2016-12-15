@@ -733,12 +733,66 @@ router.post('/refresh', (req, res, next) => {
   }
 })
 
+function updateFavorites(r, req, res, userId, errorMessage) {
+  let ipAddress = req.ip
+    , now = Math.floor(new Date() / 1000)
+
+  fetch.unique({
+    path: '/forums.htm',
+    cookies: req.formattedJvcCookies,
+    ipAddress,
+    timeout: config.timeouts.server.syncFavorites,
+  }, `syncFavorites/${userId}`, (headers, body) => {
+    if (headers.statusCode == 200) {
+      let $ = cheerio.load(body)
+        , forums = []
+        , topics = []
+
+      $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
+        let name = $('.lien-jv', element).text().trim()
+          , id = $(element).data('id')
+          , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
+        forums.push([`/${id}-${slug}`, name])
+      })
+      forums = JSON.stringify(forums)
+
+      $('.line-ellipsis[data-id]', '#liste-sujet-prefere').each((index, element) => {
+        let name = $('.lien-jv', element).text().trim()
+          , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
+          , mode = urlSplit[0]
+          , forumId = urlSplit[1]
+          , id = urlSplit[2]
+          , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/${mode}-${forumId}-${id}-1-0-1-0-`.length).split('.')[0]
+        topics.push([`/${forumId}/${mode == 1 ? 0 : ''}${id}-${slug}`, name])
+      })
+      topics = JSON.stringify(topics)
+
+      db.insertOrUpdate('favorites', {
+        forums,
+        topics,
+        updatedAt: now,
+      }, {
+        userId: userId,
+      })
+    }
+    else {
+      r.error = errorMessage
+    }
+    res.json(r)
+  }, (e) => {
+    if (e == 'timeout') {
+      res.json({error: 'Timeout'})
+    }
+    else {
+      res.json({error: `Réseau. (${e})`})
+    }
+  })
+}
+
 router.post('/syncFavorites', (req, res, next) => {
   let r = {
       error: false,
-      updated: false,
     }
-    , ipAddress = req.ip
     , user = req.user
     , now = Math.floor(new Date() / 1000)
 
@@ -746,58 +800,7 @@ router.post('/syncFavorites', (req, res, next) => {
     userId: user.id,
   }, (results) => {
     if (!results.length || results[0].updatedAt < now - config.timeouts.cache.favorites) {
-      fetch.unique({
-        path: '/forums.htm',
-        cookies: req.formattedJvcCookies,
-        ipAddress,
-        timeout: config.timeouts.server.syncFavorites,
-      }, `syncFavorites/${user.id}`, (headers, body) => {
-        if (headers.statusCode == 200) {
-          let $ = cheerio.load(body)
-            , forums = []
-            , topics = []
-
-          $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
-            let name = $('.lien-jv', element).text().trim()
-              , id = $(element).data('id')
-              , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
-            forums.push([`/${id}-${slug}`, name])
-          })
-          forums = JSON.stringify(forums)
-
-          $('.line-ellipsis[data-id]', '#liste-sujet-prefere').each((index, element) => {
-            let name = $('.lien-jv', element).text().trim()
-              , urlSplit = $('.lien-jv', element).attr('href').split('/').pop().split('-')
-              , mode = urlSplit[0]
-              , forumId = urlSplit[1]
-              , id = urlSplit[2]
-              , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/${mode}-${forumId}-${id}-1-0-1-0-`.length).split('.')[0]
-            topics.push([`/${forumId}/${mode == 1 ? 0 : ''}${id}-${slug}`, name])
-          })
-          topics = JSON.stringify(topics)
-
-          db.insertOrUpdate('favorites', {
-            forums,
-            topics,
-            updatedAt: now,
-          }, {
-            userId: user.id,
-          })
-
-          r.updated = true
-        }
-        else {
-          r.error = 'JVC n’arrive pas à servir la page'
-        }
-        res.json(r)
-      }, (e) => {
-        if (e == 'timeout') {
-          res.json({error: 'Timeout'})
-        }
-        else {
-          res.json({error: `Réseau. (${e})`})
-        }
-      })
+      updateFavorites(r, req, res, user.id, 'JVC n’arrive pas à servir la page')
     }
     else {
       res.json(r)
@@ -924,7 +927,12 @@ router.post('/favorite', (req, res, next) => {
     else {
       r.error = `JVC n’arrive pas à servir la page (erreur ${headers.statusCode})`
     }
-    res.json(r)
+    if (!r.error) {
+      updateFavorites(r, req, res, user.id, 'JVC n’arrive pas à servir la page de synchronisation')
+    }
+    else {
+      res.json(r)
+    }
   }, (e) => {
     if (e == 'timeout') {
       res.json({error: 'Timeout'})
