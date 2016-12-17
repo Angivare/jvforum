@@ -276,6 +276,9 @@ function getUserFavorites(userId, thenCallback) {
 }
 
 function isInFavorites(pathStart, favorites, topicsOrForums) {
+  if (!favorites) {
+    return false
+  }
   for (let array of favorites[topicsOrForums]) {
     let path = array[0]
     if (path.substr(0, pathStart.length) == pathStart) {
