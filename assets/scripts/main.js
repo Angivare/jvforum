@@ -547,22 +547,39 @@ function closeMenu(event) {
 }
 
 function enlargeEmoji(event) {
-  if (hasTouch) {
-    return
-  }
   if (event.target.className != 'emoji') {
-    let emojiContainerElement = qs('.emoji-container')
-    if (emojiContainerElement && emojiContainerElement.classList.contains('emoji-container--shown')) {
-      emojiContainerElement.classList.remove('emoji-container--shown')
-    }
     return
   }
-  let emojiContainerElement = qs('.emoji-container')
-  let {left, top, width} = event.target.getBoundingClientRect()
-  emojiContainerElement.src = event.target.src
-  emojiContainerElement.classList.add('emoji-container--shown')
-  emojiContainerElement.style.left = `${left + ((width - 48) / 2)}px`
-  emojiContainerElement.style.top = `${top - 48 - 4}px`
+
+  let image = event.target.src.split('/').pop()
+    , alt = event.target.alt
+
+  qs('.stage').innerHTML = `
+    <div class="stage-sticker-container">
+      <div class="stage-sticker-container__top-padding"></div>
+      <div class="stage-sticker-container__sticker">
+        <div class="stage-sticker-sd-container">
+          <img class="stage-sticker-sd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/v1/small/${image}">
+        </div>
+        <img class="stage-sticker-hd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/v1/small/${image}">
+      </div>
+    </div>
+  `
+
+  qs('.canvas').classList.add('canvas--under-stage-with-sticker')
+  qs('.stage').addEventListener('click', quitEnlargedSticker)
+  qs('.stage').classList.add('stage--shown')
+  qs('.stage').classList.add('stage--sticker')
+
+  let bigSticker = qs('.stage-sticker-hd')
+  if (bigSticker.complete) {
+    qs('.stage-sticker-sd-container').classList.add('stage-sticker-sd-container--hidden')
+  }
+  else {
+    bigSticker.addEventListener('load', () => {
+      qs('.stage-sticker-sd-container').classList.add('stage-sticker-sd-container--hidden')
+    })
+  }
 }
 
 function enlargeSticker(event) {
@@ -975,7 +992,7 @@ instantClick.on('change', function() {
   startRefreshCycle()
 })
 
-document.documentElement.addEventListener('mouseover', enlargeEmoji)
+document.documentElement.addEventListener('click', enlargeEmoji)
 document.documentElement.addEventListener('click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
 

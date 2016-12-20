@@ -1740,9 +1740,14 @@ a {
   }
 }
 
-.sticker--pack-10 { /* Brice */
-  -webkit-filter: saturate(1);
-          filter: saturate(1);
+.sticker--pack-10, /* Brice */
+.sticker--pack-emoji {
+  filter: saturate(1);
+}
+
+.sticker--pack-12, /* Bud */
+.sticker--pack-13 { /* Duracell */
+  filter: saturate(1.2);
 }
 
 .smiley {
@@ -1805,24 +1810,11 @@ a {
   width: var(---size);
   height: var(---size);
   vertical-align: sub;
+  cursor: pointer;
 }
 
 .page-title .emoji {
   ---size: 40px;
-}
-
-.emoji-container {
-  display: none;
-  width: 48px;
-  height: 48px;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  pointer-events: none;
-}
-
-.emoji-container--shown {
-  display: block;
 }
 
 .spoil {
@@ -2024,12 +2016,6 @@ a {
   font-size: 32px;
   margin-top: 35px;
   }
-}
-
-.sticker--pack-12, /* Bud */
-.sticker--pack-13 { /* Duracell */
-  -webkit-filter: saturate(1.2);
-          filter: saturate(1.2);
 }
 
 .form {
