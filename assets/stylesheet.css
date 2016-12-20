@@ -19,6 +19,7 @@ h1, h2, h3 {
     width: calc(80% - 15px);
     margin-right: 15px;
     float: left;
+    position: relative;
   }
 
   .content--no-aside {
@@ -2034,7 +2035,7 @@ a {
   ---side-width: 48px;
   background: var(--card-background);
   position: relative;
-  z-index: 1; /* For FAB */
+  z-index: 4; /* For FAB */
 }
 
 @media (min-width: 1025px) {
@@ -2421,6 +2422,10 @@ a {
   box-shadow: var(--button--active__visible--primary-shadow);
 }
 
+.button__visible--floating {
+  box-shadow: var(--button__visible--primary-shadow), 0 1px 10px hsla(0, 0%, 0%, .5);
+}
+
 .button__visible--flat {
   color: var(--link-color);
 }
@@ -2485,5 +2490,28 @@ a {
 @media (MAX-width: 1024px) {
   .page-title--with-menu-mobile {
     width: calc(100% - var(---side-margin) * 2 - 16px);
+  }
+}
+
+.fab-post2 {
+  ---offset: 20px;
+  position: fixed;
+  z-index: 3;
+  right: calc(100vw * .2 + var(---sheet-desktop-padding-x) + var(---offset));
+  bottom: var(---offset);
+}
+
+@media (MAX-width: 1024px) {
+  .fab-post2 {
+    display: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .fab-post2 {
+    right: calc(100vw * .2 + var(---sheet-desktop-padding-x) + var(---offset) + (100vw - 1440px) / 3.33);
+    /* 3.33 is a hack obtained through trial and error, I can't math.
+     * I had thought "+ (100vw - 1440px) / 2" would have worked, but no.
+     */
   }
 }

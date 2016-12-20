@@ -20,13 +20,6 @@
         </template>
       </div>
       <div class="pagination-topic pagination-topic--top">
-        {{? !it.isLocked }}
-          <div class="pagination-topic__action-button pagination-topic__action-button--post">
-            <span class="js-go-to-form button">
-              <span class="button__visible button__visible--primary">Répondre</span>
-            </span>
-          </div>
-        {{?}}
         <div class="pagination-topic__pages">
           {{#def.topicPagination}}
         </div>
@@ -72,6 +65,11 @@
           <div class="fab-post__inner">
             <div class="fab-post__icon"></div>
           </div>
+        </div>
+        <div class="fab-post2">
+          <span class="js-go-to-form button">
+            <span class="button__visible button__visible--primary button__visible--floating">Répondre</span>
+          </span>
         </div>
       {{??}}
         <div class="card">
