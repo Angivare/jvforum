@@ -1801,12 +1801,14 @@ a {
 .smiley--siffle { width: 21px; }
 
 .emoji {
-  width: 1em;
+  ---size: 20px;
+  width: var(---size);
+  height: var(---size);
+  vertical-align: sub;
 }
 
-.message__content-text .emoji {
-  width: 16px;
-  height: 16px;
+.page-title .emoji {
+  ---size: 40px;
 }
 
 .emoji-container {
