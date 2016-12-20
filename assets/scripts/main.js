@@ -53,6 +53,21 @@ function ajax(shortPath, timeout, data = {}, callback = () => {}) {
   xhr.send(data)
 }
 
+function attachEvent(selectors, type, listener, stepsLimit = 9999) {
+  document.documentElement.addEventListener(type, (event) => {
+    let element = event.target
+      , steps = 0
+    while (element.nodeType == 1 && steps < stepsLimit) {
+      if (element.matches(selectors)) {
+        listener.call(element, event)
+        break
+      }
+      element = element.parentNode
+      steps++
+    }
+  })
+}
+
 function stringToElements(string) {
   let template = document.createElement('template')
   template.innerHTML = string
@@ -899,7 +914,7 @@ function removeTabAlertForNewPosts() {
 
 function toggleFavorite(event) {
   let id = topicIdModern ? topicIdModern : forumId
-    , action = qs('.js-favorite-toggle').dataset.action
+    , action = this.dataset.action
     , formData = {}
   formData[action] = id
   ajax('favorite', timeouts.syncFavorites, formData, (status, response, xhr) => {
@@ -958,10 +973,6 @@ instantClick.on('change', function() {
     previousPageDraftIdMentioned = null
   }
 
-  qsa('.js-favorite-toggle', (element) => {
-    element.addEventListener('click', toggleFavorite)
-  })
-
   qsa('.js-go-to-form', (element) => {
     element.addEventListener('click', goToForm)
   })
@@ -996,6 +1007,7 @@ instantClick.on('change', function() {
 document.documentElement.addEventListener('click', enlargeEmoji)
 document.documentElement.addEventListener('click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
+attachEvent('.js-favorite-toggle', 'click', toggleFavorite, 2)
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
