@@ -1813,7 +1813,8 @@ a {
   cursor: pointer;
 }
 
-.page-title .emoji {
+.page-title .emoji,
+.emoji--large {
   ---size: 40px;
 }
 

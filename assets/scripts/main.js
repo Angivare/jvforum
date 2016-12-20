@@ -547,12 +547,13 @@ function closeMenu(event) {
 }
 
 function enlargeEmoji(event) {
-  if (event.target.className != 'emoji') {
+  let element = event.target
+  if (!element.classList.contains('emoji')) {
     return
   }
 
-  let image = event.target.src.split('/').pop()
-    , alt = event.target.alt
+  let image = element.src.split('/').pop()
+    , alt = element.alt
 
   qs('.stage').innerHTML = `
     <div class="stage-sticker-container">

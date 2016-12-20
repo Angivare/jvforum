@@ -8,7 +8,14 @@ twemoji.base = '/assets/emoji/'
 twemoji.size = '40'
 
 function emojify(text) {
-  return twemoji.parse(text)
+  text = twemoji.parse(text)
+  text = text.replace(/<p>\s*(<img class="emoji" draggable="false" alt="[^"]+" src="[^"]+">\s*){1,5}<\/p>/g, (all) => {
+    let str = all
+    str = str.replace(new RegExp('src="/assets/emoji/40/', 'g'), 'src="/assets/emoji/80/')
+    str = str.replace(/class="emoji"/g, 'class="emoji emoji--large"')
+    return str
+  })
+  return text
 }
 
 function adaptMessageContent(content, id, authorNickname, postDateRaw) {
