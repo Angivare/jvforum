@@ -44,9 +44,9 @@ router.get('/assets/stickers/heads/:id([0-9]+).png', (req, res, next) => {
   })
 })
 
-router.get('/assets/emoji/v1/small/:id([a-f0-9-]+).png', (req, res, next) => {
+router.get('/assets/emoji/:size(40|80|160)/:id([a-f0-9-]+).png', (req, res, next) => {
   res.sendFile(`${req.params.id}.png`, {
-    root: `${__dirname}/../assets/emoji/v1/small/`,
+    root: `${__dirname}/../assets/emoji/${req.params.size}/`,
   })
 })
 

@@ -4,8 +4,8 @@ let entities = require('html-entities').Html5Entities
   , db = require('./db')
 
 let twemoji = require('twemoji')
-twemoji.base = '/assets/emoji/v1/'
-twemoji.size = 'small'
+twemoji.base = '/assets/emoji/'
+twemoji.size = '40'
 
 function emojify(text) {
   return twemoji.parse(text)

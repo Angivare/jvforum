@@ -559,9 +559,9 @@ function enlargeEmoji(event) {
       <div class="stage-sticker-container__top-padding"></div>
       <div class="stage-sticker-container__sticker">
         <div class="stage-sticker-sd-container">
-          <img class="stage-sticker-sd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/v1/small/${image}">
+          <img class="stage-sticker-sd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/40/${image}">
         </div>
-        <img class="stage-sticker-hd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/v1/small/${image}">
+        <img class="stage-sticker-hd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/160/${image}">
       </div>
     </div>
   `
