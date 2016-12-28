@@ -679,7 +679,15 @@ router.post('/refresh', (req, res, next) => {
       function sendJSONAfterRenderings() {
         renderings++
         if (numberOfPages == 0) {
-          res.json(data)
+          try {
+            res.json(data)
+          }
+          catch (e) {
+            console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern}`)
+            console.error(e)
+            console.error(data)
+            console.error('---')
+          }
         }
         if (numberOfPages != content.numberOfPages && newMessages.length) {
           if (renderings == 2) {
