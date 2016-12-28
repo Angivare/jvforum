@@ -676,25 +676,31 @@ router.post('/refresh', (req, res, next) => {
       }
 
       let renderings = 0
+        , sent = 0
       function sendJSONAfterRenderings() {
         renderings++
         if (numberOfPages == 0) {
           try {
+            sent++
             res.json(data)
           }
           catch (e) {
             console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern}`)
             console.error(e)
+            console.error(content.numberOfPages)
             console.error(data)
+            console.error(sent)
             console.error('---')
           }
         }
         if (numberOfPages != content.numberOfPages && newMessages.length) {
           if (renderings == 2) {
+            sent++
             res.json(data)
           }
         }
         else {
+          sent++
           res.json(data)
         }
       }
@@ -722,6 +728,7 @@ router.post('/refresh', (req, res, next) => {
               idJvf,
               slug: topicSlug,
             })
+            console.error(sent)
             console.error('---')
           }
           data.paginationHTML = html
