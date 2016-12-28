@@ -711,6 +711,19 @@ router.post('/refresh', (req, res, next) => {
           idJvf,
           slug: topicSlug,
         }, (err, html) => {
+          if (html == undefined) {
+            console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern} topicPagination`)
+            console.error(err)
+            console.error({
+              paginationPages,
+              numberOfPages: content.numberOfPages,
+              page: topicPage,
+              forumId,
+              idJvf,
+              slug: topicSlug,
+            })
+            console.error('---')
+          }
           data.paginationHTML = html
           data.numberOfPages = content.numberOfPages
           sendJSONAfterRenderings()
