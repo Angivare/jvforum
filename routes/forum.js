@@ -73,12 +73,17 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
             topic.hasBeenVisited = true
             let position = positions[topic.id]
               , positionPage = 1 + Math.floor(position.answersCount / 20)
-              , actualPage = 1 + Math.floor(topic.answerCount / 20)
+              , lastPage = 1 + Math.floor(topic.answerCount / 20)
+
+            if (positionPage > lastPage) {
+              // Messages have been deleted and the saved position's page doesn't exist anymore
+              positionPage = lastPage
+            }
 
             if (topic.answerCount > position.answersCount) {
               topic.hasNewMessages = true
-              if (actualPage >= positionPage + 2) {
-                topic.position = `/${actualPage}`
+              if (lastPage >= positionPage + 2) {
+                topic.position = `/${lastPage}`
               }
               else {
                 if (position.answersCount % 20 == 19) {
