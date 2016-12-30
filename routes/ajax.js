@@ -687,9 +687,8 @@ router.post('/refresh', (req, res, next) => {
           catch (e) {
             console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern}`)
             console.error(e)
-            console.error(content.numberOfPages)
             console.error(data)
-            console.error(sent)
+            console.error(`${sent} ${numberOfPages} ${content.numberOfPages} ${newMessages.length}`)
             console.error('---')
           }
         }
@@ -728,7 +727,7 @@ router.post('/refresh', (req, res, next) => {
               idJvf,
               slug: topicSlug,
             })
-            console.error(sent)
+            console.error(`${sent} ${numberOfPages} ${content.numberOfPages} ${newMessages.length}`)
             console.error('---')
           }
           data.paginationHTML = html
