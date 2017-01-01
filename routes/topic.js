@@ -185,11 +185,8 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           viewLocals.paginationPages = paginationPages
 
           if (nicknames.length == 0) {
+            console.error(`\nnicknames 0\n${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
             res.send(renderView('topic', viewLocals))
-            console.error('---nicknames.length==0---')
-            console.error(viewLocals)
-            console.error(nicknames)
-            console.error('---/nicknames.length==0---')
             fs.appendFile('debug-no-nicknames', `${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
           }
           else {
@@ -201,6 +198,9 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
                     viewLocals.messages[i].avatar = url
                   }
                 }
+              }
+              if (nicknames.length == 0) {
+                console.error(`\nnicknames 0 bis\n${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
               }
               res.send(renderView('topic', viewLocals))
             })
