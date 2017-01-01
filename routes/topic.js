@@ -62,7 +62,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
       }
       cache.get(cacheId, config.timeouts.topicDisplay, (messages, age) => {
         content.messages = messages
-        content.message = utils.addIsMineVariable(content.messages, user.nickname)
+        utils.addIsMineVariable(content.messages, user.nickname)
         viewLocals.cacheAge = age
         serveTopic(content)
       }, () => {
@@ -134,7 +134,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
             isLocked: content.isLocked,
             lockRationale: content.lockRationale,
           })
-          content.message = utils.addIsMineVariable(content.messages, user.nickname)
+          utils.addIsMineVariable(content.messages, user.nickname)
           serveTopic(content)
         }
       }, (error) => {
