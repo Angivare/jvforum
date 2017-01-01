@@ -146,6 +146,8 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
     }
 
     function serveTopic(content, error) {
+      console.error(`serveTopic ${new Date} ${forumId}/${idJvf}/${page} ${error}`)
+
       utils.getForumsNamesAndSlugs([forumId], (content2) => {
         if (forumId in content2.names) {
           viewLocals.forumName = content2.names[forumId]
@@ -176,10 +178,6 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
           if (!nicknames.includes(nickname)) {
             nicknames.push(nickname)
           }
-        }
-
-        if (nicknames.length == 0) {
-          console.error(`\nserveTopic nicknames 0\n${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
         }
 
         Object.keys(content).forEach((key) => {
