@@ -186,6 +186,10 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
           if (nicknames.length == 0) {
             res.send(renderView('topic', viewLocals))
+            console.error('---nicknames.length==0---')
+            console.error(viewLocals)
+            console.error(nicknames)
+            console.error('---/nicknames.length==0---')
             fs.appendFile('debug-no-nicknames', `${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
           }
           else {
