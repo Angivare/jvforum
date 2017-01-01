@@ -999,6 +999,10 @@ instantClick.on('change', function() {
 
   showFavoriteToggleConfirmation()
 
+  if (qs('.forum-search__input')) {
+    qs('.forum-search__input').focus()
+  }
+
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
   startRefreshCycle()
