@@ -676,30 +676,17 @@ router.post('/refresh', (req, res, next) => {
       }
 
       let renderings = 0
-        , sent = 0
       function sendJSONAfterRenderings() {
         renderings++
         if (numberOfPages == 0) {
-          try {
-            sent++
-            res.json(data)
-          }
-          catch (e) {
-            console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern}`)
-            console.error(e)
-            console.error(data)
-            console.error(`${sent} ${numberOfPages} ${content.numberOfPages} ${newMessages.length}`)
-            console.error('---')
-          }
+          res.json(data)
         }
         if (numberOfPages != content.numberOfPages && newMessages.length) {
           if (renderings == 2) {
-            sent++
             res.json(data)
           }
         }
         else {
-          sent++
           res.json(data)
         }
       }
@@ -716,20 +703,6 @@ router.post('/refresh', (req, res, next) => {
           idJvf,
           slug: topicSlug,
         }, (err, html) => {
-          if (html == undefined) {
-            console.error(`--- ${topicMode}-${forumId}-${topicIdLegacyOrModern} topicPagination`)
-            console.error(err)
-            console.error({
-              paginationPages,
-              numberOfPages: content.numberOfPages,
-              page: topicPage,
-              forumId,
-              idJvf,
-              slug: topicSlug,
-            })
-            console.error(`${sent} ${numberOfPages} ${content.numberOfPages} ${newMessages.length}`)
-            console.error('---')
-          }
           data.paginationHTML = html
           data.numberOfPages = content.numberOfPages
           sendJSONAfterRenderings()
