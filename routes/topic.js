@@ -186,7 +186,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
 
           if (nicknames.length == 0) {
             res.send(renderView('topic', viewLocals))
-            fs.appendFile('debug-no-nicknames', `${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
+            fs.appendFile('../debug-no-nicknames', `${new Date}\n${forumId}/${idJvf}-${slug}/${page}\n\n`)
           }
           else {
             utils.getAvatars(nicknames, (avatars) => {
