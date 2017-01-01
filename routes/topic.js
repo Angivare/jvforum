@@ -120,6 +120,9 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         }
         else {
           let content = parse.topic(body)
+          if (content.messages.length == 0) {
+            console.error(`content.messages.length == 0 topic ${new Date} ${content.idModern} ${content.name}`)
+          }
           cache.save(cacheId, content.messages)
           utils.saveTopic(content.idModern, {
             idLegacy,

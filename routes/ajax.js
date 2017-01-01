@@ -610,6 +610,9 @@ router.post('/refresh', (req, res, next) => {
       }
       else {
         let content = parse.topic(body)
+        if (content.messages.length == 0) {
+          console.error(`content.messages.length == 0 ajax ${new Date} ${content.idModern} ${content.name}`)
+        }
         cache.save(cacheId, content.messages)
         utils.saveTopic(content.idModern, {
           idLegacy: topicIdLegacy,
