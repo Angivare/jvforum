@@ -342,14 +342,14 @@ function makeFavoritesSlideable() {
   }
 
   setSliderTopOffset()
-  instantClick.addEventListener('resize', setSliderTopOffset)
+  instantClick.addPageEvent('resize', setSliderTopOffset)
 
   adjustSliderWidth()
-  instantClick.addEventListener('resize', adjustSliderWidth)
+  instantClick.addPageEvent('resize', adjustSliderWidth)
 
   makeFavoritesSlide()
-  instantClick.addEventListener('scroll', makeFavoritesSlide)
-  instantClick.addEventListener('resize', makeFavoritesSlide)
+  instantClick.addPageEvent('scroll', makeFavoritesSlide)
+  instantClick.addPageEvent('resize', makeFavoritesSlide)
 }
 
 function setSliderTopOffset() {
@@ -429,7 +429,7 @@ function noteStickerAndGoBack(event) {
 function setUpStickers() {
   stickerPackWidth = undefined
   selectedHeadPackId = 0
-  instantClick.addEventListener('resize', alignAllStickerPacks)
+  instantClick.addPageEvent('resize', alignAllStickerPacks)
   alignAllStickerPacks()
   qs('.stickers-heads-container').scrollTop = 9999
 
@@ -437,7 +437,7 @@ function setUpStickers() {
     element.addEventListener('click', noteStickerAndGoBack)
   })
 
-  instantClick.addEventListener('scroll', selectHead)
+  instantClick.addPageEvent('scroll', selectHead)
   selectHead()
 
   qsa('.stickers-heads__head', (element) => {

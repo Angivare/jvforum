@@ -37,10 +37,27 @@ var instantClick
     , $currentPageTimers = []
     , $currentPageXhrs = []
     , $windowEventListeners = {}
+    , $delegatedEvents = {}
 
 
   ////////// HELPERS //////////
 
+
+  /* Polyfill needed for `addEvent` */
+  if (!Element.prototype.matches) {
+    Element.prototype.matches =
+      Element.prototype.webkitMatchesSelector ||
+      Element.prototype.msMatchesSelector ||
+      function (selector) {
+        var matches = document.querySelectorAll(selector)
+        for (var i = 0; i < matches.length; i++) {
+          if (matches[i] == this) {
+            return true
+          }
+        }
+        return false
+      }
+  }
 
   function removeHash(url) {
     var index = url.indexOf('#')
@@ -787,12 +804,53 @@ var instantClick
     return xhr
   }
 
-  function _addEventListener() {
+  function addPageEvent() {
     if (!($currentLocationWithoutHash in $windowEventListeners)) {
       $windowEventListeners[$currentLocationWithoutHash] = []
     }
     $windowEventListeners[$currentLocationWithoutHash].push(arguments)
     addEventListener.apply(window, arguments)
+  }
+
+  function addEvent(selector, type, listener) {
+    if (!(type in $delegatedEvents)) {
+      $delegatedEvents[type] = {}
+
+      // IE 8 uses attachEvent('on' + type, func)
+      var addEventFunction = window.addEventListener ? 'addEventListener' : 'attachEvent'
+        , typeParam = window.addEventListener ? type : ('on' + type)
+      document.documentElement[addEventFunction](typeParam, function(event) {
+        var element = event.target ? event.target : event.srcElement
+        while (element.nodeType == 1) {
+          for (var selector in $delegatedEvents[type]) {
+            if (element.matches(selector)) {
+              for (var i = 0; i < $delegatedEvents[type][selector].length; i++) { // IE 8 doesn't support indexOf
+                $delegatedEvents[type][selector][i].call(element, event)
+              }
+              break
+            }
+          }
+          element = element.parentNode
+        }
+      }, false) // addEventListener's third parameter isn't optional in Firefox < 6
+    }
+    if (!(selector in $delegatedEvents[type])) {
+      $delegatedEvents[type][selector] = []
+    }
+
+    // Run removeEvent beforehand so that it can't be added twice
+    removeEvent(selector, type, listener)
+
+    $delegatedEvents[type][selector].push(listener)
+  }
+
+  function removeEvent(selector, type, listener) {
+    for (var i = 0; i < $delegatedEvents[type][selector].length; i++) {
+      if ($delegatedEvents[type][selector][i] == listener) {
+        $delegatedEvents[type][selector].splice(i, 1)
+        break
+      }
+    }
   }
 
 
@@ -806,7 +864,9 @@ var instantClick
     setTimeout: setTimeout,
     setInterval: setInterval,
     xhr: xhr,
-    addEventListener: _addEventListener
+    addPageEvent: addPageEvent,
+    addEvent: addEvent,
+    removeEvent: removeEvent
   }
 
 }(document, location, navigator.userAgent);
