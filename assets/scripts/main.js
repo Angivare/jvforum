@@ -918,21 +918,12 @@ if (googleAnalyticsId) {
 instantClick.addEvent('.js-form-post', 'submit', submitPost)
 instantClick.addEvent('.js-form-post__title', 'input', saveDraftForum)
 instantClick.addEvent('.js-form-post__textarea', 'input', saveDraft)
+instantClick.addEvent('.js-go-to-form', 'click', goToForm)
+instantClick.addEvent('.menu-mobile', 'click', toggleMobileMenu)
+instantClick.addEvent('.js-logout-link', 'click', logout)
 
 instantClick.on('change', function() {
   showDraft()
-
-  qsa('.js-go-to-form', (element) => {
-    element.addEventListener('click', goToForm)
-  })
-
-  qs('.menu-mobile', (element) => {
-    element.addEventListener('click', toggleMobileMenu)
-  })
-
-  qs('.js-logout-link', (element) => {
-    element.addEventListener('click', logout)
-  })
 
   syncFavorites()
 
