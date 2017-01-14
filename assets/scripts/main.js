@@ -392,16 +392,12 @@ function setUpStickers() {
   alignAllStickerPacks()
   qs('.stickers-heads-container').scrollTop = 9999
 
-  qsa('.stickers-pack__sticker', (element) => {
-    element.addEventListener('click', noteStickerAndGoBack)
-  })
+  instantClick.addEvent('.stickers-pack__sticker', 'click', noteStickerAndGoBack)
 
   instantClick.addPageEvent('scroll', selectHead)
   selectHead()
 
-  qsa('.stickers-heads__head', (element) => {
-    element.addEventListener('click', stickerHeadOnClick)
-  })
+  instantClick.addEvent('.stickers-heads__head', 'click', stickerHeadOnClick)
 }
 
 function selectHead() {
@@ -423,8 +419,7 @@ function selectHead() {
 }
 
 function stickerHeadOnClick(event) {
-  let element = event.currentTarget
-    , packId = element.dataset.packId
+  let packId = this.dataset.packId
     , scrollPosition = qs(`.js-stickers-pack-${packId}`).getBoundingClientRect().bottom + scrollY - innerHeight
   scrollTo(0, scrollPosition)
 }
