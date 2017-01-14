@@ -70,7 +70,7 @@ function setAsHavingTouch() {
   document.documentElement.classList.remove('hasnt-touch')
   document.documentElement.classList.add('has-touch')
   hasTouch = true
-  document.body.removeEventListener('touchstart', setAsHavingTouch)
+  instantClick.removeEvent('body', 'touchstart', setAsHavingTouch)
 }
 
 function showError(error, form = 'post') {
@@ -983,7 +983,7 @@ instantClick.addEvent('.js-menu', 'click', toggleMenu)
 instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
 instantClick.addEvent('.message', 'click', closeMenu)
 
-document.body.addEventListener('touchstart', setAsHavingTouch)
+instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
 
 document.addEventListener('visibilitychange', handleVisibilityState)
 handleVisibilityState()
