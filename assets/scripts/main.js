@@ -110,7 +110,7 @@ function addMessagesEvent(element, type, listener) {
 function toggleSpoil(event) {
   event.stopPropagation()
   let target = event.target
-  if (target.matches('a, .sticker, .noelshack-link__thumb')) {
+  if (target.matches('a, .sticker, .noelshack-link__thumb, .emoji')) {
     return
   }
   this.classList.toggle('spoil--revealed')
