@@ -53,21 +53,6 @@ function ajax(shortPath, timeout, data = {}, callback = () => {}) {
   xhr.send(data)
 }
 
-function attachEvent(selectors, type, listener, stepsLimit = 9999) {
-  document.documentElement.addEventListener(type, (event) => {
-    let element = event.target
-      , steps = 0
-    while (element.nodeType == 1 && steps < stepsLimit) {
-      if (element.matches(selectors)) {
-        listener.call(element, event)
-        break
-      }
-      element = element.parentNode
-      steps++
-    }
-  })
-}
-
 function stringToElements(string) {
   let template = document.createElement('template')
   template.innerHTML = string
@@ -1011,7 +996,7 @@ instantClick.on('change', function() {
 document.documentElement.addEventListener('click', enlargeEmoji)
 document.documentElement.addEventListener('click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
-attachEvent('.js-favorite-toggle', 'click', toggleFavorite, 2)
+instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
 
 addMessagesEvent('.spoil', 'click', toggleSpoil)
 addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
