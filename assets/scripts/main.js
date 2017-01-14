@@ -4,7 +4,6 @@ let hasTouch = false
   , messagesChecksums
   , messagesDeleted = []
   , refreshInterval
-  , messagesEvents = []
   , isSliderSliding = false
   , sliderTopOffset = 0
   , stickerPackWidth
@@ -79,21 +78,7 @@ function showError(error, form = 'post') {
   qs(`.js-form-${form}__error`).classList.add('form__error--shown')
 }
 
-function addMessagesEvent(element, type, listener) {
-  messagesEvents.push({
-    element,
-    type,
-    listener,
-  })
-  instantClick.on('change', function() {
-    qsa('.message ' + element, (element) => {
-      element.addEventListener(type, listener)
-    })
-  })
-}
-
 function toggleSpoil(event) {
-  event.stopPropagation()
   let target = event.target
   if (target.matches('a, .sticker, .noelshack-link__thumb, .emoji')) {
     return
@@ -261,11 +246,6 @@ function refresh() {
           // New message
           messagesChecksums[id] = message.checksum
 
-          for (let i = 0; i < messagesEvents.length; i++) {
-            qsa(`#m${id} ${messagesEvents[i].element}`, (element) => {
-              element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
-            })
-          }
           updateTopicPosition()
           continue
         }
@@ -279,12 +259,6 @@ function refresh() {
 
           if (!qs(`#m${id} .js-content`).dataset.isBeingEdited) {
             qs(`#m${id} .js-content`).innerHTML = message.content
-          }
-
-          for (let i = 0; i < messagesEvents.length; i++) {
-            qsa(`#m${id} ${messagesEvents[i].element}`, (element) => {
-              element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
-            })
           }
         }
       }
@@ -655,11 +629,6 @@ function showEditForm(eventOrMessageId) {
     }
     let idEdited = elementEdited.dataset.id
     qs(`#m${idEdited} .js-content`).innerHTML = savedMessageContentBeforeEditing
-    for (let i = 0; i < messagesEvents.length; i++) {
-      qsa(`#m${idEdited} ${messagesEvents[i].element}`, (element) => {
-        element.addEventListener(messagesEvents[i].type, messagesEvents[i].listener)
-      })
-    }
 
     if (id == idEdited) {
       return
@@ -998,12 +967,12 @@ document.documentElement.addEventListener('click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
 instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
 
-addMessagesEvent('.spoil', 'click', toggleSpoil)
-addMessagesEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
-addMessagesEvent('.js-quote', 'click', quoteMessage)
-addMessagesEvent('.js-menu', 'click', toggleMenu)
-addMessagesEvent('.js-delete', 'click', confirmDeleteMessage)
-addMessagesEvent('', 'click', closeMenu)
+instantClick.addEvent('.spoil', 'click', toggleSpoil)
+instantClick.addEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
+instantClick.addEvent('.js-quote', 'click', quoteMessage)
+instantClick.addEvent('.js-menu', 'click', toggleMenu)
+instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
+instantClick.addEvent('.message', 'click', closeMenu)
 
 document.body.addEventListener('touchstart', setAsHavingTouch)
 
