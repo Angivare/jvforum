@@ -803,6 +803,10 @@ function saveDraft() {
 }
 
 function showDraft() {
+  if (!qs('.js-form-post')) {
+    previousPageDraftIdMentioned = null
+    return
+  }
   let hasTitle = qs('.js-form-post__title')
     , draftId = `draft_${hasTitle ? forumId : topicIdModern}`
     , value = localStorage[draftId]
@@ -911,23 +915,12 @@ if (googleAnalyticsId) {
   })
 }
 
-instantClick.on('change', function() {
-  qs('.js-form-post', (element) => {
-    element.addEventListener('submit', submitPost)
+instantClick.addEvent('.js-form-post', 'submit', submitPost)
+instantClick.addEvent('.js-form-post__title', 'input', saveDraftForum)
+instantClick.addEvent('.js-form-post__textarea', 'input', saveDraft)
 
-    let titleElement = qs('.js-form-post__title')
-    if (titleElement) {
-      titleElement.addEventListener('input', saveDraftForum)
-      qs('.js-form-post__textarea').addEventListener('input', saveDraftForum)
-    }
-    else {
-      qs('.js-form-post__textarea').addEventListener('input', saveDraftTopic)
-    }
-    showDraft()
-  })
-  if (!qs('.js-form-post')) {
-    previousPageDraftIdMentioned = null
-  }
+instantClick.on('change', function() {
+  showDraft()
 
   qsa('.js-go-to-form', (element) => {
     element.addEventListener('click', goToForm)
