@@ -447,9 +447,8 @@ function insertStickerIntoMessage() {
   saveDraft()
 }
 
-function showImbricatedQuote(event) {
-  let element = event.target
-  element.classList.add('quote--imbricated-shown')
+function showImbricatedQuote() {
+  this.classList.add('quote--imbricated-shown')
 }
 
 function html2jvcode(html) {
