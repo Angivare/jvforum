@@ -800,6 +800,15 @@ function saveDraftTopic() {
   previousPageDraftIdMentioned = draftId
 }
 
+function saveDraft() {
+  if (qs('.js-form-post__title')) {
+    saveDraftForum()
+  }
+  else {
+    saveDraftTopic()
+  }
+}
+
 function showDraft() {
   let hasTitle = qs('.js-form-post__title')
     , draftId = `draft_${hasTitle ? forumId : topicIdModern}`
