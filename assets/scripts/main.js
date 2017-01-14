@@ -641,8 +641,6 @@ function showEditForm(eventOrMessageId) {
 
   textarea.focus() // Must be before setting value in order to have the cursor at the bottom
   textarea.value = text
-
-  qs('.js-form-edit').addEventListener('submit', editMessage)
 }
 
 function editMessage(event) {
@@ -977,6 +975,8 @@ instantClick.addEvent('.js-quote', 'click', quoteMessage)
 instantClick.addEvent('.js-menu', 'click', toggleMenu)
 instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
 instantClick.addEvent('.message', 'click', closeMenu)
+
+instantClick.addEvent('.js-form-edit', 'submit', editMessage)
 
 instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
 
