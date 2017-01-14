@@ -86,7 +86,7 @@ function toggleSpoil(event) {
   this.classList.toggle('spoil--revealed')
 }
 
-function postMessage(event) {
+function submitPost(event) {
   event.preventDefault()
 
   let message = qs('.js-form-post__textarea').value
@@ -643,7 +643,7 @@ function showEditForm(eventOrMessageId) {
   textarea.value = text
 }
 
-function editMessage(event) {
+function submitEdit(event) {
   event.preventDefault()
 
   let message = qs('.js-form-edit__textarea').value
@@ -913,7 +913,7 @@ if (googleAnalyticsId) {
 
 instantClick.on('change', function() {
   qs('.js-form-post', (element) => {
-    element.addEventListener('submit', postMessage)
+    element.addEventListener('submit', submitPost)
 
     let titleElement = qs('.js-form-post__title')
     if (titleElement) {
@@ -976,7 +976,7 @@ instantClick.addEvent('.js-menu', 'click', toggleMenu)
 instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
 instantClick.addEvent('.message', 'click', closeMenu)
 
-instantClick.addEvent('.js-form-edit', 'submit', editMessage)
+instantClick.addEvent('.js-form-edit', 'submit', submitEdit)
 
 instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
 
