@@ -449,7 +449,6 @@ function insertStickerIntoMessage() {
 
 function showImbricatedQuote(event) {
   let element = event.target
-  element.removeEventListener('click', showImbricatedQuote)
   element.classList.add('quote--imbricated-shown')
 }
 
