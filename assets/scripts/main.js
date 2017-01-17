@@ -545,15 +545,11 @@ function enlargeEmoji() {
   }
 }
 
-function enlargeSticker(event) {
-  let element = event.target
-  if (!element.classList.contains('js-sticker')) {
-    return
-  }
-  let id = element.dataset.stickerId
-    , packId = element.dataset.packId
+function enlargeSticker() {
+  let id = this.dataset.stickerId
+    , packId = this.dataset.packId
 
-    // put sticker image (small for now) and code
+  // put sticker image (small for now) and code
   qs('.stage').innerHTML = `
     <div class="stage-sticker-container">
       <div class="stage-sticker-container__top-padding"></div>
@@ -942,7 +938,7 @@ instantClick.on('change', function() {
 })
 
 instantClick.addEvent('.emoji', 'click', enlargeEmoji)
-document.documentElement.addEventListener('click', enlargeSticker)
+instantClick.addEvent('.js-sticker', 'click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
 instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
 
