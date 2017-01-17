@@ -513,14 +513,9 @@ function closeMenu(event) {
   qs(`#${id}`).classList.remove('message--menu-opened')
 }
 
-function enlargeEmoji(event) {
-  let element = event.target
-  if (!element.classList.contains('emoji')) {
-    return
-  }
-
-  let image = element.src.split('/').pop()
-    , alt = element.alt
+function enlargeEmoji() {
+  let image = this.src.split('/').pop()
+    , alt = this.alt
 
   qs('.stage').innerHTML = `
     <div class="stage-sticker-container">
@@ -946,7 +941,7 @@ instantClick.on('change', function() {
   startRefreshCycle()
 })
 
-document.documentElement.addEventListener('click', enlargeEmoji)
+instantClick.addEvent('.emoji', 'click', enlargeEmoji)
 document.documentElement.addEventListener('click', enlargeSticker)
 document.documentElement.addEventListener('click', showEditForm)
 instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
