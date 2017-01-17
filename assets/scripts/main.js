@@ -594,10 +594,7 @@ function showEditForm(eventOrMessageId) {
     element = qs(`#m${eventOrMessageId}`)
   }
   else {
-    element = eventOrMessageId.target
-    if (!element.classList.contains('js-edit')) {
-      return
-    }
+    element = this
     while (!element.id) {
       element = element.parentNode
     }
@@ -939,7 +936,7 @@ instantClick.on('change', function() {
 
 instantClick.addEvent('.emoji', 'click', enlargeEmoji)
 instantClick.addEvent('.js-sticker', 'click', enlargeSticker)
-document.documentElement.addEventListener('click', showEditForm)
+instantClick.addEvent('.js-edit', 'click', showEditForm)
 instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
 
 instantClick.addEvent('.spoil', 'click', toggleSpoil)
