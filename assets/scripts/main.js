@@ -885,27 +885,37 @@ function showFavoriteToggleConfirmation() {
   localStorage.removeItem('toggledFavoriteAction')
 }
 
-instantClick.init()
-
-if (googleAnalyticsId) {
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', googleAnalyticsId, 'auto');
-
-  instantClick.on('change', function() {
-    ga('set', 'dimension1', 'Member')
-    ga('send', 'pageview', location.pathname + location.search)
-  })
-}
-
 instantClick.addEvent('.js-form-post', 'submit', submitPost)
 instantClick.addEvent('.js-form-post__title', 'input', saveDraftForum)
 instantClick.addEvent('.js-form-post__textarea', 'input', saveDraft)
 instantClick.addEvent('.js-go-to-form', 'click', goToForm)
 instantClick.addEvent('.menu-mobile', 'click', toggleMobileMenu)
 instantClick.addEvent('.js-logout-link', 'click', logout)
+
+instantClick.addEvent('.emoji', 'click', enlargeEmoji)
+instantClick.addEvent('.js-sticker', 'click', enlargeSticker)
+instantClick.addEvent('.js-edit', 'click', showEditForm)
+instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
+
+instantClick.addEvent('.spoil', 'click', toggleSpoil)
+instantClick.addEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
+instantClick.addEvent('.js-quote', 'click', quoteMessage)
+instantClick.addEvent('.js-menu', 'click', toggleMenu)
+instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
+instantClick.addEvent('.message', 'click', closeMenu)
+
+instantClick.addEvent('.js-form-edit', 'submit', submitEdit)
+
+instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
+
+document.addEventListener('visibilitychange', handleVisibilityState)
+handleVisibilityState()
+
+if (!('hasAjaxHashes' in localStorage)) {
+  getAjaxHashes()
+}
+
+instantClick.init()
 
 instantClick.on('change', function() {
   showDraft()
@@ -933,30 +943,20 @@ instantClick.on('change', function() {
   startRefreshCycle()
 })
 
-instantClick.addEvent('.emoji', 'click', enlargeEmoji)
-instantClick.addEvent('.js-sticker', 'click', enlargeSticker)
-instantClick.addEvent('.js-edit', 'click', showEditForm)
-instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
-
-instantClick.addEvent('.spoil', 'click', toggleSpoil)
-instantClick.addEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
-instantClick.addEvent('.js-quote', 'click', quoteMessage)
-instantClick.addEvent('.js-menu', 'click', toggleMenu)
-instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
-instantClick.addEvent('.message', 'click', closeMenu)
-
-instantClick.addEvent('.js-form-edit', 'submit', submitEdit)
-
-instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
-
-document.addEventListener('visibilitychange', handleVisibilityState)
-handleVisibilityState()
-
-if (!('hasAjaxHashes' in localStorage)) {
-  getAjaxHashes()
-}
-
 instantClick.on('restore', function () {
   insertStickerIntoMessage()
   startRefreshCycle()
 })
+
+if (googleAnalyticsId) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', googleAnalyticsId, 'auto');
+
+  instantClick.on('change', function() {
+    ga('set', 'dimension1', 'Member')
+    ga('send', 'pageview', location.pathname + location.search)
+  })
+}
