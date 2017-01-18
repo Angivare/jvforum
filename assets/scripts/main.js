@@ -434,7 +434,7 @@ function insertStickerIntoMessage() {
   let insertionPoint = textarea.selectionEnd
   if (isIOS) {
     /* iOS doesn't want to focus the form, so selectionEnd isn't updated.
-     * We get around this by simply adding the sticker at the end.
+     * We get around this by stupidly adding the sticker at the end.
      */
     insertionPoint = textarea.value.length
   }
