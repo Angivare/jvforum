@@ -79,8 +79,7 @@ function showError(error, form = 'post') {
 }
 
 function toggleSpoil(event) {
-  let target = event.target
-  if (target.matches('a, .sticker, .noelshack-link__thumb, .emoji')) {
+  if (event.target.matches('a, .sticker, .noelshack-link__thumb, .emoji')) {
     return
   }
   this.classList.toggle('spoil--revealed')
