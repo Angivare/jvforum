@@ -119,7 +119,7 @@ function submitPost(event) {
     qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
-      showError(`Problème réseau`)
+      showError(`Problème réseau. Le message a peut-être été envoyé.`)
       return
     }
     if (response.error) {
@@ -658,7 +658,7 @@ function submitEdit(event) {
     qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
-      showError(`Problème réseau`, 'edit')
+      showError(`Problème réseau. La modification a peut-être été faite.`, 'edit')
       return
     }
     if (response.error) {
@@ -716,7 +716,7 @@ function confirmDeleteMessage(event) {
     messageId: id,
   }, (status, response, xhr) => {
     if (status != 200) {
-      showToast(`Problème réseau lors de la suppression du message`, 3)
+      showToast(`Problème réseau lors de la suppression, le message n’a peut-être pas été supprimé.`, 3)
       return
     }
     if (response.error) {
