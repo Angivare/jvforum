@@ -33,7 +33,7 @@ function ajax(shortPath, timeout, data = {}, callback = () => {}) {
   data._csrf = _csrf
   data = JSON.stringify(data)
 
-  let xhr = instantClick.xhr()
+  let xhr = instantclick.xhr()
   xhr.open('POST', `/ajax/${shortPath}`)
   xhr.timeout = timeout
   xhr.setRequestHeader('Content-Type', 'application/json')
@@ -70,7 +70,7 @@ function setAsHavingTouch() {
   document.documentElement.classList.remove('hasnt-touch')
   document.documentElement.classList.add('has-touch')
   hasTouch = true
-  instantClick.removeEvent('body', 'touchstart', setAsHavingTouch)
+  instantclick.removeEvent('body', 'touchstart', setAsHavingTouch)
 }
 
 function showError(error, form = 'post') {
@@ -169,7 +169,7 @@ function startRefreshCycle() {
   })
   if (isLastPage || lastMessageAge < 5 * 60) {
     refreshInterval = refreshIntervals.recent
-    instantClick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
+    instantclick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
   }
   else {
     refreshInterval = refreshIntervals.old
@@ -178,7 +178,7 @@ function startRefreshCycle() {
     refresh()
   }
   else {
-    instantClick.setTimeout(refresh, refreshInterval - cacheAge)
+    instantclick.setTimeout(refresh, refreshInterval - cacheAge)
   }
 }
 
@@ -272,7 +272,7 @@ function refresh() {
     }
 
     if (!xhr.instantKilled) {
-      instantClick.setTimeout(refresh, refreshInterval)
+      instantclick.setTimeout(refresh, refreshInterval)
     }
   })
 }
@@ -300,14 +300,14 @@ function makeFavoritesSlideable() {
   }
 
   setSliderTopOffset()
-  instantClick.addPageEvent('resize', setSliderTopOffset)
+  instantclick.addPageEvent('resize', setSliderTopOffset)
 
   adjustSliderWidth()
-  instantClick.addPageEvent('resize', adjustSliderWidth)
+  instantclick.addPageEvent('resize', adjustSliderWidth)
 
   makeFavoritesSlide()
-  instantClick.addPageEvent('scroll', makeFavoritesSlide)
-  instantClick.addPageEvent('resize', makeFavoritesSlide)
+  instantclick.addPageEvent('scroll', makeFavoritesSlide)
+  instantclick.addPageEvent('resize', makeFavoritesSlide)
 }
 
 function setSliderTopOffset() {
@@ -387,16 +387,16 @@ function noteStickerAndGoBack(event) {
 function setUpStickers() {
   stickerPackWidth = undefined
   selectedHeadPackId = 0
-  instantClick.addPageEvent('resize', alignAllStickerPacks)
+  instantclick.addPageEvent('resize', alignAllStickerPacks)
   alignAllStickerPacks()
   qs('.stickers-heads-container').scrollTop = 9999
 
-  instantClick.addEvent('.stickers-pack__sticker', 'click', noteStickerAndGoBack)
+  instantclick.addEvent('.stickers-pack__sticker', 'click', noteStickerAndGoBack)
 
-  instantClick.addPageEvent('scroll', selectHead)
+  instantclick.addPageEvent('scroll', selectHead)
   selectHead()
 
-  instantClick.addEvent('.stickers-heads__head', 'click', stickerHeadOnClick)
+  instantclick.addEvent('.stickers-heads__head', 'click', stickerHeadOnClick)
 }
 
 function selectHead() {
@@ -682,12 +682,12 @@ function showToast(message, durationInSeconds = 2.5) {
   clearTimeout(toastTimer)
   $('.toast').addClass('toast--shown')
   $('.toast__label').text(message)
-  toastTimer = instantClick.setTimeout(hideToast, durationInSeconds * 1000)
+  toastTimer = instantclick.setTimeout(hideToast, durationInSeconds * 1000)
 }
 
 function hideToast() {
   $('.toast').removeClass('toast--shown')
-  toastTimer = instantClick.setTimeout(function() {
+  toastTimer = instantclick.setTimeout(function() {
     $('.toast__label').text(' ')
   }, 150)
 }
@@ -885,28 +885,28 @@ function showFavoriteToggleConfirmation() {
   localStorage.removeItem('toggledFavoriteAction')
 }
 
-instantClick.addEvent('.js-form-post', 'submit', submitPost)
-instantClick.addEvent('.js-form-post__title', 'input', saveDraftForum)
-instantClick.addEvent('.js-form-post__textarea', 'input', saveDraft)
-instantClick.addEvent('.js-go-to-form', 'click', goToForm)
-instantClick.addEvent('.menu-mobile', 'click', toggleMobileMenu)
-instantClick.addEvent('.js-logout-link', 'click', logout)
+instantclick.addEvent('.js-form-post', 'submit', submitPost)
+instantclick.addEvent('.js-form-post__title', 'input', saveDraftForum)
+instantclick.addEvent('.js-form-post__textarea', 'input', saveDraft)
+instantclick.addEvent('.js-go-to-form', 'click', goToForm)
+instantclick.addEvent('.menu-mobile', 'click', toggleMobileMenu)
+instantclick.addEvent('.js-logout-link', 'click', logout)
 
-instantClick.addEvent('.emoji', 'click', enlargeEmoji)
-instantClick.addEvent('.js-sticker', 'click', enlargeSticker)
-instantClick.addEvent('.js-edit', 'click', showEditForm)
-instantClick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
+instantclick.addEvent('.emoji', 'click', enlargeEmoji)
+instantclick.addEvent('.js-sticker', 'click', enlargeSticker)
+instantclick.addEvent('.js-edit', 'click', showEditForm)
+instantclick.addEvent('.js-favorite-toggle', 'click', toggleFavorite)
 
-instantClick.addEvent('.spoil', 'click', toggleSpoil)
-instantClick.addEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
-instantClick.addEvent('.js-quote', 'click', quoteMessage)
-instantClick.addEvent('.js-menu', 'click', toggleMenu)
-instantClick.addEvent('.js-delete', 'click', confirmDeleteMessage)
-instantClick.addEvent('.message', 'click', closeMenu)
+instantclick.addEvent('.spoil', 'click', toggleSpoil)
+instantclick.addEvent('.message__content-text > .quote > .quote > .quote', 'click', showImbricatedQuote)
+instantclick.addEvent('.js-quote', 'click', quoteMessage)
+instantclick.addEvent('.js-menu', 'click', toggleMenu)
+instantclick.addEvent('.js-delete', 'click', confirmDeleteMessage)
+instantclick.addEvent('.message', 'click', closeMenu)
 
-instantClick.addEvent('.js-form-edit', 'submit', submitEdit)
+instantclick.addEvent('.js-form-edit', 'submit', submitEdit)
 
-instantClick.addEvent('body', 'touchstart', setAsHavingTouch)
+instantclick.addEvent('body', 'touchstart', setAsHavingTouch)
 
 document.addEventListener('visibilitychange', handleVisibilityState)
 handleVisibilityState()
@@ -915,9 +915,9 @@ if (!('hasAjaxHashes' in localStorage)) {
   getAjaxHashes()
 }
 
-instantClick.init()
+instantclick.init()
 
-instantClick.on('change', function() {
+instantclick.on('change', function() {
   showDraft()
 
   syncFavorites()
@@ -943,7 +943,7 @@ instantClick.on('change', function() {
   startRefreshCycle()
 })
 
-instantClick.on('restore', function () {
+instantclick.on('restore', function () {
   insertStickerIntoMessage()
   startRefreshCycle()
 })
@@ -955,7 +955,7 @@ if (googleAnalyticsId) {
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', googleAnalyticsId, 'auto');
 
-  instantClick.on('change', function() {
+  instantclick.on('change', function() {
     ga('set', 'dimension1', 'Member')
     ga('send', 'pageview', location.pathname + location.search)
   })
