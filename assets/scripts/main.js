@@ -272,7 +272,7 @@ function refresh() {
       }
     }
 
-    if (!xhr.instantKilled) {
+    if (!xhr.instantclickAbort) {
       instantclick.setTimeout(refresh, refreshInterval)
     }
   })
