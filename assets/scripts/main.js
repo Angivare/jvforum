@@ -34,7 +34,7 @@ function ajax(shortPath, timeout, data = {}, callback = () => {}) {
   data = JSON.stringify(data)
 
   let xhr = new XMLHttpRequest()
-  instantclick.ajax(xhr)
+  instantclick.xhr(xhr)
   xhr.open('POST', `/ajax/${shortPath}`)
   xhr.timeout = timeout
   xhr.setRequestHeader('Content-Type', 'application/json')
