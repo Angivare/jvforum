@@ -946,24 +946,6 @@ instantclick.on('change', function() {
 
 instantclick.on('restore', function () {
   insertStickerIntoMessage()
-
-  if (document.body.className.indexOf(' topic-') == -1) {
-    return
-  }
-
-  let lastMessageElement = qs('.message:last-child')
-    , lastMessageAge = 0
-  if (lastMessageElement) {
-    lastMessageAge = parseInt(lastMessageElement.dataset.age)
-  }
-
-  let isLastPage = false
-  qs('.pagination-topic--bottom .pagination-topic__page:last-child .pagination-topic__page-link', (element) => {
-    isLastPage = element.classList.contains('pagination-topic__page-link--active')
-  })
-  if (isLastPage || lastMessageAge < 5 * 60) {
-    instantclick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
-  }
 })
 
 if (googleAnalyticsId) {
