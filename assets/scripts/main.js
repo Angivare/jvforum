@@ -1,21 +1,20 @@
-let hasTouch = false
-  , refreshTimeout
-  , lastRefreshTimestamp = 0
-  , messagesChecksums
-  , messagesDeleted = []
-  , refreshInterval
-  , isSliderSliding = false
-  , sliderTopOffset = 0
-  , stickerPackWidth
-  , stickerDemoWidth
-  , isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
-  , selectedHeadPackId
-  , toastTimer
-  , savedMessageContentBeforeEditing
-  , previousPageDraftIdMentioned
-  , pageVisible
-  , unviewedNewMessagesCount = 0
-  , originalTabTitle
+let $hasTouch = false
+  , $lastRefreshTimestamp = 0
+  , $messagesChecksums
+  , $messagesDeleted = []
+  , $refreshInterval
+  , $isSliderSliding = false
+  , $sliderTopOffset = 0
+  , $stickerPackWidth
+  , $stickerDemoWidth
+  , $isIOS = /\((iPhone|iPod|iPad)/.test(navigator.userAgent)
+  , $selectedHeadPackId
+  , $toastTimer
+  , $savedMessageContentBeforeEditing
+  , $previousPageDraftIdMentioned
+  , $isPageVisible
+  , $unviewedNewMessagesCount = 0
+  , $originalTabTitle
 
 function qs(selectors, callback) {
   let element = document.querySelector(selectors)
@@ -30,7 +29,7 @@ function qsa(selectors, callback) {
 }
 
 function ajax(shortPath, timeout, data = {}, callback = () => {}) {
-  data._csrf = _csrf
+  data._csrf = $csrf
   data = JSON.stringify(data)
 
   let xhr = new XMLHttpRequest()
@@ -70,7 +69,7 @@ function stringToElements(string) {
 function setAsHavingTouch() {
   document.documentElement.classList.remove('hasnt-touch')
   document.documentElement.classList.add('has-touch')
-  hasTouch = true
+  $hasTouch = true
   instantclick.removeEvent('body', 'touchstart', setAsHavingTouch)
 }
 
@@ -96,7 +95,7 @@ function submitPost(event) {
 
   let formData = {
         message,
-        forumId,
+        forumId: $forumId,
         userAgent: navigator.userAgent,
         canvasWidth: innerWidth,
         canvasHeight: innerHeight,
@@ -108,15 +107,15 @@ function submitPost(event) {
   if (qs('.js-form-post__title')) {
     isNewTopic = true
     formData.title = qs('.js-form-post__title').value
-    formData.forumSlug = forumSlug
+    formData.forumSlug = $forumSlug
   }
   else {
-    formData.topicMode = topicMode
-    formData.topicIdLegacyOrModern = topicIdLegacyOrModern
-    formData.topicSlug = topicSlug
+    formData.topicMode = $topicMode
+    formData.topicIdLegacyOrModern = $topicIdLegacyOrModern
+    formData.topicSlug = $topicSlug
   }
 
-  ajax(isNewTopic ? 'postTopic' : 'postMessage', timeouts.postMessage, formData, (status, response, xhr) => {
+  ajax(isNewTopic ? 'postTopic' : 'postMessage', $timeouts.postMessage, formData, (status, response, xhr) => {
     qs('.js-form-post__button-visible').classList.remove('form__post-button-visible--sending')
 
     if (status != 200) {
@@ -142,7 +141,7 @@ function submitPost(event) {
     if (isNewTopic) {
       location.href = response.location
     }
-    else if (!hasTouch) {
+    else if (!$hasTouch) {
       qs('.js-form-post__textarea').focus()
     }
   })
@@ -159,9 +158,9 @@ function startRefreshCycle() {
     lastMessageAge = parseInt(lastMessageElement.dataset.age)
   }
 
-  messagesChecksums = {}
+  $messagesChecksums = {}
   qsa('.message', (element) => {
-    messagesChecksums[element.id.substr(1)] = element.dataset.checksum
+    $messagesChecksums[element.id.substr(1)] = element.dataset.checksum
   })
 
   let isLastPage = false
@@ -169,41 +168,41 @@ function startRefreshCycle() {
     isLastPage = element.classList.contains('pagination-topic__page-link--active')
   })
   if (isLastPage || lastMessageAge < 5 * 60) {
-    refreshInterval = refreshIntervals.recent
-    instantclick.setInterval(restartRefreshIfNeeded, refreshIntervals.check)
+    $refreshInterval = $refreshIntervals.recent
+    instantclick.setInterval(restartRefreshIfNeeded, $refreshIntervals.check)
   }
   else {
-    refreshInterval = refreshIntervals.old
+    $refreshInterval = $refreshIntervals.old
   }
-  if (refreshInterval - cacheAge < 0) {
+  if ($refreshInterval - $cacheAge < 0) {
     refresh()
   }
   else {
-    instantclick.setTimeout(refresh, refreshInterval - cacheAge)
+    instantclick.setTimeout(refresh, $refreshInterval - $cacheAge)
   }
 }
 
 function restartRefreshIfNeeded() {
-  if (lastRefreshTimestamp < +new Date - refreshIntervals.check) {
+  if ($lastRefreshTimestamp < +new Date - $refreshIntervals.check) {
     refresh()
   }
 }
 
 function refresh() {
-  lastRefreshTimestamp = +new Date
+  $lastRefreshTimestamp = +new Date
 
-  ajax('refresh', timeouts.refresh, {
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    topicSlug,
-    topicPage,
-    numberOfPages,
-    messagesChecksums,
+  ajax('refresh', $timeouts.refresh, {
+    forumId: $forumId,
+    topicMode: $topicMode,
+    topicIdLegacyOrModern: $topicIdLegacyOrModern,
+    topicSlug: $topicSlug,
+    topicPage: $topicPage,
+    numberOfPages: $numberOfPages,
+    messagesChecksums: $messagesChecksums,
   }, (status, response, xhr) => {
     if (status == 200) {
       if (response.error) {
-        if (response.error == 'deleted' && numberOfPages) { // non-zero numberOfPages means we aren't already on an error page
+        if (response.error == 'deleted' && $numberOfPages) { // non-zero $numberOfPages means we aren't already on an error page
           location.href = location.pathname
         }
         if (response.error.substr(0, 'redirect'.length) == 'redirect') {
@@ -213,14 +212,14 @@ function refresh() {
         return
       }
 
-      if (numberOfPages == 0 && response.numberOfPages) {
+      if ($numberOfPages == 0 && response.numberOfPages) {
         // We're on an error page and there's no more error (such as a topic that's no longer deleted)
         location.href = location.pathname
       }
 
       if ('newMessagesHTML' in response) {
         for (let element of stringToElements(response.newMessagesHTML)) {
-          if (messagesDeleted.indexOf(element.dataset.id) == -1) {
+          if ($messagesDeleted.indexOf(element.dataset.id) == -1) {
             qs('.messages-list').appendChild(element)
           }
           if (!element.dataset.mine) {
@@ -229,22 +228,22 @@ function refresh() {
         }
       }
 
-      for (let id in messagesChecksums) {
+      for (let id in $messagesChecksums) {
         if (!(id in response.messages)) {
           visuallyDeleteMessage(id)
         }
       }
 
       for (let id in response.messages) {
-        if (messagesDeleted.indexOf(id) > -1) {
+        if ($messagesDeleted.indexOf(id) > -1) {
           continue
         }
 
         let message = response.messages[id]
 
-        if (!(id in messagesChecksums)) {
+        if (!(id in $messagesChecksums)) {
           // New message
-          messagesChecksums[id] = message.checksum
+          $messagesChecksums[id] = message.checksum
 
           updateTopicPosition()
           continue
@@ -255,7 +254,7 @@ function refresh() {
         qs(`#m${id} .js-date`).innerHTML = message.date
         if ('content' in message) {
           qs(`#m${id}`).dataset.checksum = message.checksum
-          messagesChecksums[id] = message.checksum
+          $messagesChecksums[id] = message.checksum
 
           if (!qs(`#m${id} .js-content`).dataset.isBeingEdited) {
             qs(`#m${id} .js-content`).innerHTML = message.content
@@ -267,23 +266,23 @@ function refresh() {
         qsa('.pagination-topic__pages', (element) => {
           element.innerHTML = response.paginationHTML
         })
-        numberOfPages = response.numberOfPages
+        $numberOfPages = response.numberOfPages
         triggerTabAlertForNewPosts(true)
       }
     }
 
     if (!xhr.instantclickAbort) {
-      instantclick.setTimeout(refresh, refreshInterval)
+      instantclick.setTimeout(refresh, $refreshInterval)
     }
   })
 }
 
 function syncFavorites() {
-  ajax('syncFavorites', timeouts.syncFavorites)
+  ajax('syncFavorites', $timeouts.syncFavorites)
 }
 
 function getAjaxHashes() {
-  ajax('getAjaxHashes', timeouts.syncFavorites, {}, (status, response, xhr) => {
+  ajax('getAjaxHashes', $timeouts.syncFavorites, {}, (status, response, xhr) => {
     if (status == 200 && !response.error) {
       localStorage.hasAjaxHashes = '1'
       localStorage.removeItem('hasAjaxHash') // legacy
@@ -312,7 +311,7 @@ function makeFavoritesSlideable() {
 }
 
 function setSliderTopOffset() {
-  sliderTopOffset = qs('.js-favorites-forums').getBoundingClientRect().bottom + scrollY
+  $sliderTopOffset = qs('.js-favorites-forums').getBoundingClientRect().bottom + scrollY
 }
 
 function adjustSliderWidth() {
@@ -321,16 +320,16 @@ function adjustSliderWidth() {
 }
 
 function makeFavoritesSlide() {
-  if (sliderTopOffset > 0 && scrollY > sliderTopOffset) {
-    if (!isSliderSliding) {
+  if ($sliderTopOffset > 0 && scrollY > $sliderTopOffset) {
+    if (!$isSliderSliding) {
       qs('.js-slider').classList.add('sliding')
-      isSliderSliding = true
+      $isSliderSliding = true
     }
   }
   else {
-    if (isSliderSliding) {
+    if ($isSliderSliding) {
       qs('.js-slider').classList.remove('sliding')
-      isSliderSliding = false
+      $isSliderSliding = false
     }
   }
 }
@@ -354,7 +353,7 @@ function toggleMobileMenu() {
 function alignStickerPack(packElement) {
   let stickersCount = packElement.children.length
 
-  let stickersPerLine = Math.trunc(stickerPackWidth / stickerDemoWidth)
+  let stickersPerLine = Math.trunc($stickerPackWidth / $stickerDemoWidth)
     , stickersCountOnLastLine = stickersCount % stickersPerLine
 
   packElement.dataset.stickersCountOnLastLine = stickersCountOnLastLine
@@ -363,20 +362,20 @@ function alignStickerPack(packElement) {
     return
   }
 
-  let marginUsedOnFullLines = stickerPackWidth % stickerDemoWidth
+  let marginUsedOnFullLines = $stickerPackWidth % $stickerDemoWidth
     , marginUsedOnLastLine = stickersCountOnLastLine * (marginUsedOnFullLines / stickersPerLine)
 
-  let marginRight = stickerPackWidth - (stickersCountOnLastLine * stickerDemoWidth) - marginUsedOnLastLine
+  let marginRight = $stickerPackWidth - (stickersCountOnLastLine * $stickerDemoWidth) - marginUsedOnLastLine
   packElement.lastElementChild.style.marginRight = `${marginRight}px`
 }
 
 function alignAllStickerPacks() {
   let newStickerPackWidth = qs('.stickers-pack').getBoundingClientRect().width
-  if (newStickerPackWidth == stickerPackWidth) {
+  if (newStickerPackWidth == $stickerPackWidth) {
     return
   }
-  stickerPackWidth = newStickerPackWidth
-  stickerDemoWidth = qs('.stickers-pack__sticker').getBoundingClientRect().width
+  $stickerPackWidth = newStickerPackWidth
+  $stickerDemoWidth = qs('.stickers-pack__sticker').getBoundingClientRect().width
   qsa('.stickers-pack', alignStickerPack)
 }
 
@@ -386,8 +385,8 @@ function noteStickerAndGoBack(event) {
 }
 
 function setUpStickers() {
-  stickerPackWidth = undefined
-  selectedHeadPackId = 0
+  $stickerPackWidth = undefined
+  $selectedHeadPackId = 0
   instantclick.addPageEvent('resize', alignAllStickerPacks)
   alignAllStickerPacks()
   qs('.stickers-heads-container').scrollTop = 9999
@@ -408,14 +407,14 @@ function selectHead() {
       packId = parseInt(element.dataset.packId)
     }
   })
-  if (packId == selectedHeadPackId) {
+  if (packId == $selectedHeadPackId) {
     return
   }
-  if (selectedHeadPackId) {
-    qs(`.js-stickers-head-${selectedHeadPackId}`).classList.remove('stickers-heads__head--selected')
+  if ($selectedHeadPackId) {
+    qs(`.js-stickers-head-${$selectedHeadPackId}`).classList.remove('stickers-heads__head--selected')
   }
   qs(`.js-stickers-head-${packId}`).classList.add('stickers-heads__head--selected')
-  selectedHeadPackId = packId
+  $selectedHeadPackId = packId
 }
 
 function stickerHeadOnClick(event) {
@@ -433,7 +432,7 @@ function insertStickerIntoMessage() {
     return
   }
   let insertionPoint = textarea.selectionEnd
-  if (isIOS) {
+  if ($isIOS) {
     /* iOS doesn't want to focus the form, so selectionEnd isn't updated.
      * We get around this by stupidly adding the sticker at the end.
      */
@@ -609,7 +608,7 @@ function showEditForm(eventOrMessageId) {
       elementEdited = elementEdited.parentNode
     }
     let idEdited = elementEdited.dataset.id
-    qs(`#m${idEdited} .js-content`).innerHTML = savedMessageContentBeforeEditing
+    qs(`#m${idEdited} .js-content`).innerHTML = $savedMessageContentBeforeEditing
 
     if (id == idEdited) {
       return
@@ -619,7 +618,7 @@ function showEditForm(eventOrMessageId) {
   let html = qs(`#m${id} .message__content-text`).innerHTML.trim()
     , text = html2jvcode(html)
 
-  savedMessageContentBeforeEditing = qs(`#m${id} .js-content`).innerHTML
+  $savedMessageContentBeforeEditing = qs(`#m${id} .js-content`).innerHTML
   qs(`#m${id} .js-content`).innerHTML = qs('.js-form-edit-template').innerHTML
   qs(`#m${id} .js-content`).dataset.isBeingEdited = true
 
@@ -648,13 +647,13 @@ function submitEdit(event) {
   }
   let messageId = element.dataset.id
 
-  ajax('editMessage', timeouts.postMessage, {
+  ajax('editMessage', $timeouts.postMessage, {
     messageId,
     message,
-    forumId,
-    topicMode,
-    topicIdLegacyOrModern,
-    topicSlug,
+    forumId: $forumId,
+    topicMode: $topicMode,
+    topicIdLegacyOrModern: $topicIdLegacyOrModern,
+    topicSlug: $topicSlug,
   }, (status, response, xhr) => {
     qs('.js-form-edit__button-visible').classList.remove('form__post-button-visible--sending')
 
@@ -675,28 +674,28 @@ function submitEdit(event) {
     qs(`#m${messageId} .js-content`).innerHTML = response.content
 
     qs(`#m${messageId}`).dataset.checksum = response.checksum
-    messagesChecksums[messageId] = response.checksum
+    $messagesChecksums[messageId] = response.checksum
   })
 }
 
 function showToast(message, durationInSeconds = 2.5) {
-  instantclick.clearTimeout(toastTimer)
+  instantclick.clearTimeout($toastTimer)
   $('.toast').addClass('toast--shown')
   $('.toast__label').text(message)
-  toastTimer = instantclick.setTimeout(hideToast, durationInSeconds * 1000)
+  $toastTimer = instantclick.setTimeout(hideToast, durationInSeconds * 1000)
 }
 
 function hideToast() {
   $('.toast').removeClass('toast--shown')
-  toastTimer = instantclick.setTimeout(function() {
+  $toastTimer = instantclick.setTimeout(function() {
     $('.toast__label').text(' ')
   }, 150)
 }
 
 function visuallyDeleteMessage(id) {
-  messagesDeleted.push(id)
+  $messagesDeleted.push(id)
   qs(`#m${id}`).classList.add('message--being-deleted')
-  delete messagesChecksums[id]
+  delete $messagesChecksums[id]
   setTimeout((id) => {
     qs(`#m${id}`).remove()
   }, 200, id)
@@ -713,7 +712,7 @@ function confirmDeleteMessage(event) {
   let id = element.dataset.id
   visuallyDeleteMessage(id)
 
-  ajax('deleteMessage', timeouts.postMessage, {
+  ajax('deleteMessage', $timeouts.postMessage, {
     messageId: id,
   }, (status, response, xhr) => {
     if (status != 200) {
@@ -744,15 +743,15 @@ function updateTopicPosition() {
   if (!lastMessage) { // Deleted topic
     return
   }
-  ajax('topicPosition', timeouts.topicPosition, {
+  ajax('topicPosition', $timeouts.topicPosition, {
     topicIdModern,
     messageId: lastMessage.dataset.id,
-    answersCount: (topicPage - 1) * 20 + document.querySelectorAll('.message').length - 1,
+    answersCount: ($topicPage - 1) * 20 + document.querySelectorAll('.message').length - 1,
   })
 }
 
 function saveDraftForum() {
-  let draftId = `draft_${forumId}`
+  let draftId = `draft_${$forumId}`
     , value = qs('.js-form-post__title').value + '__jvforum_draft_delimiter__' + qs('.js-form-post__textarea').value
 
   if (value == '__jvforum_draft_delimiter__') {
@@ -762,11 +761,11 @@ function saveDraftForum() {
 
   localStorage[draftId] = value
   qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
-  previousPageDraftIdMentioned = draftId
+  $previousPageDraftIdMentioned = draftId
 }
 
 function saveDraftTopic() {
-  let draftId = `draft_${topicIdModern}`
+  let draftId = `draft_${$topicIdModern}`
     , value = qs('.js-form-post__textarea').value
 
   if (!value) {
@@ -776,7 +775,7 @@ function saveDraftTopic() {
 
   localStorage[draftId] = value
   qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
-  previousPageDraftIdMentioned = draftId
+  $previousPageDraftIdMentioned = draftId
 }
 
 function saveDraft() {
@@ -790,11 +789,11 @@ function saveDraft() {
 
 function showDraft() {
   if (!qs('.js-form-post')) {
-    previousPageDraftIdMentioned = null
+    $previousPageDraftIdMentioned = null
     return
   }
   let hasTitle = qs('.js-form-post__title')
-    , draftId = `draft_${hasTitle ? forumId : topicIdModern}`
+    , draftId = `draft_${hasTitle ? $forumId : $topicIdModern}`
     , value = localStorage[draftId]
   if (!value) {
     return
@@ -807,7 +806,7 @@ function showDraft() {
   else {
     qs('.js-form-post__textarea').value = value
   }
-  if (draftId != previousPageDraftIdMentioned) {
+  if (draftId != $previousPageDraftIdMentioned) {
     qs('.js-form-post__draft-mention').classList.add('form__draft-mention--visible')
     qs('.js-form-post__draft-mention-action').addEventListener('click', () => {
       if (hasTitle) {
@@ -822,48 +821,48 @@ function showDraft() {
         saveDraftTopic()
       }
       qs('.js-form-post__draft-mention').classList.remove('form__draft-mention--visible')
-      previousPageDraftIdMentioned = draftId
+      $previousPageDraftIdMentioned = draftId
     })
   }
 }
 
 function handleVisibilityState() {
-  pageVisible = document.visibilityState == 'visible'
-  if (pageVisible) {
+  $isPageVisible = document.visibilityState == 'visible'
+  if ($isPageVisible) {
     removeTabAlertForNewPosts()
   }
 }
 
 function triggerTabAlertForNewPosts(hasNewPage) {
-  if (pageVisible) {
+  if ($isPageVisible) {
     return
   }
   if (hasNewPage) {
-    if (unviewedNewMessagesCount < 100000) {
-      unviewedNewMessagesCount += 100000
+    if ($unviewedNewMessagesCount < 100000) {
+      $unviewedNewMessagesCount += 100000
     }
   }
   else {
-    unviewedNewMessagesCount++
+    $unviewedNewMessagesCount++
   }
-  let newMessagesOnPage = unviewedNewMessagesCount % 100000
-    , titleInfo = '(' + (newMessagesOnPage > 0 ? newMessagesOnPage : '') + (unviewedNewMessagesCount >= 100000 ? '+' : '') + ')'
-  document.title = `${titleInfo} ${originalTabTitle}`
+  let newMessagesOnPage = $unviewedNewMessagesCount % 100000
+    , titleInfo = '(' + (newMessagesOnPage > 0 ? newMessagesOnPage : '') + ($unviewedNewMessagesCount >= 100000 ? '+' : '') + ')'
+  document.title = `${titleInfo} ${$originalTabTitle}`
 }
 
 function removeTabAlertForNewPosts() {
-  if (unviewedNewMessagesCount) {
-    document.title = originalTabTitle
-    unviewedNewMessagesCount = 0
+  if ($unviewedNewMessagesCount) {
+    document.title = $originalTabTitle
+    $unviewedNewMessagesCount = 0
   }
 }
 
 function toggleFavorite(event) {
-  let id = topicIdModern ? topicIdModern : forumId
+  let id = $topicIdModern ? $topicIdModern : $forumId
     , action = this.dataset.action
     , formData = {}
   formData[action] = id
-  ajax('favorite', timeouts.syncFavorites, formData, (status, response, xhr) => {
+  ajax('favorite', $timeouts.syncFavorites, formData, (status, response, xhr) => {
     if (status != 200) {
       showToast('Problème réseau lors ' + (action == 'add' ? 'de l’ajout au' : 'du retrait des') + ' favoris.')
       return
@@ -882,7 +881,7 @@ function showFavoriteToggleConfirmation() {
   if (!action) {
     return
   }
-  showToast((topicIdModern ? 'Topic' : 'Forum') + ' ' + (action == 'add' ? 'ajouté aux' : 'retiré des') + ' favoris.')
+  showToast(($topicIdModern ? 'Topic' : 'Forum') + ' ' + (action == 'add' ? 'ajouté aux' : 'retiré des') + ' favoris.')
   localStorage.removeItem('toggledFavoriteAction')
 }
 
@@ -931,7 +930,7 @@ instantclick.on('change', function() {
 
   updateTopicPosition()
 
-  originalTabTitle = document.title
+  $originalTabTitle = document.title
 
   showFavoriteToggleConfirmation()
 
@@ -948,12 +947,12 @@ instantclick.on('restore', function () {
   insertStickerIntoMessage()
 })
 
-if (googleAnalyticsId) {
+if ($googleAnalyticsId) {
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', googleAnalyticsId, 'auto');
+  ga('create', $googleAnalyticsId, 'auto');
 
   instantclick.on('change', function() {
     ga('set', 'dimension1', 'Member')

@@ -2,13 +2,13 @@
 <div class="stage"></div>
 
 <script>
-var googleAnalyticsId = '{{=it.googleAnalyticsId}}';
-var timeouts = {
+var $googleAnalyticsId = '{{=it.googleAnalyticsId}}';
+var $timeouts = {
  {{ for (let name in it.timeouts) { }}
   {{=name}}: {{=it.timeouts[name]}},
 {{ } }}
  };
-var refreshIntervals = {
+var $refreshIntervals = {
  {{ for (let name in it.refreshIntervals) { }}
   {{=name}}: {{=it.refreshIntervals[name]}},
 {{ } }}
