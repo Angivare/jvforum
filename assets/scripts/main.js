@@ -82,6 +82,7 @@ function toggleSpoil(event) {
   if (event.target.matches('a, .sticker, .noelshack-link__thumb, .emoji')) {
     return
   }
+  event.stopPropagation()
   this.classList.toggle('spoil--revealed')
 }
 
