@@ -1,10 +1,14 @@
 let http = require('http')
+  , https = require('https')
   , querystring = require('querystring')
   , fs = require('fs')
   , config = require('../config')
 
 http.globalAgent.keepAlive = true
 http.globalAgent.maxSockets = config.maxSimultaneousRequests
+
+https.globalAgent.keepAlive = true
+https.globalAgent.maxSockets = config.maxSimultaneousRequestsHTTPS
 
 function fetch(pathOrOptions, successCallback, failCallback) {
   let path = pathOrOptions
@@ -16,9 +20,14 @@ function fetch(pathOrOptions, successCallback, failCallback) {
         },
       }
     , postData
+    , secure = false
 
   if (typeof pathOrOptions == 'object') {
     requestOptions.path = pathOrOptions.path
+
+    if (pathOrOptions.secure) {
+      secure = pathOrOptions.secure
+    }
 
     if (pathOrOptions.cookies) {
       requestOptions.headers['Cookie'] = pathOrOptions.cookies
@@ -48,7 +57,7 @@ function fetch(pathOrOptions, successCallback, failCallback) {
     requestOptions.path = pathOrOptions
   }
 
-  let request = http.request(requestOptions, (res) => {
+  let request = (secure ? https : http).request(requestOptions, (res) => {
     let bodyBuffer = Buffer.alloc(0)
     res.on('data', (chunk) => {
       bodyBuffer = Buffer.concat([bodyBuffer, chunk])

@@ -7,6 +7,7 @@ let config = {
     database: 'jvforum',
   },
   maxSimultaneousRequests: 30,
+  maxSimultaneousRequestsHTTPS: 5,
   googleAnalyticsId: '',
 
   /* ------------------------ */

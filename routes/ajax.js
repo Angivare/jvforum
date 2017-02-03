@@ -41,6 +41,7 @@ router.post('/login', (req, res, next) => {
 
   fetch({
     path: '/login',
+    secure: true,
     ipAddress,
   }, (headers, body) => {
     let form = parse.form(body)
@@ -52,6 +53,7 @@ router.post('/login', (req, res, next) => {
       let cookie = headers['set-cookie'][0].split(';')[0] // dlrowolleh
       fetch({
         path: '/login',
+        secure: true,
         ipAddress,
         cookies: cookie,
         postData: form,
