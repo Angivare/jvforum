@@ -31,4 +31,4 @@ npm-debug.log
 
 config/development.js
 config/production.js
-assets/stickers
+#assets/stickers
