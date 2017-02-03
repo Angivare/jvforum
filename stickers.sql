@@ -312,3 +312,4 @@ INSERT INTO stickers VALUES(241, '1rzs', 6, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(242, '1rzt', 6, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(243, '1rzu', 6, 140, 140, 560, 560);
 INSERT INTO stickers VALUES(244, '1rzv', 6, 140, 140, 560, 560);
+INSERT INTO stickers VALUES(245, '1ptd', 19, 140, 140, 560, 560);
