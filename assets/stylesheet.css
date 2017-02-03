@@ -1384,7 +1384,7 @@ color: hsl(240, 8%, 27%);
 /* 2017 */
 
 :root {
-  --background: hsl(0, 0%, 0%);
+  --background: hsl(0, 0%, 2%);
   --color: hsl(240, 8%, 87%);
   --link-color: hsl(182, 25%, 50%);
   --link--visited-color: hsl(0, 0%, 57%);
