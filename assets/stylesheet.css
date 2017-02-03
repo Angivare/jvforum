@@ -1939,7 +1939,7 @@ a {
 
 @media (min-width: 1025px) {
   .stickers-list {
-    ---stickers-list-side-padding: 0;
+    ---stickers-list-side-padding: 0px;
   }
 }
 
