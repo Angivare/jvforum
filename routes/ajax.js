@@ -756,7 +756,7 @@ function updateFavorites(r, req, res, userId, errorMessage) {
       $('.line-ellipsis[data-id]', '#liste-forums-preferes').each((index, element) => {
         let name = $('.lien-jv', element).text().trim()
           , id = $(element).data('id')
-          , slug = $('.lien-jv', element).attr('href').substr(`//www.jeuxvideo.com/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
+          , slug = $('.lien-jv', element).attr('href').substr(`/forums/0-${id}-0-1-0-1-0-`.length).split('.')[0]
         forums.push([`/${id}-${slug}`, name])
       })
       forums = JSON.stringify(forums)
