@@ -1787,7 +1787,7 @@ a {
   ---size: 20px;
   width: var(---size);
   height: var(---size);
-  vertical-align: sub;
+  vertical-align: bottom;
   cursor: pointer;
 }
 
