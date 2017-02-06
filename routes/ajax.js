@@ -27,6 +27,8 @@ router.post('/login', (req, res, next) => {
     }
     , ipAddress = req.ip
 
+  return res.json({error: 'Impossible de se connecter pour le moment'})
+
   let missingParams = false
   ;['nickname', 'password', 'captcha'].forEach((varName) => {
     if (!(varName in req.body)) {
