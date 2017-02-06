@@ -42,6 +42,7 @@ router.post('/login', (req, res, next) => {
   let {nickname, password, captcha} = req.body
 
   if (tooManyLoginsTimestamp) {
+    utils.logLogin(nickname, `tooManyLogins ${config.tooManyLoginsDelay}`)
     return res.json({error: `Trop de connexions depuis JVForum pour JVC en ce moment. Retentez dans ${Math.round((config.tooManyLoginsDelay * 1000 + tooManyLoginsTimestamp - +new Date) / 1000)} secondes.`})
   }
 
