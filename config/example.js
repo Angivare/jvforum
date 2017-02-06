@@ -8,6 +8,7 @@ let config = {
   },
   maxSimultaneousRequests: 30,
   maxSimultaneousRequestsHTTPS: 5,
+  tooManyLoginsDelay: 60,
   googleAnalyticsId: '',
 
   /* ------------------------ */
