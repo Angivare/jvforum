@@ -41,6 +41,19 @@ router.post('/login', (req, res, next) => {
 
   let {nickname, password, captcha} = req.body
 
+  if (!nickname) {
+    utils.logLogin(nickname, 'empty nickname')
+    return res.json({error: `Veuillez entrer votre pseudo.`})
+  }
+  if (!password) {
+    utils.logLogin(nickname, 'empty password')
+    return res.json({error: `Vous avez oublié de saisir votre mot de passe.`})
+  }
+  if (!captcha) {
+    utils.logLogin(nickname, 'empty captcha')
+    return res.json({error: `Veuillez satisfaire le captcha.`})
+  }
+
   if (tooManyLoginsTimestamp) {
     utils.logLogin(nickname, `tooManyLogins ${config.tooManyLoginsDelay}`)
     return res.json({error: `Trop de connexions depuis JVForum pour JVC en ce moment. Retentez dans ${Math.round((config.tooManyLoginsDelay * 1000 + tooManyLoginsTimestamp - +new Date) / 1000)} secondes.`})
