@@ -21,6 +21,8 @@ router.post('/*', (req, res, next) => {
   next()
 })
 
+let tooManyLogins = false
+
 router.post('/login', (req, res, next) => {
   let r = {
       error: false,
@@ -40,6 +42,10 @@ router.post('/login', (req, res, next) => {
   }
 
   let {nickname, password, captcha} = req.body
+
+  if (tooManyLogins) {
+    return res.json({error: `Trop de connexions depuis JVForum pour JVC en ce moment. Retentez dans ${60 - Math.round(tooManyLogins - +new Date)} secondes.`})
+  }
 
   fetch({
     path: '/login',
@@ -92,6 +98,15 @@ router.post('/login', (req, res, next) => {
         else {
           if (matches = /<div class="bloc-erreur">([^<]+)<\/div>/.exec(body)) {
             r.error = 'Erreur lors de la connexion : ' + matches[1]
+            if (matches[1] == 'Votre tentative de connexion a été refusée, merci de retenter dans quelques instants.') {
+              r.error = `Trop de connexions depuis JVForum pour JVC en ce moment. Veuillez retenter dans une minute.`
+              if (!tooManyLogins) {
+                tooManyLogins = +new Date
+                setTimeout(() => {
+                  tooManyLogins = false
+                }, 60000)
+              }
+            }
             utils.logLogin(nickname, `jvc ${matches[1]}`)
           }
           else {
