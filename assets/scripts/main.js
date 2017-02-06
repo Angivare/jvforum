@@ -285,8 +285,7 @@ function syncFavorites() {
 function getAjaxHashes() {
   ajax('getAjaxHashes', $timeouts.syncFavorites, {}, (status, response, xhr) => {
     if (status == 200 && !response.error) {
-      localStorage.hasAjaxHashes = '1'
-      localStorage.removeItem('hasAjaxHash') // legacy
+      localStorage.hasAjaxHashes = +new Date
     }
   })
 }
@@ -912,7 +911,7 @@ instantclick.addEvent('body', 'touchstart', setAsHavingTouch)
 document.addEventListener('visibilitychange', handleVisibilityState)
 handleVisibilityState()
 
-if (!('hasAjaxHashes' in localStorage)) {
+if (!localStorage.hasAjaxHashes || localStorage.hasAjaxHashes.length == 1) {
   getAjaxHashes()
 }
 
