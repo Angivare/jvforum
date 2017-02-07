@@ -2216,7 +2216,7 @@ a {
   transition: transform .2s;
 }
 
-.message--being-deleted {
+.message--animating-its-deletion {
   filter: grayscale(1) blur(1px);
   transform: scaleY(0);
   opacity: .75;

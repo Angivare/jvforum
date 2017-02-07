@@ -1,6 +1,5 @@
 let $hasTouch = false
   , $lastRefreshTimestamp = 0
-  , $messagesChecksums
   , $messagesDeleted = []
   , $refreshInterval
   , $isSliderSliding = false
@@ -159,11 +158,6 @@ function startRefreshCycle() {
     lastMessageAge = parseInt(lastMessageElement.dataset.age)
   }
 
-  $messagesChecksums = {}
-  qsa('.message', (element) => {
-    $messagesChecksums[element.id.substr(1)] = element.dataset.checksum
-  })
-
   let isLastPage = false
   qs('.pagination-topic--bottom .pagination-topic__page:last-child .pagination-topic__page-link', (element) => {
     isLastPage = element.classList.contains('pagination-topic__page-link--active')
@@ -189,6 +183,14 @@ function restartRefreshIfNeeded() {
   }
 }
 
+function getMessagesChecksums() {
+  let messagesChecksums = {}
+  qsa('.message', (element) => {
+    messagesChecksums[element.id.substr(1)] = element.dataset.checksum
+  })
+  return messagesChecksums
+}
+
 function refresh() {
   $lastRefreshTimestamp = +new Date
 
@@ -199,7 +201,7 @@ function refresh() {
     topicSlug: $topicSlug,
     topicPage: $topicPage,
     numberOfPages: $numberOfPages,
-    messagesChecksums: $messagesChecksums,
+    messagesChecksums: getMessagesChecksums(),
   }, (status, response, xhr) => {
     if (status == 200) {
       if (response.error) {
@@ -218,18 +220,7 @@ function refresh() {
         location.href = location.pathname
       }
 
-      if ('newMessagesHTML' in response) {
-        for (let element of stringToElements(response.newMessagesHTML)) {
-          if ($messagesDeleted.indexOf(element.dataset.id) == -1) {
-            qs('.messages-list').appendChild(element)
-          }
-          if (!element.dataset.mine) {
-            triggerTabAlertForNewPosts()
-          }
-        }
-      }
-
-      for (let id in $messagesChecksums) {
+      for (let id in getMessagesChecksums()) {
         if (!(id in response.messages)) {
           visuallyDeleteMessage(id)
         }
@@ -241,26 +232,34 @@ function refresh() {
         }
 
         let message = response.messages[id]
+          , messageElement = qs(`#m${id}`)
 
-        if (!(id in $messagesChecksums)) {
-          // New message
-          $messagesChecksums[id] = message.checksum
-
-          updateTopicPosition()
+        if (!messageElement) { // New message
           continue
         }
 
         // Update
-        qs(`#m${id}`).dataset.age = message.age
+        messageElement.dataset.age = message.age
         qs(`#m${id} .js-date`).innerHTML = message.date
         if ('content' in message) {
-          qs(`#m${id}`).dataset.checksum = message.checksum
-          $messagesChecksums[id] = message.checksum
+          messageElement.dataset.checksum = message.checksum
 
           if (!qs(`#m${id} .js-content`).dataset.isBeingEdited) {
             qs(`#m${id} .js-content`).innerHTML = message.content
           }
         }
+      }
+
+      if ('newMessagesHTML' in response) {
+        for (let element of stringToElements(response.newMessagesHTML)) {
+          if ($messagesDeleted.indexOf(element.dataset.id) == -1) {
+            qs('.messages-list').appendChild(element)
+          }
+          if (!element.dataset.mine) {
+            triggerTabAlertForNewPosts()
+          }
+        }
+        updateTopicPosition()
       }
 
       if ('paginationHTML' in response) {
@@ -674,7 +673,6 @@ function submitEdit(event) {
     qs(`#m${messageId} .js-content`).innerHTML = response.content
 
     qs(`#m${messageId}`).dataset.checksum = response.checksum
-    $messagesChecksums[messageId] = response.checksum
   })
 }
 
@@ -694,8 +692,7 @@ function hideToast() {
 
 function visuallyDeleteMessage(id) {
   $messagesDeleted.push(id)
-  qs(`#m${id}`).classList.add('message--being-deleted')
-  delete $messagesChecksums[id]
+  qs(`#m${id}`).classList.add('message--animating-its-deletion')
   setTimeout((id) => {
     qs(`#m${id}`).remove()
   }, 200, id)
@@ -938,9 +935,10 @@ instantclick.on('change', function() {
     qs('.forum-search__input').focus()
   }
 
+  startRefreshCycle()
+
   /* Below: same as in 'restore' */
   insertStickerIntoMessage()
-  startRefreshCycle()
 })
 
 instantclick.on('restore', function () {
