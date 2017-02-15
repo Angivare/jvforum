@@ -206,10 +206,12 @@ function refresh() {
     if (status == 200) {
       if (response.error) {
         if (response.error == 'deleted' && $numberOfPages) { // non-zero $numberOfPages means we aren't already on an error page
+          console.log('undeleted')
           location.href = location.pathname
         }
         if (response.error.substr(0, 'redirect'.length) == 'redirect') {
           redirectTo = response.error.split('=')[1]
+          console.log(`redirectTo ${redirectTo}`)
           location.href = redirectTo
         }
         return
@@ -217,6 +219,7 @@ function refresh() {
 
       if ($numberOfPages == 0 && response.numberOfPages) {
         // We're on an error page and there's no more error (such as a topic that's no longer deleted)
+        console.log(`numberOfPages ${response.numberOfPages}`)
         location.href = location.pathname
       }
 
