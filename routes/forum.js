@@ -114,7 +114,7 @@ router.get('/:id([0-9]+)(-:slug([0-9a-z-]+))?(/:page([0-9]+))?', (req, res, next
     }
 
     let cacheId = `${id}/${page}`
-    cache.get(cacheId, config.timeouts.cache.forumDisplay, (data, age) => {
+    cache.get(cacheId, config.ludicrous && page == 1 ? 0 : config.timeouts.cache.forumDisplay, (data, age) => {
       let {topics, hasNextPage} = data
       for (let i = 0; i < topics.length; i++) {
         topics[i].date = date.convertTopicList(topics[i].dateRaw)

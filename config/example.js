@@ -10,6 +10,7 @@ let config = {
   maxSimultaneousRequestsHTTPS: 5,
   tooManyLoginsDelay: 60,
   googleAnalyticsId: '',
+  ludicrous: false,
 
   /* ------------------------ */
 

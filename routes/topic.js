@@ -60,7 +60,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
         serveTopic(null, 'deleted')
         return
       }
-      cache.get(cacheId, config.timeouts.topicDisplay, (messages, age) => {
+      cache.get(cacheId, config.ludicrous ? 0 : config.timeouts.topicDisplay, (messages, age) => {
         content.messages = messages
         utils.addIsMineVariable(content.messages, user.nickname)
         viewLocals.cacheAge = age
