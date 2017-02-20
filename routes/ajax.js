@@ -713,7 +713,12 @@ router.post('/refresh', (req, res, next) => {
       function sendJSONAfterRenderings() {
         renderings++
         if (numberOfPages == 0) {
-          res.json(data)
+          try {
+            res.json(data)
+          }
+          catch (e) {
+            console.error(`sendJSONAfterRenderings twice /${forumId}/${topicMode + topicIdLegacyOrModern}-${topicSlug}/${topicPage} ${renderings} ${numberOfPages} ${content.numberOfPages} ${newMessages.length} ${new Date}`)
+          }
         }
         if (numberOfPages != content.numberOfPages && newMessages.length) {
           if (renderings == 2) {
