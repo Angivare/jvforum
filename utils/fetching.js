@@ -33,6 +33,12 @@ function fetch(pathOrOptions, successCallback, failCallback) {
       requestOptions.headers['Cookie'] = pathOrOptions.cookies
     }
 
+    if (pathOrOptions.headers) {
+      for (let i in pathOrOptions.headers) {
+        requestOptions.headers[i] = pathOrOptions.headers[i]
+      }
+    }
+
     if (pathOrOptions.ipAddress) {
       requestOptions.headers['X-Forwarded-For'] = pathOrOptions.ipAddress
     }
