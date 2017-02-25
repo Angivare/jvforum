@@ -94,7 +94,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   content = content.replace(/<a class="noelshack-link" href="(?:https:\/\/www\.noelshack\.com\/([0-9]+)-([0-9]+)-([^"]+))" target="_blank" title="[^"]+">/g, '<a class="noelshack-link" href="https://image.noelshack.com/fichiers/$1/$2/$3" target="_blank" title="https://image.noelshack.com/fichiers/$1/$2/$3">')
 
   // Correct thumbnails for PSD and SWF on NoelShack
-  content = content.replace(/(<a class="noelshack-link" href="[^"]+\.(swf|psd)"[^<]+>)<img class="noelshack-link__thumb" src="[^"]+"/g, '$1<img class="noelshack-link__thumb" src="https://www.noelshack.com/pics/mini_$2.png"')
+  content = content.replace(/(<a class="noelshack-link" href="[^"]+\.swf"[^<]+>)<img class="noelshack-link__thumb" src="[^"]+"/g, '$1<img class="noelshack-link__thumb" src="/assets/images/noelshack_swf_thumbnail.png"')
 
   // Spoils
   content = content.replace(/<span class="bloc-spoil-jv en-ligne">.+?<span class="contenu-spoil">/g, '<span class="spoil spoil--inline"><span class="spoil__content">')
