@@ -77,8 +77,7 @@
   display: table;
   margin: 0 0 12px 15px;
   width: 100%;
-  width: -webkit-calc(100% - 15px);
-  width:         calc(100% - 15px);
+  width: calc(100% - 15px);
 }
 
 .aside__top-button {
@@ -123,8 +122,7 @@
   position: fixed;
   top: 15px;
   max-height: 90%;
-  max-height: -webkit-calc(100% - 30px);
-  max-height:         calc(100% - 30px);
+  max-height: calc(100% - 30px);
   overflow-y: auto;
 }
 
@@ -340,8 +338,7 @@
   display: table;
   margin: 1em 10px;
   width: 100%;
-  width: -webkit-calc(100% - 20px);
-  width:         calc(100% - 20px);
+  width: calc(100% - 20px);
 }
 
 @media (min-width: 1025px) {
@@ -394,7 +391,6 @@
 }
 
 .pagination-topic__page + .pagination-topic__page {
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
   padding-left: 2px;
 }
@@ -449,8 +445,7 @@
   box-shadow: 0 2px 8px hsla(0, 0%, 0%, .5),
               inset 0 1px 0 hsl(0, 0%, 100%);
   background: hsl(0, 0%, 75%);
-  background-image: -webkit-linear-gradient(hsl(0, 0%, 90%), hsl(0, 0%, 80%) 50%, hsl(0, 0%, 70%) 50%, hsl(0, 0%, 60%) 100%);
-  background-image:         linear-gradient(hsl(0, 0%, 86%), hsl(0, 0%, 76%) 50%, hsl(0, 0%, 70%) 50%, hsl(0, 0%, 60%) 100%);
+  background-image: linear-gradient(hsl(0, 0%, 86%), hsl(0, 0%, 76%) 50%, hsl(0, 0%, 70%) 50%, hsl(0, 0%, 60%) 100%);
 }
 
 .fab-post__icon {
@@ -743,33 +738,27 @@
 
 @media (MAX-width: 1024px) {
   .message {
-    -webkit-transition: -webkit-transform .07s ease-out;
-            transition: transform .07s ease-out, -webkit-transform .07s ease-out;
+    transition: transform .07s ease-out;
   }
 
   .message--nb-actions-3 {
-    -webkit-transition: -webkit-transform .15s ease-out;
-            transition: transform .15s ease-out, -webkit-transform .15s ease-out;
+    transition: transform .15s ease-out;
   }
 
   .message--nb-actions-4 {
-    -webkit-transition: -webkit-transform .2s ease-out;
-            transition: transform .2s ease-out, -webkit-transform .2s ease-out;
+    transition: transform .2s ease-out;
   }
 
   .message--menu-opened {
-    -webkit-transform: translateX(-62px);
-            transform: translateX(-62px);
+    transform: translateX(-62px);
   }
 
   .message--menu-opened.message--nb-actions-3 {
-    -webkit-transform: translateX(-182px);
-            transform: translateX(-182px);
+    transform: translateX(-182px);
   }
 
   .message--menu-opened.message--nb-actions-4 {
-    -webkit-transform: translateX(-242px);
-            transform: translateX(-242px);
+    transform: translateX(-242px);
   }
 
   .message__actions {
@@ -779,18 +768,15 @@
 
 @media (MAX-width: 399px) {
   .message--menu-opened {
-    -webkit-transform: translateX(-60px);
-            transform: translateX(-60px);
+    transform: translateX(-60px);
   }
 
   .message--menu-opened.message--nb-actions-3 {
-    -webkit-transform: translateX(-180px);
-            transform: translateX(-180px);
+    transform: translateX(-180px);
   }
 
   .message--menu-opened.message--nb-actions-4 {
-    -webkit-transform: translateX(-240px);
-            transform: translateX(-240px);
+    transform: translateX(-240px);
   }
 }
 
@@ -840,14 +826,12 @@
   background-repeat: no-repeat;
   color: var(--message-action-color);
   cursor: pointer;
-  -webkit-transition: -webkit-transform .075s ease-out;
-          transition: transform .075s ease-out, -webkit-transform .075s ease-out;
+  transition: transform .075s ease-out;
   box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--message-action-light));
 }
 
 .message__actions-action:active {
-    -webkit-transform: scale(.85);
-            transform: scale(.85);
+  transform: scale(.85);
 }
 
 .message__actions-action--quote {
@@ -1366,7 +1350,7 @@ a {
   ---size: 140px;
 }
 
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (MAX-width: 1024px) {
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx), (MAX-width: 1024px) {
   .sticker {
     ---size: 70px;
   }
@@ -1393,9 +1377,8 @@ a {
 
 @media (-webkit-min-device-pixel-ratio: 2) {
   .smiley {
-    -ms-interpolation-mode: nearest-neighbor;
-    -webkit-image-rendering: crisp-edges;
-    image-rendering: pixelated;
+    -moz-image-rendering: crisp-edges;
+         image-rendering: pixelated;
   }
 }
 
@@ -1761,9 +1744,6 @@ a {
 }
 
 .form__input::-webkit-placeholder {
-  color: var(--form-input-placeholder-color);
-}
-.form__input::-moz-placeholder { /* To remove when Firefox 51 or 52 (ESR) ships */
   color: var(--form-input-placeholder-color);
 }
 .form__input::placeholder {
