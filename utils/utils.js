@@ -54,7 +54,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
     let url = matches.slice(1).join('').replace(/\$/g, '$$$$')
       , replace = `<a href="${url}" target="_blank" title="${url}">${url}</a>`
     content = content.replace(matches[0], replace)
-    regex.lastIndex = regex.lastIndex - matches[0].length + replace.length
+    regex.lastIndex += -matches[0].length + replace.length
   }
 
   // Non-JvCare links unshortening
