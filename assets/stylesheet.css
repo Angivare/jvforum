@@ -433,7 +433,6 @@
   letter-spacing: .5px;
   font-weight: bold;
   text-transform: uppercase;
-  -webkit-tap-highlight-color: transparent;
   outline: none;
   color: white;
   cursor: pointer;
@@ -493,7 +492,6 @@
 .message {
   margin: 0 8px 12px;
   position: relative;
-  -webkit-tap-highlight-color: transparent;
 }
 
 @media (min-width: 1025px) {
@@ -1091,6 +1089,7 @@ body {
   margin: 0;
   overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
   background: var(--background);
   font: 14px/1.4 -apple-system, sans-serif;
   color: var(--color);
@@ -1220,7 +1219,6 @@ a {
   top: 0;
   right: -10px;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 @media (min-width: 1025px) {
@@ -1494,7 +1492,6 @@ a {
   border-top-color: var(--stickers-heads-selected-border-top-color);
   background: var(--stickers-head-selected-background);
   box-shadow: var(--stickers-head-selected-shadow);
-  -webkit-tap-highlight-color: transparent;
 }
 
 .stickers-heads__head-image {
@@ -1740,7 +1737,6 @@ a {
   border: none;
   width: calc(var(---side-width) + var(---padding));
   background: transparent;
-  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
   outline: none;
   -webkit-appearance: none;
@@ -1955,7 +1951,6 @@ a {
   display: inline-block;
   margin: -6px;
   padding: 6px;
-  -webkit-tap-highlight-color: transparent;
   outline: none;
   -webkit-appearance: none;
   border: none;
@@ -2115,7 +2110,6 @@ a {
 .forum-search__result {
   display: flex;
   padding: 10px 0;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .forum-search__result + .forum-search__result {
