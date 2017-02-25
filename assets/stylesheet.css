@@ -720,6 +720,8 @@
   color: var(--message__byline-date-inline-color);
   font-size: 13px;
   vertical-align: top;
+  -webkit-user-select: text;
+     -moz-user-select: text;
 }
 
 @media (min-width: 1025px) {
@@ -909,6 +911,8 @@
   min-height: 48px; /* A message can be empty when there’s only an unknown sticker in it */
   overflow: hidden;
   color: var(--message__content-color);
+  -webkit-user-select: text;
+     -moz-user-select: text;
 }
 
 @media (min-width: 400px) {
@@ -1137,6 +1141,8 @@ body {
   background: var(--background);
   font: 14px/1.4 -apple-system, sans-serif;
   color: var(--color);
+  -webkit-user-select: none;
+     -moz-user-select: none;
 }
 
 ::-moz-focus-inner {
@@ -2066,6 +2072,8 @@ a {
   margin: 10px var(---side-margin) 0;
   position: relative;
   word-wrap: break-word;
+  -webkit-user-select: text;
+     -moz-user-select: text;
 }
 
 .page-title--larger {
