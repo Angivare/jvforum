@@ -67,7 +67,9 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   regex = /<a href="((?:&#[x0-9a-f]+;)+)"[^<]+>([^<]+)<\/a>/g
   while (matches = regex.exec(content)) {
     let email = entities.decode(matches[1]).replace(/\$/g, '$$$$')
-    content = content.replace(matches[0], `<a href="mailto:${email}" target="_blank" title="${email}">${email}</a>`)
+      , replace = `<a href="mailto:${email}" target="_blank" title="${email}">${email}</a>`
+    content = content.replace(matches[0], replace)
+    regex.lastIndex += -matches[0].length + replace.length
   }
 
   // NoelShack thumbnails
