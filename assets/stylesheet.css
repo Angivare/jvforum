@@ -833,7 +833,7 @@
   margin-left: 5px;
 }
 
-@media (hover) {
+@media (hover: hover) {
   .message__quick-action:hover {
     opacity: 1;
   }
@@ -963,7 +963,7 @@
   }
 }
 
-@media (hover) {
+@media (hover: hover) {
   .youtube-link:hover:after {
     opacity: 1;
   }
@@ -1974,7 +1974,7 @@ a {
   box-shadow: var(--button__visible--primary-shadow);
 }
 
-@media (hover) {
+@media (hover: hover) {
   .button:hover .button__visible--primary {
     color: var(--button--hover__visible--primary-color);
     background: var(--button--hover__visible--primary-background);
@@ -2000,7 +2000,7 @@ a {
   color: var(--danger-color);
 }
 
-@media (hover) {
+@media (hover: hover) {
   .button:hover .button__visible--flat {
     filter: brightness(1.2);
   }
