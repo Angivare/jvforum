@@ -22,12 +22,17 @@
       {{?}}
     </div>
     <div class="home-bottom">
-      <!--<div>
+      <!--<div class="home-bottom__button-container">
         <a class="button" href="/forums" data-no-instant>
           <span class="button__visible button__visible--flat">Rechercher un forum</span>
         </a>
       </div>-->
-      <div>
+      <div class="home-bottom__button-container">
+        <a class="button" href="/1000021/39674315-appli-jvforum-topic-officiel/{{=it.jvfOfficialTopicNumberOfPages}}#textarea">
+          <span class="button__visible button__visible--flat">Rapport de bug / Suggestion / Avis</span>
+        </a>
+      </div>
+      <div class="home-bottom__button-container">
         <a class="js-logout-link button" href="/logout?_csrf={{=it.csrf}}" data-no-instant>
           <span class="button__visible button__visible--flat button__visible--danger">Déconnexion</span>
         </a>

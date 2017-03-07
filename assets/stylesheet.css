@@ -1076,6 +1076,7 @@
   --menu__item--blank-state_-_color: hsl(240, 8%, 73%);
   --message__content_-_desktop-margin-left: 200px;
   --poll-mention_-_color: hsl(240, 8%, 63%);
+  --button_-_additional-tap-target: 6px;
 }
 
 html {
@@ -1869,18 +1870,12 @@ a {
   text-align: center;
 }
 
-.home-bottom-links__link {
-  display: inline-block;
-  padding: 13px 20px;
+.home-bottom__button-container {
+  margin: var(--button_-_additional-tap-target) 0;
 }
 
-.home-bottom-links__link + .home-bottom-links__link {
+.home-bottom__button-container + .home-bottom__button-container {
   border-top: 1px solid var(--home-bottom-links-delimiter-color);
-}
-
-.home-bottom-links__link--logout {
-  color: var(--home-bottom-links-destructive-color);
-  font-size: 13px;
 }
 
 .forum-pagination {
@@ -1951,8 +1946,8 @@ a {
   text-transform: uppercase;
   white-space: nowrap;
   display: inline-block;
-  margin: -6px;
-  padding: 6px;
+  margin: calc(-1 * var(--button_-_additional-tap-target));
+  padding: var(--button_-_additional-tap-target);
   outline: none;
   -webkit-appearance: none;
   border: none;
