@@ -143,7 +143,7 @@ function form(body) {
     , matches
 
   while (matches = regex.exec(body)) {
-    r[matches[1]] = matches[2]
+    returnValue[matches[1]] = matches[2]
   }
   if (returnValue.length == 0) {
     return false
