@@ -373,12 +373,12 @@ function getTopic(where, successCallback, failCallback) {
       return
     }
     successCallback({
-      idModern: parseInt(results[0].idModern),
+      idModern: results[0].idModern,
       name: results[0].name,
       slug: results[0].slug,
-      numberOfPages: parseInt(results[0].numberOfPages),
-      isDeleted: parseInt(results[0].isDeleted),
-      isLocked: parseInt(results[0].isLocked),
+      numberOfPages: results[0].numberOfPages,
+      isDeleted: results[0].isDeleted,
+      isLocked: results[0].isLocked,
       lockRationale: results[0].lockRationale,
       pollTitle: results[0].pollTitle,
     })
