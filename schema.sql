@@ -25,6 +25,7 @@ CREATE TABLE `topics` (
   `isDeleted` tinyint NOT NULL,
   `isLocked` tinyint NOT NULL,
   `lockRationale` varchar(1024) NOT NULL,
+  `pollTitle` varchar(128) NOT NULL,
   PRIMARY KEY (`idModern`),
   KEY `idLegacy` (`idLegacy`),
   KEY `forumId` (`forumId`)

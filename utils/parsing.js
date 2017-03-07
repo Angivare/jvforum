@@ -6,7 +6,7 @@ let cheerio = require('cheerio')
 function topic(body) {
   let $ = cheerio.load(body)
     , selection
-    , r = retour = {}
+    , r = {}
 
   let matches
     , regex
@@ -17,7 +17,7 @@ function topic(body) {
     r.name = selection.text()
   }
 
-  retour.messages = []
+  r.messages = []
   regex = /<div class="bloc-message-forum " data-id="([0-9]+)">\s+<div class="conteneur-message">\s+(?:<div class="bloc-avatar-msg">\s+<div class="back-img-msg">\s+<div>\s+<span[^>]+>\s+<img src="[^"]+" data-srcset="([^"]+)"[^>]+>\s+<\/span>\s+<\/div>\s+<\/div>\s+<\/div>\s+)?<div class="inner-head-content">[\s\S]+?(?:<span class="JvCare [0-9A-F]+ bloc-pseudo-msg text-([^"]+)"|<div class="bloc-pseudo-msg")[^>]+>\s+([\s\S]+?)\s+<[\s\S]+?<div class="bloc-date-msg">\s+(?:<span[^>]+>)?([0-9][\s\S]+?)(?:<\/span>)?\s+<\/div>[\s\S]+?<div class="txt-msg  text-enrichi-forum ">([\s\S]+?)<\/div><\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g
   let avatars = {}
   while (matches = regex.exec(body)) {
@@ -25,7 +25,7 @@ function topic(body) {
       , avatar = !nickname || matches[2].includes('/default.jpg') ? '' : matches[2]
       , content = utils.adaptMessageContent(matches[6], matches[1], nickname, matches[5])
       , status = !matches[3] || matches[3] == 'user' ? '' : matches[3]
-    retour.messages.push({
+    r.messages.push({
       id: parseInt(matches[1]),
       status,
       nickname,
@@ -45,27 +45,33 @@ function topic(body) {
     page = parseInt(matches[1])
   }
 
-  retour.numberOfPages = false
+  r.numberOfPages = false
   regex = /<span><a href="\/forums\/[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9a-z-]+\.htm" class="lien-jv">([0-9]+)<\/a><\/span>/g
   while (matches = regex.exec(body)) {
-    retour.numberOfPages = parseInt(matches[1])
+    r.numberOfPages = parseInt(matches[1])
   }
-  if (page > retour.numberOfPages) {
-    retour.numberOfPages = page
+  if (page > r.numberOfPages) {
+    r.numberOfPages = page
   }
 
-  retour.isLocked = 0
-  retour.lockRationale = ''
+  r.isLocked = 0
+  r.lockRationale = ''
   regex = /<div class="message-lock-topic">\s+Sujet fermé pour la raison suivante :\s+<span>([^<]+)<\/span>\s+<\/div>/
   if (matches = regex.exec(body)) {
-    retour.isLocked = 1
-    retour.lockRationale = matches[1]
+    r.isLocked = 1
+    r.lockRationale = matches[1]
   }
 
-  retour.idModern = 0
+  r.idModern = 0
   regex = /var id_topic = ([0-9]+);\s+\/\/ \]\]>/
   if (matches = regex.exec(body)) {
-    retour.idModern = parseInt(matches[1])
+    r.idModern = parseInt(matches[1])
+  }
+
+  r.pollTitle = ''
+  regex = /<div class="intitule-sondage">([^<]+)<\/div>/
+  if (matches = regex.exec(body)) {
+    r.pollTitle = matches[1]
   }
 
   return r

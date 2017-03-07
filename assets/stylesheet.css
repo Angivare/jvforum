@@ -877,7 +877,7 @@
 
 @media (min-width: 1025px) {
   .message__content {
-    margin-left: 200px;
+    margin-left: var(--message__content_-_desktop-margin-left);
     background: var(--card-background);
     border-radius: 3px;
     box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, var(--card-box-shadow-opacity));
@@ -1074,6 +1074,8 @@
                                            , inset 0 2px 15px hsla(0, 0%, 0%, .875);
   --page-title-color: hsl(240, 8%, 67%);
   --menu__item--blank-state_-_color: hsl(240, 8%, 73%);
+  --message__content_-_desktop-margin-left: 200px;
+  --poll-mention_-_color: hsl(240, 8%, 63%);
 }
 
 html {
@@ -2146,5 +2148,16 @@ a {
 @media (min-width: 1025px) {
   .subforums-mobile-list {
     display: none;
+  }
+}
+
+.poll-mention {
+  margin: 0 12px 1em;
+  color: var(--poll-mention_-_color);
+}
+
+@media (min-width: 1025px) {
+  .poll-mention {
+    padding-left: var(--message__content_-_desktop-margin-left);
   }
 }

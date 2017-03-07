@@ -367,7 +367,7 @@ function saveTopic(idModern, params) {
 }
 
 function getTopic(where, successCallback, failCallback) {
-  db.query(`SELECT idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale FROM topics WHERE ${where}`, null, (results) => {
+  db.query(`SELECT idModern, name, slug, numberOfPages, isDeleted, isLocked, lockRationale, pollTitle FROM topics WHERE ${where}`, null, (results) => {
     if (!results.length) {
       failCallback()
       return
@@ -380,6 +380,7 @@ function getTopic(where, successCallback, failCallback) {
       isDeleted: parseInt(results[0].isDeleted),
       isLocked: parseInt(results[0].isLocked),
       lockRationale: results[0].lockRationale,
+      pollTitle: results[0].pollTitle,
     })
   })
 }

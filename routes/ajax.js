@@ -654,6 +654,7 @@ router.post('/refresh', (req, res, next) => {
           isDeleted: 0,
           isLocked: content.isLocked,
           lockRationale: content.lockRationale,
+          pollTitle: content.pollTitle,
         })
         serveTopic(content)
       }

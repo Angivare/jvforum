@@ -133,6 +133,7 @@ router.get('/:forumId([0-9]{1,7})/:idJvf([0-9]{1,10})-:slug([a-z0-9-]+)/:page([0
             isDeleted: 0,
             isLocked: content.isLocked,
             lockRationale: content.lockRationale,
+            pollTitle: content.pollTitle,
           })
           utils.addIsMineVariable(content.messages, user.nickname)
           serveTopic(content)
