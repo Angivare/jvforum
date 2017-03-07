@@ -6,18 +6,18 @@ let cheerio = require('cheerio')
 function topic(body) {
   let $ = cheerio.load(body)
     , selection
-    , r = {}
+    , returnValue = {}
 
   let matches
     , regex
 
-  r.name = false
+  returnValue.name = false
   selection = $('#bloc-title-forum')
   if (selection) {
-    r.name = selection.text()
+    returnValue.name = selection.text()
   }
 
-  r.messages = []
+  returnValue.messages = []
   regex = /<div class="bloc-message-forum " data-id="([0-9]+)">\s+<div class="conteneur-message">\s+(?:<div class="bloc-avatar-msg">\s+<div class="back-img-msg">\s+<div>\s+<span[^>]+>\s+<img src="[^"]+" data-srcset="([^"]+)"[^>]+>\s+<\/span>\s+<\/div>\s+<\/div>\s+<\/div>\s+)?<div class="inner-head-content">[\s\S]+?(?:<span class="JvCare [0-9A-F]+ bloc-pseudo-msg text-([^"]+)"|<div class="bloc-pseudo-msg")[^>]+>\s+([\s\S]+?)\s+<[\s\S]+?<div class="bloc-date-msg">\s+(?:<span[^>]+>)?([0-9][\s\S]+?)(?:<\/span>)?\s+<\/div>[\s\S]+?<div class="txt-msg  text-enrichi-forum ">([\s\S]+?)<\/div><\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g
   let avatars = {}
   while (matches = regex.exec(body)) {
@@ -25,7 +25,7 @@ function topic(body) {
       , avatar = !nickname || matches[2].includes('/default.jpg') ? '' : matches[2]
       , content = utils.adaptMessageContent(matches[6], matches[1], nickname, matches[5])
       , status = !matches[3] || matches[3] == 'user' ? '' : matches[3]
-    r.messages.push({
+    returnValue.messages.push({
       id: parseInt(matches[1]),
       status,
       nickname,
@@ -45,57 +45,57 @@ function topic(body) {
     page = parseInt(matches[1])
   }
 
-  r.numberOfPages = false
+  returnValue.numberOfPages = false
   regex = /<span><a href="\/forums\/[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9a-z-]+\.htm" class="lien-jv">([0-9]+)<\/a><\/span>/g
   while (matches = regex.exec(body)) {
-    r.numberOfPages = parseInt(matches[1])
+    returnValue.numberOfPages = parseInt(matches[1])
   }
-  if (page > r.numberOfPages) {
-    r.numberOfPages = page
+  if (page > returnValue.numberOfPages) {
+    returnValue.numberOfPages = page
   }
 
-  r.isLocked = 0
-  r.lockRationale = ''
+  returnValue.isLocked = 0
+  returnValue.lockRationale = ''
   regex = /<div class="message-lock-topic">\s+Sujet fermé pour la raison suivante :\s+<span>([^<]+)<\/span>\s+<\/div>/
   if (matches = regex.exec(body)) {
-    r.isLocked = 1
-    r.lockRationale = matches[1]
+    returnValue.isLocked = 1
+    returnValue.lockRationale = matches[1]
   }
 
-  r.idModern = 0
+  returnValue.idModern = 0
   regex = /var id_topic = ([0-9]+);\s+\/\/ \]\]>/
   if (matches = regex.exec(body)) {
-    r.idModern = parseInt(matches[1])
+    returnValue.idModern = parseInt(matches[1])
   }
 
-  r.pollTitle = ''
+  returnValue.pollTitle = ''
   regex = /<div class="intitule-sondage">([^<]+)<\/div>/
   if (matches = regex.exec(body)) {
-    r.pollTitle = matches[1]
+    returnValue.pollTitle = matches[1]
   }
 
-  return r
+  return returnValue
 }
 
 function forum(body) {
   let $ = cheerio.load(body)
-    , r = {}
+    , returnValue = {}
     , selection
 
-  r.name = ''
+  returnValue.name = ''
   selection = $('.highlight')
   if (selection) {
-    r.name = selection.text().substr("Forum ".length).replace(/ - Page [0-9]+$/, '')
+    returnValue.name = selection.text().substr("Forum ".length).replace(/ - Page [0-9]+$/, '')
   }
 
-  r.topics = []
+  returnValue.topics = []
   selection = $('li[data-id]', '.topic-list')
   selection.each((index, element) => {
     let url = $('.topic-title', element).attr('href')
       , urlSplit = url.split('/forums/')[1].split('-')
       , dateRaw = $('.topic-date span', element).text().trim()
 
-    r.topics.push({
+    returnValue.topics.push({
       id: $(element).data('id'),
       label: $('.topic-img', element).attr('src').substr("/img/forums/topic-".length).split('.')[0],
       idJvf: (urlSplit[0] == 1 ? '0' : '') + urlSplit[2],
@@ -109,9 +109,9 @@ function forum(body) {
   })
 
   // Text on JVC: Vous ne pouvez pas créer un nouveau sujet sur ce forum car il est fermé.
-  r.isLocked = $('#bloc-formulaire-forum .alert').length > 0
+  returnValue.isLocked = $('#bloc-formulaire-forum .alert').length > 0
 
-  r.parentId = 0
+  returnValue.parentId = 0
   if (2 in $('.fil-ariane-crumb span a')) {
     let element = $('.fil-ariane-crumb span a')[2]
       , elementText = $(element).text()
@@ -119,36 +119,36 @@ function forum(body) {
 
     if (elementText.substr(0, 'Forum principal '.length) == 'Forum principal ') {
       // Game forums, but not their subforums, have their breadcrumb include a link to the game's info page
-      r.parentId = parseInt(url.split('-')[1])
+      returnValue.parentId = parseInt(url.split('-')[1])
     }
   }
 
-  r.subforumsIds = []
+  returnValue.subforumsIds = []
   $('.liste-sous-forums .lien-jv').each((index, element) => {
     let url = $(element).attr('href')
-    r.subforumsIds.push(parseInt(url.split('-')[1]))
+    returnValue.subforumsIds.push(parseInt(url.split('-')[1]))
   })
-  r.subforumsIds = r.subforumsIds.sort((a, b) => {
+  returnValue.subforumsIds = returnValue.subforumsIds.sort((a, b) => {
     return a - b
   })
 
-  r.hasNextPage = $('.pagi-suivant-actif').length > 0
+  returnValue.hasNextPage = $('.pagi-suivant-actif').length > 0
 
-  return r
+  return returnValue
 }
 
 function form(body) {
-  let r = {}
+  let returnValue = {}
     , regex = /<input type="hidden" name="(fs_[^"]+)" value="([^"]+)"\/>/g
     , matches
 
   while (matches = regex.exec(body)) {
     r[matches[1]] = matches[2]
   }
-  if (r.length == 0) {
+  if (returnValue.length == 0) {
     return false
   }
-  return r
+  return returnValue
 }
 
 function editResponse(body) {
