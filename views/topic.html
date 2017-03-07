@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="messages-list">
-        {{? it.pollTitle }}
+        {{? it.page == 1 && it.pollTitle }}
           <div class="poll-mention">Comporte un sondage nommé <strong>{{=it.pollTitle}}</strong></div>
         {{?}}
         {{#def.topicMessages}}
