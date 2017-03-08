@@ -7,6 +7,11 @@ let express = require('express')
   , router = express.Router()
 
 router.get('/stickers', (req, res, next) => {
+  let user = utils.parseUserCookie(req.signedCookies.user)
+
+  if (!user) {
+    return res.redirect('/')
+  }
 
   let packs = {}
   for (let stickerId in stickers.packFromId) {
