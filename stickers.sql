@@ -10,7 +10,7 @@ INSERT INTO stickerPacks VALUES(9, 'Grukk');
 INSERT INTO stickerPacks VALUES(10, 'Brice');
 INSERT INTO stickerPacks VALUES(11, 'Football');
 INSERT INTO stickerPacks VALUES(12, 'Bud');
-INSERT INTO stickerPacks VALUES(13, 'Duracell');
+INSERT INTO stickerPacks VALUES(13, 'Duracell never dies');
 INSERT INTO stickerPacks VALUES(14, 'Xbox');
 INSERT INTO stickerPacks VALUES(15, 'Store');
 INSERT INTO stickerPacks VALUES(16, 'X-Men');
