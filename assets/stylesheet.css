@@ -1077,6 +1077,7 @@
   --message__content_-_desktop-margin-left: 200px;
   --poll-mention_-_color: hsl(240, 8%, 63%);
   --button_-_additional-tap-target: 6px;
+  --body--profile_-_background-color: hsl(240, 8%, 40%);
 }
 
 html {
@@ -2158,6 +2159,7 @@ a {
 }
 
 .body--profile {
+  background-color: var(--body--profile_-_background-color);
   background-position: top center;
   padding-bottom: 1px; /* Fixes Safari not showing bottom margin when html { height: 100%; } */
 }
