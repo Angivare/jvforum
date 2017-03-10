@@ -2156,3 +2156,120 @@ a {
     padding-left: var(--message__content_-_desktop-margin-left);
   }
 }
+
+.body--profile {
+  background-position: top center;
+  padding-bottom: 1px; /* Fixes Safari not showing bottom margin when html { height: 100%; } */
+}
+
+.profile {
+  ---margin-between-elements: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.profile__nickname {
+  text-align: center;
+  font-size: 2.3em;
+  color: hsl(0, 0%, 100%);
+  text-shadow: 0 0 2px hsl(0, 0%, 0%);
+  letter-spacing: 1px;
+  margin: var(---margin-between-elements) 0;
+  line-height: 1; /* Removes additional "margin" */
+  -webkit-user-select: text;
+     -moz-user-select: text;
+}
+
+.profile__avatar {
+  display: block;
+  margin: var(---margin-between-elements) auto;
+  max-width: 100%;
+  box-shadow: 0 2px 2px hsla(0, 0%, 0%, .075);
+}
+
+@media (min-width: 601px) {
+  .profile__avatar {
+    border-radius: 1px;
+  }
+}
+
+.profile__info-block-container {
+  display: flex;
+  width: calc(100% - 8px);
+  margin: var(---margin-between-elements) 4px;
+}
+
+.profile__card {
+  ---light: .25;
+  ---background-opacity: .5;
+  background: hsla(0, 0%, 100%, var(---background-opacity));
+  padding: 1px 0;
+  color: hsl(0, 0%, 0%);
+  border-radius: 3px;
+  box-shadow: 0 2px 2px hsla(0, 0%, 0%, .075)
+            , 0 1px 0 1px hsla(0, 0%, 0%, .075)
+            , inset 0 1px 0 hsla(0, 0%, 100%, var(---light));
+  -webkit-user-select: text;
+     -moz-user-select: text;
+}
+
+@supports (backdrop-filter: unset) or (-webkit-backdrop-filter: unset) {
+  .profile__card {
+    ---light: .17;
+    ---background-opacity: .33;
+    ---backdrop-blur: 7px;
+    -webkit-backdrop-filter: blur(var(---backdrop-blur));
+            backdrop-filter: blur(var(---backdrop-blur));
+  }
+}
+
+.profile__card-header {
+  padding: .3rem calc(.5rem + 1px) .2rem;
+  margin-bottom: -1px;
+  font-size: 11px;
+  letter-spacing: .67px;
+  color: hsla(0, 0%, 0%, .33);
+  font-weight: bold;
+  border-bottom: 1px solid hsla(0, 0%, 0%, .125);
+  text-transform: uppercase;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+}
+
+.is-ios .profile__card-header {
+  border-bottom: .5px solid hsla(0, 0%, 0%, .2);
+}
+
+.profile__card-body {
+  padding: 0 calc(.5rem + 1px);
+}
+
+.profile__card-body p {
+  margin: .5rem 0;
+}
+
+.profile__info-block {
+  width: 100%;
+  margin: 0 4px;
+}
+
+.profile__user-text {
+  margin: var(---margin-between-elements) 8px;
+}
+
+.profile__info-block-body {
+  color: hsla(0, 0%, 0%, .8);
+  font-size: .9em;
+  text-align: center;
+}
+
+.profile__info-block-body strong {
+  font-size: 1.4rem;
+  letter-spacing: .5px;
+}
+
+.profile__info-block-body em {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1rem;
+}
