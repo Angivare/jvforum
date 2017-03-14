@@ -73,7 +73,7 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
       }
     }
 
-    if (viewLocals.messages !== false) {
+    if (viewLocals.message && viewLocals.messages !== false) {
       viewLocals.messages = viewLocals.messages.toLocaleString().replace(/,/g, ' ')
     }
 
@@ -91,7 +91,7 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
 
   let nicknameLowerCase = req.params[0].toLowerCase()
     , cacheId = `@${nicknameLowerCase}`
-    , data
+    , data = {}
   cache.get(cacheId, config.timeouts.cache.forumDisplay, (cacheData, age) => {
     data = cacheData
     fetchLudicrousInformations()

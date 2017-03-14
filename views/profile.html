@@ -21,14 +21,14 @@
     {{?}}
 
     <div class="profile__info-block-container">
-      {{? it.messages !== false || it.messagesIn2017 !== false}}
+      {{? (it.messages && it.messages !== false) || it.messagesIn2017 !== false}}
         <div class="profile__card profile__info-block">
           <div class="profile__card-header">Messages</div>
           <div class="profile__card-body profile__info-block-body">
             {{? it.messagesIn2017 !== false}}
               <p><strong>{{=it.messagesIn2017}}</strong> en 2017</p>
             {{?}}
-            {{? it.messages !== false}}
+            {{? it.messages && it.messages !== false}}
               <p><strong>{{=it.messages}}</strong> au total</p>
             {{?}}
           </div>
