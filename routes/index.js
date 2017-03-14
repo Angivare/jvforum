@@ -40,7 +40,7 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
               data.registrationTimestamp = createdAt
             }
             else {
-              if (!('registrationTimestamp' in data)) {
+              if (!data.registrationTimestamp) {
                 data.registrationTimestamp = createdAt
               }
               data.registrationVagueness = vagueness
