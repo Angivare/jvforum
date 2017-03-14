@@ -32,21 +32,22 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
     if (config.ludicrous && data.nickname) {
       db.query('select count(*) from messages where nickname = ? and postedAt >= 1483225200', [data.nickname], (results) => {
         data.messagesIn2017 = results[0]['count(*)']
-        if (data.registrationTimestamp) {
-          sendResponse()
-        }
-        else {
-          db.select('createdAt, vagueness', 'nicknames_registration_date', {nickname: data.nickname}, (results) => {
-            if (results.length) {
-              let {createdAt, vagueness} = results[0]
+
+        db.select('createdAt, vagueness', 'nicknames_registration_date', {nickname: data.nickname}, (results) => {
+          if (results.length) {
+            let {createdAt, vagueness} = results[0]
+            if (vagueness == 0) {
               data.registrationTimestamp = createdAt
-              if (vagueness > 0) {
-                data.registrationVagueness = vagueness
-              }
             }
-            sendResponse()
-          })
-        }
+            else {
+              if (!('registrationTimestamp' in data)) {
+                data.registrationTimestamp = createdAt
+              }
+              data.registrationVagueness = vagueness
+            }
+          }
+          sendResponse()
+        })
       })
     }
     else {
@@ -64,7 +65,7 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
     }
 
     if (viewLocals.registrationTimestamp) {
-      let {relativeDays, absoluteYear, absoluteDate, absoluteHour} = date.convertProfileTimestampToDate(data.registrationTimestamp)
+      let {relativeDays, absoluteYear, absoluteDate, absoluteHour} = date.convertProfileTimestampToDate(viewLocals.registrationTimestamp)
       viewLocals.registrationDays = relativeDays
       viewLocals.registrationYear = absoluteYear
       viewLocals.registrationDate = absoluteDate
