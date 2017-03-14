@@ -74,11 +74,11 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
       }
     }
 
-    if (viewLocals.message && viewLocals.messages !== false) {
+    if (viewLocals.messages) {
       viewLocals.messages = viewLocals.messages.toLocaleString().replace(/,/g, ' ')
     }
 
-    if (viewLocals.messagesIn2017 !== false) {
+    if (viewLocals.messagesIn2017) {
       viewLocals.messagesIn2017 = viewLocals.messagesIn2017.toLocaleString().replace(/,/g, ' ')
     }
 
