@@ -1,44 +1,89 @@
 {{#def.layoutHead}}
-<body class="body--profile" style="background-image: url('http://image.noelshack.com/fichiers/2015/14/1427798934-couverture-alexandre-127647-1427798930-ecac2dfc1f74a6fa5f998954a946364c.png');">
+<body class="body--profile" style="background-image: url('https://image.noelshack.com/fichiers{{=it.backgroundCover}}');">
 <div class="canvas">
 <div class="profile">
 
-  <h1 class="profile__nickname">Alexandre</h1>
+  {{? !it.error}}
+    {{?it.nickname}}
+      <h1 class="profile__nickname">{{=it.nickname}}</h1>
+    {{?}}
 
-  <div class="profile__info-block-container">
-    <div class="profile__card profile__info-block">
-      <div class="profile__card-header">Messages</div>
-      <div class="profile__card-body profile__info-block-body">
-        <p><strong>400+</strong> en 2017</p>
-        <p><strong>25 551</strong> au total</p>
+    {{? it.banished}}
+      <div class="profile__card profile__user-text">
+        <div class="profile__card-body profile__banished-mention">
+          <p>Pseudo banni.</p>
+        </div>
+      </div>
+    {{?}}
+
+    <div class="profile__info-block-container">
+      {{? it.messages !== false || it.messagesIn2017 !== false}}
+        <div class="profile__card profile__info-block">
+          <div class="profile__card-header">Messages</div>
+          <div class="profile__card-body profile__info-block-body">
+            {{? it.messagesIn2017 !== false}}
+              <p><strong>{{=it.messagesIn2017}}</strong> en 2017</p>
+            {{?}}
+            {{? it.messages !== false}}
+              <p><strong>{{=it.messages}}</strong> au total</p>
+            {{?}}
+          </div>
+        </div>
+      {{?}}
+
+      {{? it.registrationTimestamp}}
+        <div class="profile__card profile__info-block">
+          <div class="profile__card-header">Ancienneté</div>
+          <div class="profile__card-body profile__info-block-body">
+            <p><strong>{{=it.registrationDays}}</strong> jours</p>
+            <p>
+              <em>{{=it.registrationYear}}</em>, {{=it.registrationDate}}
+              {{? it.registrationHour}}
+              à {{=it.registrationHour}}
+              {{?}}
+            </p>
+          </div>
+        </div>
+      {{?}}
+    </div>
+
+    {{? it.avatar}}
+      <img class="profile__avatar" src="https://image.jeuxvideo.com{{=it.avatar}}">
+    {{?}}
+
+    {{? it.signature}}
+      <div class="profile__card profile__user-text">
+        <div class="profile__card-header">Signature</div>
+        <div class="profile__card-body">
+          <p>{{=it.signature}}</p>
+        </div>
+      </div>
+    {{?}}
+
+    {{? it.description}}
+      <div class="profile__card profile__user-text">
+        <div class="profile__card-header">Description</div>
+        <div class="profile__card-body">
+          <p>{{=it.description}}</p>
+        </div>
+      </div>
+    {{?}}
+  {{??}}
+    <div class="profile__card profile__user-text">
+      <div class="profile__card-header">Erreur réseau</div>
+      <div class="profile__card-body profile__card-header--danger">
+        <p>
+          {{? it.error == 'timeout'}}
+            La page sur JVC mettait trop de temps à charger, elle a été arrêtée.
+          {{?? it.error == 'network'}}
+            La page n’a pas pu être récupérée depuis JVC. ({{=it.errorDetail}})
+          {{??}}
+            La page a pu être récupérée depuis JVC mais elle renvoie un code HTTP invalide ({{=it.error}}).
+          {{?}}
+        </p>
       </div>
     </div>
-
-    <div class="profile__card profile__info-block">
-      <div class="profile__card-header">Ancienneté</div>
-      <div class="profile__card-body profile__info-block-body">
-        <p><strong>6 936</strong> jours</p>
-        <p><em>1998</em>, 12 mars à 08:53</p>
-      </div>
-    </div>
-  </div>
-
-  <img class="profile__avatar" src="http://image.jeuxvideo.com/avatar/a/l/alexandre-1486654104-abce6d717ab78ea47a4b2c25e1433bba.jpg">
-
-  <div class="profile__card profile__user-text">
-    <div class="profile__card-header">Signature</div>
-    <div class="profile__card-body">
-      <p><strong>Si avoir 99.999.999 comptes est un Flood! Les sanctionner est aussi un Flood!</strong></p>
-    </div>
-  </div>
-
-  <div class="profile__card profile__user-text">
-    <div class="profile__card-header">Description</div>
-    <div class="profile__card-body">
-      <p><strong>Si avoir 99.999.999 comptes est un Flood! Les sanctionner est aussi un Flood!</strong></p>
-    </div>
-  </div>
-
+  {{?}}
 </div>
 </div>
 <script>

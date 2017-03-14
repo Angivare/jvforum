@@ -30,6 +30,7 @@ let config = {
     cache: {
       topicDisplay: 60 * 60 * 24 * 7,
       forumDisplay: 5,
+      profileDisplay: 30,
       refresh: 5,
       favorites: 60 * 30,
     },

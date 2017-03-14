@@ -55,7 +55,7 @@ function convertTopicList(date) {
 }
 
 function convertMessage(date) {
-  // 07 juin 2016 à 19:26:12
+  // Example: "07 juin 2016 à 19:26:12"
   let now = new Date()
     , [day, month, year, , time] = date.split(' ')
     , [hours, minutes, seconds] = time.split(':')
@@ -194,9 +194,42 @@ function editFormat(editDateRaw, postDateRaw) {
   return text
 }
 
+function convertProfileDateToTimestamp(dateString) {
+  // Example: "12 mars 1998"
+  let [day, month, year] = dateString.split(' ')
+  month = monthsFull.indexOf(month)
+  day = parseInt(day)
+  let then = new Date(year, month, day, 0, 0, 0)
+    , timestamp = then / 1000
+
+  return timestamp
+}
+
+function convertProfileTimestampToDate(timestamp) {
+  let date = new Date(timestamp * 1000)
+    , relativeDays = Math.floor((+new Date - date) / (1000 * 60 * 60 * 24))
+    , absoluteYear = date.getFullYear()
+    , absoluteDate = pad(date.getDate()) + ' ' + monthsFull[date.getMonth()]
+    , absoluteHour = formatHoursAndMinutes(date)
+
+  if (timestamp < 1236853380 || (absoluteHour == '00:00' && date.getSeconds() == 0)) {
+    // Timestamps are only accurate to the day before 2009/03/12 at 11h23m
+    absoluteHour = false
+  }
+
+  return {
+    relativeDays,
+    absoluteYear,
+    absoluteDate,
+    absoluteHour,
+  }
+}
+
 module.exports = {
   convertTopicList,
   convertMessage,
   quoteFormat,
   editFormat,
+  convertProfileDateToTimestamp,
+  convertProfileTimestampToDate,
 }

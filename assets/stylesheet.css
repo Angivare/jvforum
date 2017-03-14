@@ -1078,6 +1078,7 @@
   --poll-mention_-_color: hsl(240, 8%, 63%);
   --button_-_additional-tap-target: 6px;
   --body--profile_-_background-color: hsl(240, 8%, 40%);
+  --profile__banished-mention_-_text-shadow-color: hsla(0, 100%, 22.5%, .5); /* --danger-color darker with opacity */
 }
 
 html {
@@ -2166,7 +2167,7 @@ a {
 
 .profile {
   ---margin-between-elements: 20px;
-  max-width: 600px;
+  max-width: 616px;
   margin: auto;
 }
 
@@ -2182,11 +2183,21 @@ a {
      -moz-user-select: text;
 }
 
+.profile__banished-mention {
+  color: var(--danger-color);
+  text-shadow: 0 1px 25px var(--profile__banished-mention_-_text-shadow-color);
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: .5px;
+}
+
 .profile__avatar {
   display: block;
   margin: var(---margin-between-elements) auto;
   max-width: 100%;
-  box-shadow: 0 2px 2px hsla(0, 0%, 0%, .075);
+  box-shadow: 0 2px 2px hsla(0, 0%, 0%, .075)
+            , 0 1px 0 1px hsla(0, 0%, 0%, .075);
 }
 
 @media (min-width: 601px) {
@@ -2240,6 +2251,10 @@ a {
 
 .is-ios .profile__card-header {
   border-bottom: .5px solid hsla(0, 0%, 0%, .2);
+}
+
+.profile__card-header--danger {
+  color: var(--danger-color);
 }
 
 .profile__card-body {

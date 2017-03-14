@@ -164,9 +164,74 @@ function editResponse(body) {
   }
 }
 
+function profile(body) {
+  let returnValue = {}
+
+  let matches
+    , regex
+
+  returnValue.nickname = false
+  regex = /<h1>([^<]+)<\/h1>/
+  if (matches = regex.exec(body)) {
+    returnValue.nickname = matches[1].trim()
+  }
+
+  returnValue.avatar = false
+  regex = /<img alt="Avatar de [^"]+" src="https?:\/\/image\.jeuxvideo\.com([^"]+)">/
+  if (matches = regex.exec(body)) {
+    if (matches[1].split('/').pop() != 'default.jpg') {
+      returnValue.avatar = matches[1].replace(/^\/avatar(s)?-md\//, '/avatar$1/')
+    }
+  }
+
+  returnValue.backgroundCover = false
+  regex = /<div id="content" style="background: url\('https?:\/\/image\.noelshack\.com\/fichiers([^']+)'\) /
+  if (matches = regex.exec(body)) {
+    returnValue.backgroundCover = matches[1]
+  }
+
+  returnValue.registrationTimestamp = false
+  regex = /<div class="info-lib">Membre depuis :<\/div><div class="info-value">([^<]+)<\/div>/
+  if (matches = regex.exec(body)) {
+    let registrationDate = matches[1].split('(')[0].trim()
+    returnValue.registrationTimestamp = date.convertProfileDateToTimestamp(registrationDate)
+  }
+
+  returnValue.messages = false
+  regex = /<div class="info-lib">Messages Forums :<\/div><div class="info-value">([0-9.]+) messages?<\/div>/
+  if (matches = regex.exec(body)) {
+    returnValue.messages = parseInt(matches[1].replace('.', ''))
+  }
+
+  /* To parse description and signature the regex must encompass the cases
+   * when there's the two as well as when there's one but not the other.
+   */
+
+  returnValue.description = false
+  regex = /<div class="bloc-description-desc txt-enrichi-desc-profil">([\s\S]+?)<\/div>\s{32}/
+  if (matches = regex.exec(body)) {
+   returnValue.description = utils.adaptMessageContent(matches[1])
+  }
+
+  returnValue.signature = false
+  regex = /<p>Signature dans les forums :<\/p>\s+<div>([\s\S]+?)<\/div>\s+<\/div>\s{20}/
+  if (matches = regex.exec(body)) {
+   returnValue.signature = utils.adaptMessageContent(matches[1])
+  }
+
+  returnValue.banished = false
+  regex = /<div class="alert-row"> Le pseudo est banni\. <\/div>\s{12}/
+  if (matches = regex.exec(body)) {
+   returnValue.banished = true
+  }
+
+  return returnValue
+}
+
 module.exports = {
   topic,
   forum,
   form,
   editResponse,
+  profile,
 }
