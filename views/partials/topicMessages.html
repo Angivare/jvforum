@@ -11,7 +11,7 @@
       <div class="message__byline">
         <div class="message__byline-author">
           {{? m.nickname }}
-            <a class="message__byline-author-link" href="http://www.jeuxvideo.com/profil/{{=m.nickname.toLowerCase()}}?mode=infos" target="_blank">
+            <a class="message__byline-author-link" href="/@{{=m.nickname.toLowerCase()}}">
               <span class="message__byline-author-avatar"><!--
                 {{? m.avatar }}
                   --><img class="message__byline-author-avatar-image" src="{{=m.avatar}}">
