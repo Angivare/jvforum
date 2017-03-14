@@ -30,7 +30,7 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
   function fetchLudicrousInformations() {
     data.messagesIn2017 = false
     if (config.ludicrous && data.nickname) {
-      db.select('count(*)', 'messages', {nickname: data.nickname}, (results) => {
+      db.query('select count(*) from messages where nickname = ? and postedAt >= 1483225200', [data.nickname], (results) => {
         data.messagesIn2017 = results[0]['count(*)']
         if (data.registrationTimestamp) {
           sendResponse()
