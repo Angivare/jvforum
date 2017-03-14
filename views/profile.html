@@ -1,5 +1,9 @@
 {{#def.layoutHead}}
-<body class="body--profile" style="background-image: url('https://image.noelshack.com/fichiers{{=it.backgroundCover}}');">
+<body class="body--profile"
+{{? it.backgroundCover}}
+  style="background-image: url('https://image.noelshack.com/fichiers{{=it.backgroundCover}}');"
+{{?}}
+>
 <div class="canvas">
 <div class="profile">
 
@@ -84,6 +88,15 @@
       </div>
     </div>
   {{?}}
+
+  {{? it.backgroundCover}}
+    <div class="profile__centered">
+      <a class="button" target="_blank" href="https://image.noelshack.com/fichiers{{=it.backgroundCover}}">
+        <span class="button__visible button__visible--profile">Afficher l’image de fond</span>
+      </a>
+    </div>
+  {{?}}
+
 </div>
 </div>
 <script>

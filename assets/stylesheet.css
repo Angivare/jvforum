@@ -1072,6 +1072,8 @@
   --button--active__visible--primary-background: linear-gradient(hsl(268, 90%, 35%), hsl(270, 90%, 40%));
   --button--active__visible--primary-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .1)
                                            , inset 0 2px 15px hsla(0, 0%, 0%, .875);
+  --button--active__visible--profile-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .1)
+                                           , inset 0 2px 15px hsla(0, 0%, 0%, .5);
   --page-title-color: hsl(240, 8%, 67%);
   --menu__item--blank-state_-_color: hsl(240, 8%, 73%);
   --message__content_-_desktop-margin-left: 200px;
@@ -1987,6 +1989,36 @@ a {
   box-shadow: var(--button--active__visible--primary-shadow);
 }
 
+.button__visible--profile {
+  ---background-opacity: .5;
+  ---background-opacity-state-multiplier: 1;
+  color: hsl(0, 0%, 0%);
+  text-shadow: none;
+  background: hsla(0, 0%, 100%, calc(var(---background-opacity) * var(---background-opacity-state-multiplier)));
+  box-shadow: var(--button__visible--primary-shadow);
+}
+
+@supports (backdrop-filter: unset) or (-webkit-backdrop-filter: unset) {
+  .button__visible--profile {
+    ---background-opacity: .33;
+    ---backdrop-blur: 7px;
+    -webkit-backdrop-filter: blur(var(---backdrop-blur));
+            backdrop-filter: blur(var(---backdrop-blur));
+  }
+}
+
+@media (hover: hover) {
+  .button:hover .button__visible--profile {
+    ---background-opacity-state-multiplier: 1.2;
+    box-shadow: var(--button--hover__visible--primary-shadow);
+  }
+}
+
+.button:active .button__visible--profile {
+  ---background-opacity-state-multiplier: .75;
+  box-shadow: var(--button--active__visible--profile-shadow);
+}
+
 .button__visible--floating {
   box-shadow: var(--button__visible--primary-shadow), 0 1px 10px hsla(0, 0%, 0%, .5);
 }
@@ -2247,6 +2279,7 @@ a {
   text-transform: uppercase;
   -webkit-user-select: none;
      -moz-user-select: none;
+  cursor: default;
 }
 
 .is-ios .profile__card-header {
@@ -2289,4 +2322,9 @@ a {
   font-style: normal;
   font-weight: bold;
   font-size: 1rem;
+}
+
+.profile__centered {
+  text-align: center;
+  margin: var(---margin-between-elements) 0;
 }
