@@ -6,7 +6,7 @@
   <div class="content">
     {{? !it.error }}
       <h1 class="page-title page-title--larger page-title--with-menu-mobile">
-        <a class="page-title__link page-title__link--with-refresh-icon" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
+        <a class="page-title__link page-title__link--with-refresh-icon primitive-element-state" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
       </h1>
       <div class="menu-mobile">
         <div class="menu-mobile__opener"></div>
@@ -37,7 +37,7 @@
       <div class="liste-topics">
         {{~it.topics :t:index}}
           {{? t.label != 'ghost' }}
-            <a class="topic {{? t.hasBeenVisited}} topic--visited {{?}}" href="/{{=it.id}}/{{=t.idJvf}}-{{=t.slug}}{{=t.position}}">
+            <a class="topic {{? t.hasBeenVisited}} topic--visited {{?}} primitive-element-state" href="/{{=it.id}}/{{=t.idJvf}}-{{=t.slug}}{{=t.position}}">
               <div class="topic__label topic__label--{{=t.label}}"></div>
               <div class="topic__text-container">
                 <div class="topic__title">
@@ -152,12 +152,12 @@
   {{? !it.error && it.subforumsIds.length}}
     <div class="menu subforums-mobile-list">
       {{? it.parentId}}
-        <a class="menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}
+        <a class="primitive-element-state menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}
       {{??}}
-        <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
+        <a class="primitive-element-state menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
       {{?}}
       {{~it.subforumsIds :sId:index}}
-        <a class="menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
+        <a class="primitive-element-state menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
       {{~}}
     </div>
   {{?}}
@@ -181,7 +181,7 @@
     <div class="aside__menu menu">
       {{? it.favorites && it.favorites.forums.length }}
         {{~it.favorites.forums :a}}
-          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+          <a class="primitive-element-state menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
         {{~}}
       {{??}}
         <span class="menu__item menu__item--blank-state">Ajoutez vos forums favoris pour les suivre</span>
@@ -190,7 +190,7 @@
     <div class="aside__menu menu">
       {{? it.favorites && it.favorites.topics.length }}
         {{~it.favorites.topics :a}}
-          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+          <a class="primitive-element-state menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
         {{~}}
       {{??}}
         <span class="menu__item menu__item--blank-state">Ajoutez vos topics favoris pour les suivre</span>
@@ -199,12 +199,12 @@
     {{? it.subforumsIds.length }}
       <div class="menu aside__menu">
         {{? it.parentId }}
-          <a class="menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}</a>
+          <a class="primitive-element-state menu__item" href="/{{=it.parentId}}-{{=it.forumSlugs[it.parentId]}}">{{!it.forumNames[it.parentId]}}</a>
         {{??}}
-          <a class="menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
+          <a class="primitive-element-state menu__item" href="/{{=it.id}}-{{=it.slug}}">{{!it.name}}</a>
         {{?}}
         {{~it.subforumsIds :sId:index}}
-          <a class="menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
+          <a class="primitive-element-state menu__item" href="/{{=sId}}-{{=it.forumSlugs[sId]}}">{{!it.forumNames[sId]}}</a>
         {{~}}
       </div>
     {{?}}

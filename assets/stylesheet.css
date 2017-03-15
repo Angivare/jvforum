@@ -2332,3 +2332,13 @@ a {
   text-align: center;
   margin: var(---margin-between-elements) 0;
 }
+
+@media (hover: hover) {
+  .primitive-element-state:hover {
+    filter: brightness(1.2);
+  }
+}
+
+.primitive-element-state:active {
+  filter: brightness(.5);
+}
