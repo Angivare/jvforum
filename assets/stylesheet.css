@@ -947,15 +947,6 @@
   left: 999em;
 }
 
-.too-big-notice {
-  font-size: 95%;
-  background: #660;
-  color: hsla(0, 100%, 100%, .87);
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 2px;
-}
-
 /* 2017 */
 
 :root {
@@ -1048,6 +1039,7 @@
   --message__content_-_desktop-margin-left: 200px;
   --poll-mention_-_color: hsl(240, 8%, 63%);
   --button_-_additional-tap-target: 6px;
+  --cant-display-notice_-_color: hsl(0, 100%, 10%);
 
   /* Profile */
   --canvas--profile_-_background-color: hsl(240, 8%, 40%);
@@ -2324,4 +2316,12 @@ a {
 .message__byline-author-link:active,
 .pagination-topic__page-link--not-active:active {
   filter: brightness(.5);
+}
+
+.cant-display-notice {
+  font-size: 86.67%;
+  background: var(--cant-display-notice_-_color);
+  display: inline-block;
+  padding: 4px 6px;
+  border-radius: 2px;
 }

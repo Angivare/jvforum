@@ -158,7 +158,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   content = content.replace(/<a(?: class="[^"]+")? href="(https?:\/\/youtu\.be\/([a-zA-Z0-9-_]{11})([^"])*)"[^>]+>.+?<\/a>/g, '<a class="youtube-link" href="$1" target="_blank" title="$1"><img class="youtube-link__thumb" src="https://img.youtube.com/vi/$2/mqdefault.jpg" alt="$1"></a>')
 
   // Remove JVC embeds
-  content = content.replace(/<div class="player-contenu">\s+<div class="embed-responsive embed-responsive-16by9">\s+<div class="embed-responsive-item" >\s+<div class="player-jv" id="player-jv-[0-9]+-[0-9]+" data-srcset-video="[^"]+">Chargement du lecteur vidéo...<\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g, '<p><small>[ Miniature vidéo de JVC, non-visible sur JVForum ]</small></p>')
+  content = content.replace(/<div class="player-contenu">\s+<div class="embed-responsive embed-responsive-16by9">\s+<div class="embed-responsive-item" >\s+<div class="player-jv" id="player-jv-[0-9]+-[0-9]+" data-srcset-video="[^"]+">Chargement du lecteur vidéo...<\/div>\s+<\/div>\s+<\/div>\s+<\/div>/g, '<p><div class="cant-display-notice">Miniature vidéo de JVC non-visible sur JVForum</div></p>')
   // Remove YouTube embeds
   content = content.replace(/<div class="player-contenu"><div class="embed-responsive embed-responsive-16by9"><iframe width="[0-9]+" height="[0-9]+" src="https:\/\/www\.youtube\.com\/embed\/([^"]+)\?feature=oembed" frameborder="0" allowfullscreen><\/iframe><\/div><\/div>/g, '<a class="youtube-link" href="https://youtu.be/$1" target="_blank" title="https://youtu.be/$1"><img class="youtube-link__thumb" src="https://img.youtube.com/vi/$1/mqdefault.jpg"></a>')
   // Remove Dailymotion embeds
@@ -174,7 +174,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   content = emojify(content)
 
   if (content.length > 80000) {
-    content = '<div class="message__content-text"><p><div class="too-big-notice">Message trop gros pour être affiché par JVForum.</div></p></div>'
+    content = '<div class="message__content-text"><p><div class="cant-display-notice">Message trop gros pour être affiché par JVForum.</div></p></div>'
   }
 
   return content
