@@ -13,11 +13,11 @@
         <template id="menu-mobile-items">
           <div class="menu-mobile-items">
             {{? !it.isFavorite }}
-              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="add">Mettre en favoris</span>
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item primitive-element-state" data-action="add">Mettre en favoris</span>
             {{??}}
-              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="delete">Retirer des favoris</span>
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item primitive-element-state" data-action="delete">Retirer des favoris</span>
             {{?}}
-            <a class="menu-mobile-items__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
+            <a class="menu-mobile-items__item primitive-element-state" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
           </div>
         </template>
       </div>
