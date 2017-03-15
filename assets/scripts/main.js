@@ -375,7 +375,7 @@ function alignAllStickerPacks() {
 }
 
 function noteStickerAndGoBack(event) {
-  localStorage.stickerToInsert = event.target.dataset.stickerId
+  localStorage.stickerToInsert = event.target.dataset.code
   history.back()
 }
 
@@ -435,7 +435,7 @@ function insertStickerIntoMessage() {
   }
   let stringBeforeInsertionPoint = textarea.value.substr(0, insertionPoint)
     , stringAfterInsertionPoint = textarea.value.substr(insertionPoint)
-  textarea.value = `${stringBeforeInsertionPoint} :${localStorage.stickerToInsert}: ${stringAfterInsertionPoint}`
+  textarea.value = `${stringBeforeInsertionPoint} ${localStorage.stickerToInsert} ${stringAfterInsertionPoint}`
   textarea.focus()
   localStorage.removeItem('stickerToInsert')
   saveDraft()
