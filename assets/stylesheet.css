@@ -1091,6 +1091,7 @@
   --button_-_additional-tap-target: 6px;
   --body--profile_-_background-color: hsl(240, 8%, 40%);
   --profile__banished-mention_-_text-shadow-color: hsla(0, 100%, 22.5%, .5); /* --danger-color darker with opacity */
+  --profile-link-color: hsl(182, 25%, 12.5%);
 }
 
 html {
@@ -2205,6 +2206,11 @@ a {
   background-color: var(--body--profile_-_background-color);
   background-position: top center;
   padding-bottom: 1px; /* Fixes Safari not showing bottom margin when html { height: 100%; } */
+}
+
+.body--profile a {
+  color: var(--profile-link-color);
+  text-decoration: underline;
 }
 
 .profile {
