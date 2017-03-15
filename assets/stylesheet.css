@@ -408,6 +408,7 @@
   margin: -5px;
   padding: 5px 7px;
   position: relative;
+  color: var(--link-color);
 }
 
 .pagination-topic__page-link--active {
@@ -415,6 +416,7 @@
   font-weight: bold;
   margin: 0;
   padding: 0 2px;
+  color: var(--color);
 }
 
 .pagination-topic__page-link--visited {
@@ -1124,8 +1126,21 @@ body {
 }
 
 a {
-  color: var(--link-color);
   text-decoration: none;
+}
+
+.link {
+  color: var(--link-color);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    filter: brightness(1.4);
+  }
+}
+
+.link:active {
+  filter: brightness(.75);
 }
 
 .canvas {
