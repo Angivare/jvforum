@@ -189,11 +189,6 @@
   }
 }
 
-.topic:visited .topic__new-messages-indicator {
-  /* display: none would be ideal but it can't be set in :visited */
-  background: currentColor;
-}
-
 .topic--visited,
 .topic:visited { /* :visited takes into account when the user goes back in history, --visited does not */
   color: var(--link--visited-color);
