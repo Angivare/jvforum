@@ -66,8 +66,6 @@ function stringToElements(string) {
 }
 
 function setAsHavingTouch() {
-  document.documentElement.classList.remove('hasnt-touch')
-  document.documentElement.classList.add('has-touch')
   $hasTouch = true
   instantclick.removeEvent('body', 'touchstart', setAsHavingTouch)
 }
