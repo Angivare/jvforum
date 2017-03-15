@@ -2365,11 +2365,15 @@ a {
 }
 
 @media (hover: hover) {
-  .primitive-element-state:hover {
+  .primitive-element-state:hover,
+  .emoji:hover,
+  .sticker:hover {
     filter: brightness(1.2);
   }
 }
 
-.primitive-element-state:active {
+.primitive-element-state:active,
+.emoji:active,
+.sticker:active {
   filter: brightness(.5);
 }
