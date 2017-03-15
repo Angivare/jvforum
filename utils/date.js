@@ -118,7 +118,7 @@ function quoteFormat(timestamp) {
     date = ''
   }
   else {
-    date = `le ${day} ${months[month]}`
+    date = `le ${day} ${monthsFull[month]}`
     if (year == now.getFullYear()) {
       let yesterday = new Date(now - (1000 * 60 * 60 * 24))
         , dayBeforeYesterday = new Date(now - (1000 * 60 * 60 * 24 * 2))
