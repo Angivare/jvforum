@@ -336,11 +336,6 @@ function makeFavoritesSlide() {
   }
 }
 
-function goToForm() {
-  qs('.js-form-post__textarea').focus()
-  scrollTo(0, qs('.js-form-post').getBoundingClientRect().top + scrollY)
-}
-
 function toggleMobileMenu() {
   qs('.menu-mobile__opener').classList.toggle('menu-mobile__opener--hidden')
   qs('.canvas').classList.toggle('canvas--under-stage-with-menu-mobile-items')
@@ -888,7 +883,6 @@ function showFavoriteToggleConfirmation() {
 instantclick.addEvent('.js-form-post', 'submit', submitPost)
 instantclick.addEvent('.js-form-post__title', 'input', saveDraftForum)
 instantclick.addEvent('.js-form-post__textarea', 'input', saveDraft)
-instantclick.addEvent('.js-go-to-form', 'click', goToForm)
 instantclick.addEvent('.menu-mobile', 'click', toggleMobileMenu)
 instantclick.addEvent('.js-logout-link', 'click', logout)
 
