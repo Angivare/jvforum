@@ -2365,15 +2365,31 @@ a {
 }
 
 @media (hover: hover) {
-  .primitive-element-state:hover,
   .emoji:hover,
-  .sticker:hover {
+  .sticker:hover,
+  .noelshack-link:hover,
+  .page-title__link:hover,
+  .menu-mobile-items__item:hover,
+  .topic:hover,
+  .menu__item:hover,
+  .aside__top-button:hover,
+  .header__link:hover,
+  .message__byline-author-link:hover,
+  .pagination-topic__page-link--not-active:hover {
     filter: brightness(1.2);
   }
 }
 
-.primitive-element-state:active,
 .emoji:active,
-.sticker:active {
+.sticker:active,
+.noelshack-link:active,
+.page-title__link:active,
+.menu-mobile-items__item:active,
+.topic:active,
+.menu__item:active,
+.aside__top-button:active,
+.header__link:active,
+.message__byline-author-link:active,
+.pagination-topic__page-link--not-active:active {
   filter: brightness(.5);
 }

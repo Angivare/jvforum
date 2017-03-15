@@ -11,11 +11,11 @@
         <template id="menu-mobile-items">
           <div class="menu-mobile-items">
             {{? !it.isFavorite }}
-              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item primitive-element-state" data-action="add">Mettre en favoris</span>
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="add">Mettre en favoris</span>
             {{??}}
-              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item primitive-element-state" data-action="delete">Retirer des favoris</span>
+              <span class="js-favorite-toggle js-favorite-toggle-label menu-mobile-items__item" data-action="delete">Retirer des favoris</span>
             {{?}}
-            <a class="menu-mobile-items__item primitive-element-state" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
+            <a class="menu-mobile-items__item" href="{{=it.urlJvc}}" target="_blank">Ouvrir sur JVC</a>
           </div>
         </template>
       </div>
@@ -141,15 +141,15 @@
     {{? !it.error }}
       <div class="aside__top-buttons">
         {{? !it.isFavorite }}
-          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite primitive-element-state" data-action="add">
+          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite" data-action="add">
             <span class="js-favorite-toggle-label aside__top-button-label">Mettre en favoris</span>
           </span>
         {{??}}
-          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite primitive-element-state" data-action="delete">
+          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite" data-action="delete">
             <span class="js-favorite-toggle-label aside__top-button-label">Retirer des favoris</span>
           </span>
         {{?}}
-        <a class="aside__top-button aside__top-button--open-jeuxvideocom primitive-element-state" href="{{=it.urlJvc}}" target="_blank">
+        <a class="aside__top-button aside__top-button--open-jeuxvideocom" href="{{=it.urlJvc}}" target="_blank">
           <span class="aside__top-button-label">Ouvrir sur JVC</span>
         </a>
       </div>
@@ -157,7 +157,7 @@
     <div class="js-favorites-forums aside__menu menu">
       {{? it.favorites && it.favorites.forums.length }}
         {{~it.favorites.forums :a}}
-          <a class="primitive-element-state menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
         {{~}}
       {{??}}
         <span class="menu__item menu__item--blank-state">Ajoutez vos forums favoris pour les suivre</span>
@@ -166,7 +166,7 @@
     <div class="js-slider aside__menu menu slider">
       {{? it.favorites && it.favorites.topics.length }}
         {{~it.favorites.topics :a}}
-          <a class="primitive-element-state menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
+          <a class="menu__item" href="{{=a[0]}}">{{=a[1]}}</a>
         {{~}}
       {{??}}
         <span class="menu__item menu__item--blank-state">Ajoutez vos topics favoris pour les suivre</span>
