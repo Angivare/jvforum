@@ -1050,7 +1050,7 @@
   --button_-_additional-tap-target: 6px;
 
   /* Profile */
-  --body--profile_-_background-color: hsl(240, 8%, 40%);
+  --canvas--profile_-_background-color: hsl(240, 8%, 40%);
   --profile__banished-mention_-_text-shadow-color: hsla(0, 100%, 22.5%, .5); /* --danger-color darker with opacity */
   --profile-link-color: hsl(182, 25%, 12.5%);
   --button__visible--profile-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .33)
@@ -1103,6 +1103,14 @@ a {
 .canvas {
   ---sheet-desktop-padding-x: 30px;
   ---header__forum-link-over400-padding-x: 20px;
+}
+
+.canvas--profile {
+  background-color: var(--canvas--profile_-_background-color);
+  background-position: top center;
+  padding-bottom: 1px; /* Fixes Safari not showing bottom margin when html { height: 100%; } */
+  padding-top: 1px;
+  min-height: 100vh;
 }
 
 .canvas--under-stage-with-menu-mobile-items {
@@ -2151,13 +2159,7 @@ a {
   }
 }
 
-.body--profile {
-  background-color: var(--body--profile_-_background-color);
-  background-position: top center;
-  padding-bottom: 1px; /* Fixes Safari not showing bottom margin when html { height: 100%; } */
-}
-
-.body--profile a {
+.canvas--profile a {
   color: var(--profile-link-color);
   text-decoration: underline;
 }
