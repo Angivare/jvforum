@@ -80,7 +80,13 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
       if (noelshackId in stickers.jvcToJvf) {
         let jvfId = stickers.jvcToJvf[noelshackId]
           , packId = stickers.packFromId[jvfId]
-        return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+          , memorableId = jvfId
+
+        if (jvfId in stickers.legacyShortcutsIndices) {
+          memorableId = stickers.legacyShortcutsIndices[jvfId]
+        }
+
+        return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${memorableId}" data-pack-id="${packId}" data-code=":${memorableId}:" title=":${memorableId}:" alt=":${memorableId}:">`
       }
     }
 
@@ -138,7 +144,13 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
     }
     let jvfId = stickers.jvcToJvf[jvcId]
       , packId = stickers.packFromId[jvfId]
-    return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${jvfId}:" title=":${jvfId}:" alt=":${jvfId}:">`
+      , memorableId = jvfId
+
+    if (jvfId in stickers.legacyShortcutsIndices) {
+      memorableId = stickers.legacyShortcutsIndices[jvfId]
+    }
+
+    return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${memorableId}" data-pack-id="${packId}" data-code=":${memorableId}:" title=":${memorableId}:" alt=":${memorableId}:">`
   })
 
   // Show thumbnails for YouTube links

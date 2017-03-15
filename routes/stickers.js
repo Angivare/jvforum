@@ -20,7 +20,15 @@ router.get('/stickers', (req, res, next) => {
     if (!(packId in packs)) {
       packs[packId] = []
     }
-    packs[packId].push(stickerId)
+    let memorableId = stickerId
+    if (stickerId in stickers.legacyShortcutsIndices) {
+      memorableId = stickers.legacyShortcutsIndices[stickerId]
+    }
+
+    packs[packId].push({
+      id: stickerId,
+      memorable: memorableId,
+    })
   }
 
   res.send(renderView('stickers', {

@@ -150,10 +150,16 @@ let legacyShortcuts = {
   'forza': 107,
 }
 
+let legacyShortcutsIndices = {}
+for (let key in legacyShortcuts) {
+  legacyShortcutsIndices[legacyShortcuts[key]] = key
+}
+
 module.exports = {
   packs,
   packFromId,
   jvcToJvf,
   jvfToJvc,
   legacyShortcuts,
+  legacyShortcutsIndices,
 }
