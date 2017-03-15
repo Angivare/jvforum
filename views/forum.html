@@ -165,15 +165,15 @@
     {{? !it.error}}
       <div class="aside__top-buttons">
         {{? !it.isFavorite }}
-          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite" data-action="add">
+          <span class="js-favorite-toggle aside__top-button aside__top-button--favorite primitive-element-state" data-action="add">
             <span class="js-favorite-toggle-label aside__top-button-label">Mettre en favoris</span>
           </span>
         {{??}}
-          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite" data-action="delete">
+          <span class="js-favorite-toggle aside__top-button aside__top-button--unfavorite primitive-element-state" data-action="delete">
             <span class="js-favorite-toggle-label aside__top-button-label">Retirer des favoris</span>
           </span>
         {{?}}
-        <a class="aside__top-button aside__top-button--open-jeuxvideocom" href={{=it.urlJvc}} target="_blank">
+        <a class="aside__top-button aside__top-button--open-jeuxvideocom primitive-element-state" href={{=it.urlJvc}} target="_blank">
           <span class="aside__top-button-label">Ouvrir sur JVC</span>
         </a>
       </div>
