@@ -14,7 +14,7 @@
     {{ for (let packId in it.packs) { }}
       <div class="js-stickers-pack-{{=packId}} stickers-pack" data-pack-id="{{=packId}}">
         {{~it.packs[packId] :sticker}}
-          <img class="stickers-pack__sticker sticker sticker--pack-{{=packId}}" src="/assets/stickers/v2/{{=sticker.id}}" data-code=":{{=sticker.memorable}}:" title=":{{=sticker.memorable}}:" alt=":{{=sticker.memorable}}:">
+          <img class="stickers-pack__sticker sticker sticker--pack-{{=packId}}" src="/assets/stickers/v2/{{=sticker.id}}" data-code=":{{=sticker.code}}:" title=":{{=sticker.code}}:" alt=":{{=sticker.code}}:">
         {{~}}
       </div>
     {{ } }}

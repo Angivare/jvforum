@@ -25,7 +25,7 @@ db.query(`SELECT jvfId, jvcId, packId FROM stickers ORDER BY jvfId`, null, (resu
   })
 })
 
-let legacyShortcuts = {
+let memorableCodes = {
   'pose': 9,
   'prof': 10,
   'ananas': 12,
@@ -150,9 +150,9 @@ let legacyShortcuts = {
   'forza': 107,
 }
 
-let legacyShortcutsIndices = {}
-for (let key in legacyShortcuts) {
-  legacyShortcutsIndices[legacyShortcuts[key]] = key
+let memorableCodesIndices = {}
+for (let key in memorableCodes) {
+  memorableCodesIndices[memorableCodes[key]] = key
 }
 
 module.exports = {
@@ -160,6 +160,6 @@ module.exports = {
   packFromId,
   jvcToJvf,
   jvfToJvc,
-  legacyShortcuts,
-  legacyShortcutsIndices,
+  memorableCodes,
+  memorableCodesIndices,
 }

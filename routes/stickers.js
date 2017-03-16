@@ -14,20 +14,19 @@ router.get('/stickers', (req, res, next) => {
   }
 
   let packs = {}
-  for (let stickerId in stickers.packFromId) {
-    stickerId = parseInt(stickerId)
-    let packId = stickers.packFromId[stickerId]
+  for (let id in stickers.packFromId) {
+    let packId = stickers.packFromId[id]
     if (!(packId in packs)) {
       packs[packId] = []
     }
-    let memorableId = stickerId
-    if (stickerId in stickers.legacyShortcutsIndices) {
-      memorableId = stickers.legacyShortcutsIndices[stickerId]
+    let code = id
+    if (id in stickers.codesIndices) {
+      code = stickers.codesIndices[id]
     }
 
     packs[packId].push({
-      id: stickerId,
-      memorable: memorableId,
+      id,
+      code,
     })
   }
 

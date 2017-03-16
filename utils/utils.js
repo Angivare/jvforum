@@ -80,13 +80,13 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
       if (noelshackId in stickers.jvcToJvf) {
         let jvfId = stickers.jvcToJvf[noelshackId]
           , packId = stickers.packFromId[jvfId]
-          , memorableId = jvfId
+          , memorableCode = jvfId
 
-        if (jvfId in stickers.legacyShortcutsIndices) {
-          memorableId = stickers.legacyShortcutsIndices[jvfId]
+        if (jvfId in stickers.memorableCodesIndices) {
+          memorableCode = stickers.memorableCodesIndices[jvfId]
         }
 
-        return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${memorableId}:" title=":${memorableId}:" alt=":${memorableId}:">`
+        return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${memorableCode}:" title=":${memorableCode}:" alt=":${memorableCode}:">`
       }
     }
 
@@ -144,13 +144,13 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
     }
     let jvfId = stickers.jvcToJvf[jvcId]
       , packId = stickers.packFromId[jvfId]
-      , memorableId = jvfId
+      , memorableCode = jvfId
 
-    if (jvfId in stickers.legacyShortcutsIndices) {
-      memorableId = stickers.legacyShortcutsIndices[jvfId]
+    if (jvfId in stickers.memorableCodesIndices) {
+      memorableCode = stickers.memorableCodesIndices[jvfId]
     }
 
-    return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${memorableId}:" title=":${memorableId}:" alt=":${memorableId}:">`
+    return `<img class="js-sticker sticker sticker--pack-${packId}" src="/assets/stickers/v2/${jvfId}" data-sticker-id="${jvfId}" data-pack-id="${packId}" data-code=":${memorableCode}:" title=":${memorableCode}:" alt=":${memorableCode}:">`
   })
 
   // Show thumbnails for YouTube links
@@ -236,10 +236,10 @@ function adaptPostedMessage(message, hostname) {
   message = message.trim()
 
   if (message.match(/:[a-z]/)) {
-    for (let legacyShortcut in stickers.legacyShortcuts) {
-      if (message.indexOf(`:${legacyShortcut}:`) > -1) {
-        let jvfId = stickers.legacyShortcuts[legacyShortcut]
-        message = message.replace(new RegExp(`:${legacyShortcut}:`, 'gi'), `[[sticker:p/${stickers.jvfToJvc[jvfId]}]]`)
+    for (let memorableCode in stickers.memorableCodes) {
+      if (message.indexOf(`:${memorableCode}:`) > -1) {
+        let jvfId = stickers.memorableCodes[memorableCode]
+        message = message.replace(new RegExp(`:${memorableCode}:`, 'gi'), `[[sticker:p/${stickers.jvfToJvc[jvfId]}]]`)
       }
     }
   }
