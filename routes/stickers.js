@@ -20,8 +20,8 @@ router.get('/stickers', (req, res, next) => {
       packs[packId] = []
     }
     let code = id
-    if (id in stickers.codesIndices) {
-      code = stickers.codesIndices[id]
+    if (id in stickers.memorableCodesIndices) {
+      code = stickers.memorableCodesIndices[id]
     }
 
     packs[packId].push({
