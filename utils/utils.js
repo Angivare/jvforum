@@ -132,7 +132,7 @@ function adaptMessageContent(content, id, authorNickname, postDateRaw) {
   })
 
   // Make all non-JVF links open in a new tab for those that normally don't (jeuxvideo.com, wearefans.com, allocine.fr, etc.)
-  content = content.replace(/<a(?: class="([^"]+)")? href="([^/][^"]+)"( title|>)/g, '<a class="$1" href="$2" target="_blank"$3')
+  content = content.replace(/<a href="([^/][^"]+)"( title|>)/g, '<a class="link" href="$1" target="_blank"$2')
 
   // Smileys
   content = content.replace(/<img src="\/\/image\.jeuxvideo\.com\/smileys_img\/([^.]+)\.(?:gif|png)" alt="([^"]+)" data-def="SMILEYS" data-code="[^"]+" title="[^"]+" \/>/g, '<img class="smiley smiley--$1" src="/assets/smileys/v1/$1" data-code="$2" title="$2" alt="$2">')
