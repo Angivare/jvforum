@@ -235,10 +235,11 @@ function adaptPostedMessage(message, hostname) {
   }
   message = message.trim()
 
-  if (message.match(/:[a-z]/)) {
+  if (message.match(/:[+a-z]/)) {
     for (let memorableCode in stickers.memorableCodes) {
       if (message.indexOf(`:${memorableCode}:`) > -1) {
         let jvfId = stickers.memorableCodes[memorableCode]
+        memorableCode = memorableCode.replace(/\+/g, '\\+')
         message = message.replace(new RegExp(`:${memorableCode}:`, 'gi'), `[[sticker:p/${stickers.jvfToJvc[jvfId]}]]`)
       }
     }
