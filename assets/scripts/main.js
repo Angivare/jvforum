@@ -516,9 +516,9 @@ function enlargeEmoji() {
       <div class="stage-sticker-container__top-padding"></div>
       <div class="stage-sticker-container__sticker">
         <div class="stage-sticker-sd-container">
-          <img class="stage-sticker-sd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/40/${image}">
+          <img class="stage-sticker-sd sticker sticker--on-stage sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/40/${image}">
         </div>
-        <img class="stage-sticker-hd sticker sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/160/${image}">
+        <img class="stage-sticker-hd sticker sticker--on-stage sticker--pack-emoji" style="---width: 160px; ---height: 160px;" src="/assets/emoji/160/${image}">
       </div>
     </div>
   `
@@ -549,9 +549,9 @@ function enlargeSticker() {
       <div class="stage-sticker-container__top-padding"></div>
       <div class="stage-sticker-container__sticker">
         <div class="stage-sticker-sd-container">
-          <img class="stage-sticker-sd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
+          <img class="stage-sticker-sd sticker sticker--on-stage sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/v2/${id}">
         </div>
-        <img class="stage-sticker-hd sticker sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
+        <img class="stage-sticker-hd sticker sticker--on-stage sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
       </div>
       <div class="stage-sticker-container__code">
         <div class="stage-sticker-code">:${id}:</div>
