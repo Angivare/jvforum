@@ -541,6 +541,7 @@ function enlargeEmoji() {
 
 function enlargeSticker() {
   let id = this.dataset.stickerId
+    , code = this.dataset.code
     , packId = this.dataset.packId
 
   // put sticker image (small for now) and code
@@ -554,7 +555,7 @@ function enlargeSticker() {
         <img class="stage-sticker-hd sticker sticker--on-stage sticker--pack-${packId}" style="---width: 560px; ---height: 560px;" src="/assets/stickers/big/${id}">
       </div>
       <div class="stage-sticker-container__code">
-        <div class="stage-sticker-code">:${id}:</div>
+        <div class="stage-sticker-code">${code}</div>
       </div>
     </div>
   `
