@@ -38,6 +38,7 @@
   font-weight: bold;
   cursor: pointer;
   padding: 13px 10px;
+  background: inherit; /* for state brightness */
 }
 
 @media (min-width: 1025px) {
