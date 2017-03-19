@@ -172,6 +172,21 @@
   background: var(--topic-background-odd);
 }
 
+.topic:nth-child(even) {
+  background: inherit; /* for state brightness */
+}
+
+@media (hover: hover) {
+  .topic:hover {
+    background: var(--topic-background-odd);
+    filter: brightness(1.3);
+  }
+}
+
+.topic:active {
+  filter: brightness(.5);
+}
+
 .topic__new-messages-indicator {
   background: var(--topic__new-messages-indicator-background);
   box-shadow: var(--topic__new-messages-indicator-shadow);
@@ -2298,7 +2313,6 @@ a {
   .noelshack-link:hover,
   .page-title__link:hover,
   .menu-mobile-items__item:hover,
-  .topic:hover,
   .menu__item:hover,
   .aside__top-button:hover,
   .header__link:hover,
@@ -2313,7 +2327,6 @@ a {
 .noelshack-link:active,
 .page-title__link:active,
 .menu-mobile-items__item:active,
-.topic:active,
 .menu__item:active,
 .aside__top-button:active,
 .header__link:active,
