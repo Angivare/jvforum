@@ -105,6 +105,7 @@ CREATE TABLE `stickers` (
   `heightSmall` smallint NOT NULL,
   `widthBig` smallint NOT NULL,
   `heightBig` smallint NOT NULL,
+  `memorableCode` varchar(100),
   KEY (`jvfId`),
   KEY `jvcId` (`jvcId`),
   KEY `packId` (`packId`)
