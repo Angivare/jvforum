@@ -1304,6 +1304,9 @@ a {
   width: var(---size);
   height: var(---size);
   filter: saturate(1.4);
+}
+
+.sticker:not(.sticker--on-stage) {
   cursor: pointer;
 }
 
@@ -2290,7 +2293,7 @@ a {
 
 @media (hover: hover) {
   .emoji:hover,
-  .sticker:hover,
+  .sticker:not(.sticker--on-stage):hover,
   .noelshack-link:hover,
   .page-title__link:hover,
   .menu-mobile-items__item:hover,
@@ -2305,7 +2308,7 @@ a {
 }
 
 .emoji:active,
-.sticker:active,
+.sticker:not(.sticker--on-stage):active,
 .noelshack-link:active,
 .page-title__link:active,
 .menu-mobile-items__item:active,
