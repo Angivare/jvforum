@@ -430,6 +430,17 @@
   color: var(--color);
 }
 
+@media (hover: hover) {
+  .pagination-topic__page-link--not-active:hover {
+    background: var(--pagination-topic__page-link--not-active_-_hover-background);
+    filter: brightness(1.5);
+  }
+}
+
+.pagination-topic__page-link--not-active:active {
+  filter: brightness(.5);
+}
+
 .pagination-topic__page-link--visited {
   color: var(--link--visited-color);
 }
@@ -991,6 +1002,7 @@
   --topic-background: hsl(240, 8%, 8%);
   --topic-background-odd: hsl(240, 8%, 10%);
   --pagination-topic__page-link--active-background: hsl(182, 25%, 40%);
+  --pagination-topic__page-link--not-active_-_hover-background: hsl(0, 0%, 5%);
   --message__byline-date-inline-color: hsl(182, 25%, 40%);
   --quote-border-color: hsla(0, 0%, 100%, .125);
   --quote-background: hsla(0, 0%, 100%, .05);
@@ -2316,8 +2328,7 @@ a {
   .menu__item:hover,
   .aside__top-button:hover,
   .header__link:hover,
-  .message__byline-author-link:hover,
-  .pagination-topic__page-link--not-active:hover {
+  .message__byline-author-link:hover {
     filter: brightness(1.2);
   }
 }
@@ -2330,8 +2341,7 @@ a {
 .menu__item:active,
 .aside__top-button:active,
 .header__link:active,
-.message__byline-author-link:active,
-.pagination-topic__page-link--not-active:active {
+.message__byline-author-link:active {
   filter: brightness(.5);
 }
 
