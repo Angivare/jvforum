@@ -2319,6 +2319,10 @@ a {
   margin: var(---margin-between-elements) 0;
 }
 
+.profile__number {
+  word-spacing: -.12em;
+}
+
 @media (hover: hover) {
   .emoji:hover,
   .sticker:not(.sticker--on-stage):hover,

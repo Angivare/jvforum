@@ -75,15 +75,15 @@ router.get(/^\/@([a-zA-Z0-9-_[\]]{3,15})$/, (req, res, next) => {
     }
 
     if (viewLocals.messages) {
-      viewLocals.messages = viewLocals.messages.toLocaleString().replace(/,/g, ' ')
+      viewLocals.messages = viewLocals.messages.toLocaleString().replace(/,/g, ' ')
     }
 
     if (viewLocals.messagesIn2017) {
-      viewLocals.messagesIn2017 = viewLocals.messagesIn2017.toLocaleString().replace(/,/g, ' ')
+      viewLocals.messagesIn2017 = viewLocals.messagesIn2017.toLocaleString().replace(/,/g, ' ')
     }
 
     if (viewLocals.registrationDays) {
-      viewLocals.registrationDays = viewLocals.registrationDays.toLocaleString().replace(/,/g, ' ')
+      viewLocals.registrationDays = viewLocals.registrationDays.toLocaleString().replace(/,/g, ' ')
     }
 
     res.set('Cache-Control', 'max-age=10, private')
