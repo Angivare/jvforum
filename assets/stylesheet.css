@@ -1367,15 +1367,15 @@ a {
   min-height: 15px;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2) {
-  .smiley {
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 1.5dppx) {
+  .smiley:not(.smiley--5):not(.smiley--16):not(.smiley--fish) {
     -moz-image-rendering: crisp-edges;
          image-rendering: pixelated;
   }
 }
 
 .smiley--2 { width: 25px; height: 23px; }
-.smiley--16 { min-width: 14px; }
+.smiley--16 { min-width: 14px; height: 16px; }
 .smiley--17 { width: 16px; min-height: 11px; }
 .smiley--22 { height: 16px; }
 .smiley--27 { width: 22px; height: 25px; }
